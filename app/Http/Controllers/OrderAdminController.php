@@ -15,8 +15,7 @@ class OrderAdminController extends Controller
     public function index()
     {
         $this->isAdmin();
-        $orders = Order::all();
-        $orders->load('user.invoice');
+        $orders = Order::orderBy('id', 'DESC')->with('user.invoice')->paginate(10);
         return OrderResource::collection($orders);
     }
 

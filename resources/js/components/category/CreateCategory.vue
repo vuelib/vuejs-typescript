@@ -77,7 +77,7 @@
                         }
                     })
                     .then(res => {
-                        console.log("true");
+                        this.$router.push({name: "zbozi"});
                     })
                     .catch(error => {
                         if (error.response.status == 422) {

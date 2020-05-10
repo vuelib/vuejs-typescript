@@ -1,2 +1,12 @@
 User-agent: *
-Disallow:
+Allow: /zbozi/*
+Allow: /kontakt
+Allow: /prihlasit-se
+Allow: /registrovat
+Disallow: /fakturacni-udaje*
+Disallow: /objednat-zbozi*
+Disallow: /objednat-zbozi*
+Disallow: /prehled-objednavek*
+Disallow: /prehled-zakazniku*
+Disallow: /uzivatel*
+Disallow: /upravy*

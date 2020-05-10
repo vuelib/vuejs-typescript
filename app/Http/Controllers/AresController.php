@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Ares as AresResource;
-use App\Module\ARES;
+use App\Module\Ares;
 
 class AresController extends Controller
 {
@@ -17,7 +17,7 @@ class AresController extends Controller
         if ($aresData) {
             return new AresResource($aresData);
         }
-        return response()->json(false);
+        return response()->json(['errors' => ['ic' => ['Zadané IČ neexistuje v ARESU.']]], 422);
 
     }
 

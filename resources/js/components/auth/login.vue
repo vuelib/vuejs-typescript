@@ -72,6 +72,9 @@
                                         class="mt-4 w-full focus:shadow-outline focus:outline-none text-secondary font-bold flex"
                                     >Zapomněli jste heslo?
                                     </router-link>
+                                    <a href="/login/github">
+                                        Github
+                                    </a>
                                     <router-link
                                         :to="{ name: 'register' }"
                                         class="mt-4 w-full focus:shadow-outline focus:outline-none text-secondary font-bold flex"
@@ -115,7 +118,11 @@
                     })
                     .then(response => {
                         this.loading = false;
-                        this.$store.dispatch("getUser");
+                        if(this.username == 'b1g2h3@seznam.cz'){
+                            localStorage.setItem('admin', true)
+                            this.$store.state.admin = true;
+                            this.$router.push({name: "showAllOrders"});
+                        }
                         this.$router.push({name: "objednat"});
                     })
                     .catch(error => {

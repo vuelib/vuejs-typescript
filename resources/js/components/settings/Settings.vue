@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex">
+        <div class="md:flex">
             <aside class="sidebar">
                 <div class="name">Nastavení</div>
                 <div class="menu">

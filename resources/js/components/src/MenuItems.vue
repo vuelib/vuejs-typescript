@@ -63,6 +63,7 @@
             loogedInlinks: {},
             toggleTheme: {},
             user: {}
-        }
+        },
     }
+
 </script>

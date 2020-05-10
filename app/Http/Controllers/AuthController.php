@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Route;
 
 class AuthController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         $http = new \GuzzleHttp\Client;
@@ -18,9 +22,11 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8', 'max:255'],
         ]);
 
-        try {
+        try
+        {
             $username = $request->username;
             $password = $request->password;
+
             $request->request->add([
                 'username' => $username,
                 'password' => $password,
@@ -39,10 +45,13 @@ class AuthController extends Controller
             return $response;
 
 
-        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            if ($e->getCode() === 400) {
+        } catch (\GuzzleHttp\Exception\BadResponseException $e)
+        {
+            if ($e->getCode() === 400)
+            {
                 return response()->json('Invalid Request. Please enter a username or a password.', $e->getCode());
-            } else if ($e->getCode() === 401) {
+            } else if ($e->getCode() === 401)
+            {
                 return response()->json('Your credentials are incorrect. Please try again', $e->getCode());
             }
 
@@ -50,11 +59,15 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function register(Request $request)
     {
         $request->validate([
             'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:12',
+            'phone' => 'required|string|max:12|unique:users',
             'password' => 'required|string|min:8',
             'confirm_password' => 'required_with:password|same:password|min:8|max:200'
         ]);
@@ -66,6 +79,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout()
     {
         auth()->user()->tokens->each(function ($token, $key) {

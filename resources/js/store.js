@@ -3,11 +3,13 @@ import Vuex from "vuex";
 import axios from "axios";
 
 Vue.use(Vuex);
-axios.defaults.baseURL = "http://127.0.0.1:8000/api";
+axios.defaults.baseURL = "http://sotola.localhost/api";
+
 
 export const store = new Vuex.Store({
     state: {
         token: localStorage.getItem("access_token") || null,
+        admin: localStorage.getItem("admin") || null,
         user: {},
         allUsers: {},
         orders: [],
@@ -41,7 +43,7 @@ export const store = new Vuex.Store({
             return state.navbarlinks
         },
         isAdmin(state) {
-            return state.user.email == 'b1g2h3@seznam.cz'
+            return state.admin
         },
         theme(state) {
             return state.theme;
@@ -222,11 +224,13 @@ export const store = new Vuex.Store({
                         .post("/logout")
                         .then(response => {
                             localStorage.removeItem("access_token");
+                            localStorage.removeItem("admin");
                             context.commit("destroyToken");
                             resolve(response);
                         })
                         .catch(error => {
                             localStorage.removeItem("access_token");
+                            localStorage.removeItem("admin");
                             context.commit("destroyToken");
                             reject(error);
                         });

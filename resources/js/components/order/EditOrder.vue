@@ -222,7 +222,7 @@
             editOrder() {
                 delete this.orders.order[undefined]
                 this.axios
-                    .put(`/order/${this.idc}`, this.orders,
+                    .put(`/order/${this.id}`, this.orders,
                         {
                             headers: {
                                 Authorization:

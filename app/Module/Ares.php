@@ -2,7 +2,7 @@
 
 namespace App\Module;
 
-class ARES
+class Ares
 {
     /** @var string */
     private $ares_url = 'https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=';

@@ -1,12 +1,12 @@
 <template>
     <div
-        class="bg-lightblue shadow-lg block md:hidden h-16 fixed bottom-0 mt-12 md:relative z-10 md:mt-0 md:z-0 w-full md:w-48"
+        class="bg-button shadow-lg block md:hidden h-16 fixed bottom-0 mt-12 md:relative z-10 md:mt-0 md:z-0 w-full md:w-48"
         v-show="loggedIn"
     >
         <div
             class="md:w-48  md:left-0 md:top-0 content-center md:content-start text-left justify-between"
         >
-        <ul
+        <ul v-if="!isAdmin"
                 class="list-reset flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left"
             >
                 <li class="mr-3 flex-1 hover:text-black" v-bind:key="index" v-for="(link, index) in links">
@@ -20,6 +20,20 @@
                         >{{link.name}}</span>
                     </router-link>
                 </li>
+            </ul>
+            <ul v-else
+                class="list-reset flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left"
+            >
+                <li class="mr-3 flex-1 hover:text-black">
+                    <router-link :to="{ name: 'showUsers'}" class="block py-1 md:py-3 pl-1 align-middle text-primary no-underline hover:text-black border-b-2 border-primary hover:border-secondary">Přehled uživatelů</router-link>
+                </li>
+                <li class="mr-3 flex-1 hover:text-black">
+                    <router-link :to="{ name: 'showAllOrders'}" class="block py-1 md:py-3 pl-1 align-middle text-primary no-underline hover:text-black border-b-2 border-primary hover:border-secondary">Přehled objednávek</router-link>
+                </li>
+                <li class="mr-3 flex-1 hover:text-black">
+                    <router-link :to="{ name: 'admin'}" class="block py-1 md:py-3 pl-1 align-middle text-primary no-underline hover:text-black border-b-2 border-primary hover:border-secondary">Úpravy</router-link>
+                </li>
+
             </ul>
         </div>
     </div>
@@ -35,6 +49,9 @@
         computed: {
             links() {
                 return this.$store.state.sidebarlinks;
+            },
+            isAdmin() {
+                return this.$store.getters.isAdmin;
             },
             loggedIn() {
                 return this.$store.getters.loggedIn;

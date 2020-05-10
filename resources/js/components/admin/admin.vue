@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex mb-4">
+        <div class="md:flex mb-4">
             <aside class="sidebar">
                 <div class="name">Úpravy</div>
                 <div class="menu">

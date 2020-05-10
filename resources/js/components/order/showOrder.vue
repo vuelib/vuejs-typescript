@@ -92,7 +92,8 @@
                 successMessage: ""
             };
         },
-        created() {
+        mounted() {
+            // Echo.channel('')
             this.$store.dispatch("fetchOrder", this.id);
         },
         computed: {

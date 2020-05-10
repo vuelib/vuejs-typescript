@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="sendEmail" class="mx-auto lg:mx-0 w-4/5   border-teal-500 opacity-100">
-        <div class="flex flex-wrap -mx-3 mb-4">
-            <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full md:w-1/2 px-2 mb-4 md:mb-0">
                 <label
                         class=" pt-2 text-base font-bold flex pl-2 justify-start lg:justify-start"
                         for="grid-first-name"
@@ -36,7 +36,7 @@
         <div class="flex flex-wrap -mx-3 mb-2">
             <div class="w-full px-3">
                 <label
-                        class="ares-label"
+                        class=" text-base font-bold flex pl-2 justify-start lg:justify-start"
                         for="email"
                 >E-mailová adresa</label>
                 <input

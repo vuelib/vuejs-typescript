@@ -1,7 +1,27 @@
 <template>
-    <div class="flex">
+    <div class="md:flex">
         <aside class="sidebar">
-            <div class="name">Objednávkový systém</div>
+            <div class="flex">
+                <div  class="w-1/6 text-black block cursor-pointer md:hidden">
+                    <Slide Push :closeOnNavigation="true">
+                        <div
+                            class="link"
+                            v-on:click="allProduct"
+                        >
+                            Všechny produkty
+                        </div>
+                        <div v-bind:key="category.id" v-for="category in categories">
+                            <div
+                                class="link"
+                                v-on:click="value(category.id, category.name)"
+                            >
+                                {{ category.name }}
+                            </div>
+                        </div>
+                    </Slide>
+                </div>
+                <div class="name w-4/6 md:w-full pt-2 md:pt-0">Objednávkový systém</div>
+            </div>
             <div class="menu">
                 <input
                     class="pt-2 appearance-none text-black block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
@@ -10,15 +30,15 @@
                     v-model="search"
                 />
                 <div
-                    class="link"
+                    class="link hidden md:block"
                     v-on:click="allProduct"
                 >
                     Všechny produkty
                 </div>
                 <div v-bind:key="category.id" v-for="category in categories">
                     <div
-                        class="link"
-                        v-on:click="value"
+                        class="link hidden md:block"
+                        v-on:click="value(category.id, category.name)"
                     >
                         {{ category.name }}
                     </div>
@@ -131,10 +151,10 @@
 
 <script>
     import SidebarMenu from "./SidebarMenu";
-
+    import { Slide } from 'vue-burger-menu'
     export default {
         name: "AddOrder",
-        components: {SidebarMenu},
+        components: {SidebarMenu, Slide},
         data() {
             return {
                 collapsed: false,
@@ -216,3 +236,66 @@
         }
     };
 </script>
+<style>
+    .bm-burger-button {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        left: 36px;
+        top: 36px;
+        cursor: pointer;
+    }
+    .bm-burger-bars {
+        background-color: #000;
+    }
+    .line-style {
+        position: absolute;
+        height: 10%;
+        left: 0;
+        right: 0;
+    }
+    .cross-style {
+        position: absolute;
+        top: 12px;
+        right: 2px;
+        cursor: pointer;
+    }
+    .bm-cross {
+        background: #bdc3c7;
+    }
+    .bm-cross-button {
+        height: 24px;
+        width: 24px;
+    }
+    .bm-menu {
+        height: 100%; /* 100% Full-height */
+        width: 0; /* 0 width - change this with JavaScript */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Stay on top */
+        top: 0;
+        left: 0;
+        background-color: rgb(63, 63, 65); /* Black*/
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 60px; /* Place content 60px from the top */
+        transition: 0.5s; /*0.5 second transition effect to slide in the sidenav*/
+    }
+
+    .bm-overlay {
+        background: #fff;
+    }
+    .bm-item-list {
+        color: #b8b7ad;
+        margin-left: 10%;
+        font-size: 20px;
+    }
+    .bm-item-list > * {
+        display: flex;
+        text-decoration: none;
+        padding: 0.7em;
+    }
+    .bm-item-list > * > span {
+        margin-left: 10px;
+        font-weight: 700;
+        color: white;
+    }
+</style>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Amount;
+use App\Events\OrderAdded;
 use App\Http\Resources\Order as OrderResource;
 use App\Http\Resources\User as UserResource;
 use App\Mail\AdminOrderFormMail;
@@ -32,6 +33,7 @@ class OrderrController extends Controller
             $order->amounts()->attach($mnozstvi->id);
         }
         $order->load('amounts.product');
+        broadcast(new OrderAdded($order));
         return new OrderResource($order);
     }
 
@@ -50,6 +52,7 @@ class OrderrController extends Controller
             $mnozstvi = Amount::create(['product_id' => $prodId, 'mnozstvi' => $value]);
             $order->amounts()->attach($mnozstvi->id);
         }
+        broadcast(new OrderAdded($order));
     }
 
     public function confirm(Order $order)
@@ -60,8 +63,9 @@ class OrderrController extends Controller
         ]);
         $order->update(['status' => 1, 'description' => request()->description]);
         $url = env('APP_URL') . 'objednavky/' . $order->id;
-        Mail::to($user->email)->send(new OrderFormMail($user, $order, $url));
-        Mail::to(env('ADMIN_EMAIL'))->send(new AdminOrderFormMail($user, $order, $url));
+//        Mail::to($user->email)->send(new OrderFormMail($user, $order, $url));
+//        Mail::to(env('ADMIN_EMAIL'))->send(new AdminOrderFormMail($user, $order, $url));
+//        broadcast(new OrderAdded($order));
         return response()->json('true');
     }
 

@@ -229,8 +229,6 @@
                 errors: ""
             };
         },
-        created() {
-        },
         methods: {
             addInvoice() {
                 this.errors = [];

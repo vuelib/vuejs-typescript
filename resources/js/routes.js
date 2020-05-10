@@ -16,7 +16,8 @@ import addInvoice from "./components/admin/user/addInvoice";
 import Settings from "./components/settings/Settings";
 import ChangePassword from "./components/settings/ChangePassword";
 import ChangeContact from "./components/settings/ChangeContact";
-// import ChangeInvoice from "./components/invoice/ChangeInvoice";
+// import changeInvoice from "./components/invoice/ChangeInvoice";
+import changeInvoice from "./components/admin/user/ChangeInvoice";
 import KeStazeni from "./components/lib/kestazeni";
 import Kontakt from "./components/contact/sendEmail";
 import admin from "./components/admin/admin";
@@ -30,16 +31,42 @@ import showOrder from "./components/admin/order/showOrder";
 export const routes = [{
     name: "home",
     path: "/",
-    component: Domu
+    component: Domu,
+    meta: {
+        title: 'Šotola Miroslav - Úvodní stránka',
+        metaTags: [
+            {
+                name: 'description',
+                content: 'Hlavní stránka'
+            },
+            {
+                property: 'og:description',
+                content: 'Hlavní stránka.'
+            }
+        ]
+    }
 },
     {
         name: "zbozi",
         path: "/zbozi",
         component: AllCategories,
         props: true,
+        meta: {
+            title: 'Šotola Miroslav - Zboží',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Hlavní stránka'
+                },
+                {
+                    property: 'og:description',
+                    content: 'Hlavní stránka.'
+                }
+            ]
+        },
         children: [{
             name: "category_show",
-            path: ":id",
+            path: ":id/:slug?",
             component: ShowCategory,
             props: true
         }]
@@ -47,19 +74,58 @@ export const routes = [{
     {
         name: "kontakt",
         path: "/kontakt",
-        component: Kontakt
+        component: Kontakt,
+        meta: {
+            title: 'Šotola Miroslav - Kontakt',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Hlavní stránka'
+                },
+                {
+                    property: 'og:description',
+                    content: 'Hlavní stránka.'
+                }
+            ]
+        },
     },
     {
         name: "login",
         path: "/prihlasit-se",
         component: Login,
-        props: true
+        props: true,
+        meta: {
+            title: 'Šotola Miroslav - Přihlásit se',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Hlavní stránka'
+                },
+                {
+                    property: 'og:description',
+                    content: 'Hlavní stránka.'
+                }
+            ]
+        },
     },
     {
         name: "register",
         path: "/registrovat",
         component: Register,
-        props: true
+        props: true,
+        meta: {
+            title: 'Šotola Miroslav - Registrovat',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Hlavní stránka'
+                },
+                {
+                    property: 'og:description',
+                    content: 'Hlavní stránka.'
+                }
+            ]
+        },
     },
     {
         name: "logout",
@@ -184,6 +250,12 @@ export const routes = [{
                 name: "addInvoice",
                 path: "pridat-fakturacni-udaje",
                 component: addInvoice,
+                props: true
+            },
+            {
+                name: "changeInvoice",
+                path: "zmena-fakturacni-udaje",
+                component: changeInvoice,
                 props: true
             },
             {

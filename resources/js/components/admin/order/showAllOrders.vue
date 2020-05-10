@@ -32,9 +32,9 @@
                                     {{order.user.invoice.nazev }}
                                 </router-link>
                             </td>
-                            <td class="border px-4 py-2">
+                            <td class="border px-4 text-center py-2">
                                 <router-link :to="{ name: 'showOrder', params: {id:order.user_id ,idc: order.id} }">
-                                    {{order.status}}
+                                    <i :class="order.status == 'rozpracovaná' ? 'fa-pen' : 'fa-check'" class="fas"></i>
                                 </router-link>
                             </td>
                             <td class="border text-center">
@@ -45,6 +45,14 @@
                         </tr>
                         </tbody>
                     </table>
+<!--                    <button class="" @click="fetchStories(pagination.prev_page_url)"-->
+<!--                            :disabled="!pagination.prev_page_url">-->
+<!--                        Previous-->
+<!--                    </button>-->
+<!--                    <span>Page {{pagination.current_page}} of {{pagination.last_page}}</span>-->
+<!--                    <button class="btn btn-default" @click="fetchStories(pagination.next_page_url)"-->
+<!--                            :disabled="!pagination.next_page_url">Next-->
+<!--                    </button>-->
                 </div>
             </div>
         </div>
@@ -67,6 +75,12 @@
             this.$store.dispatch("allOrders")
                 .then(response => {
                     this.loading = false
+                })
+            Echo.channel('orders')
+                .listen('OrderAdded', (e) => {
+                    console.log(e.order);
+                    this.$store.state.allOrders.unshift(e.order)
+                    // this.$store.commit("allOrders", e.orders);
                 })
         },
         computed: {

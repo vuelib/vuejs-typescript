@@ -40,8 +40,9 @@
                 <button
                     v-else
                     class="bg-transparent hover:bg-green-700 text-black font-semibold hover:text-white py-2 px-4 border border-green-700 hover:border-transparent rounded"
+                    v-on:click="changeInvoice"
                 >
-                    Upravit údaje
+                    Změnit fakturační údaje
                 </button>
                 <button
                     class="bg-transparent hover:bg-red-700 text-black font-semibold hover:text-white py-2 px-4 border border-red-700 hover:border-transparent rounded"
@@ -115,6 +116,11 @@
             addInvoice() {
                 this.$router.push({
                     name: "addInvoice", params: {id: this.id}
+                })
+            },
+            changeInvoice() {
+                this.$router.push({
+                    name: "changeInvoice", params: {id: this.id}
                 })
             },
             deleteUser() {

@@ -3,11 +3,8 @@
 use Illuminate\Http\Request;
 
 
-
-Route::middleware('auth:api')->group(function() {
-    Route::get('user', function (Request $request) {
-        return $request->user();
-    });
+Route::middleware('auth:api')->group(function () {
+    //Users route
     Route::post('user', 'InvoiceController@check');
     Route::post('logout', 'AuthController@logout');
     Route::put('changeContact', 'UserController@changeContact');
@@ -16,9 +13,10 @@ Route::middleware('auth:api')->group(function() {
     Route::get('allorders', 'OrderAdminController@index');
     Route::get('allusers', 'UserController@index');
     Route::get('userprofile/{id}', 'UserController@show');
-    Route::delete('deleteuser/{id}', 'UserController@destroy');       
-    Route::post('invoice/{id}', 'InvoiceController@add'); 
-    Route::post('order/{id}', 'OrderAdminController@store');    
+    Route::delete('deleteuser/{id}', 'UserController@destroy');
+    Route::post('invoice/{id}', 'InvoiceController@add');
+    Route::put('invoice/{id}', 'InvoiceController@update');
+    Route::post('order/{id}', 'OrderAdminController@store');
     Route::put('order/{user}/{order}', 'OrderrController@update');
     //Ares
     Route::post('ares', 'AresController@check');

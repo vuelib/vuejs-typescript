@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Events\ItemAdded;
+use App\Events\ItemDeleted;
 use App\Http\Resources\Category as CategoryResource;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -13,6 +15,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         $categories->load('products');
+//        broadcast(new ItemAdded($categories));
         return CategoryResource::collection($categories);
     }
 
@@ -31,6 +34,7 @@ class CategoryController extends Controller
             $imageArray ?? []
         ));
 
+        broadcast(new ItemAdded());
         return response('success');
     }
 
@@ -56,12 +60,14 @@ class CategoryController extends Controller
             $data,
             $imageArray ?? []
         ));
+        broadcast(new ItemAdded());
         return response('success');
     }
 
     public function destroy(Category $category)
     {
         $category->products()->delete();
+        broadcast(new ItemDeleted($category));
         $category->delete();
     }
 
