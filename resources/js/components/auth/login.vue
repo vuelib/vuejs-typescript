@@ -117,7 +117,7 @@
                         password: this.password
                     })
                     .then(response => {
-                        this.loading = false;
+                        this.loading = false;o
                         if(this.username == 'b1g2h3@seznam.cz'){
                             localStorage.setItem('admin', true)
                             this.$store.state.admin = true;

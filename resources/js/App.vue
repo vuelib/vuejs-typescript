@@ -34,8 +34,6 @@
         },
         created() {
             this.loggedIn ? this.$store.dispatch('getUser') : '';
-
-
         }
     };
 </script>
