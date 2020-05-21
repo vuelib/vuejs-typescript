@@ -8,7 +8,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('user', 'InvoiceController@check');
     Route::post('logout', 'AuthController@logout');
     Route::put('changeContact', 'UserController@changeContact');
-    Route::patch('changePassword', 'UserController@changePassword');
+    Route::put('changePassword', 'UserController@changePassword');
     //Admin
     Route::get('allorders', 'OrderAdminController@index');
     Route::get('allusers', 'UserController@index');

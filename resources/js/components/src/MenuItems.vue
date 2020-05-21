@@ -29,10 +29,10 @@
                                 class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block">
                             Nastavení
                         </router-link>
-                        <div @click.prevent="toggleTheme"
-                             class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block">
-                            DarkMode
-                        </div>
+<!--                        <div @click.prevent="toggleTheme"-->
+<!--                             class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block">-->
+<!--                            DarkMode-->
+<!--                        </div>-->
                         <div class="border border-bg-ivory"></div>
                         <router-link
                                 :to="{ name: 'logout'}"

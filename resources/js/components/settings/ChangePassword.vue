@@ -111,9 +111,7 @@
         methods: {
             changePassword() {
                 this.errors = [];
-                this.successMessage = [];
-                axios
-                    .patch("/changePassword", this.user, {
+                axios.put("/changePassword", this.user, {
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("access_token")
                         }
@@ -124,6 +122,8 @@
                     .catch(error => {
                         if (error.response.status == 422) {
                             this.errors = error.response.data.errors;
+                        }else if(error.response.status == 404){
+                            this.errors = {password: ['Heslo není správné!']};
                         }
                     });
             }

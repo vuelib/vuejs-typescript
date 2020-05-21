@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 .theme-light {
     --bg-primary: #fffff0;
     --bg-secondary: #000;
@@ -16,20 +18,9 @@
     --bg-background-darkergreen: #22833e;
 }
 
-// ::-webkit-scrollbar {
-//     width: 7px;
-//   }
-
-//   ::-webkit-scrollbar-track {
-//     box-shadow: inset 0 0 5px grey;
-//     border-radius: 10px;
-//   }
-
-//   ::-webkit-scrollbar-thumb {
-//     background: red;
-//     border-radius: 10px;
-//   }
-
+main {
+    min-height: 70vh;
+}
 
 .fa-pen {
     @apply .text-blue-800;
@@ -49,7 +40,6 @@
 
 .sidebar {
     @apply .flex .flex-col .text-primary .font-semibold;
-
     .name {
         @apply .text-center .text-junglegreen .mt-6 .mb-3 .text-xl .bg-transparent;
     }
@@ -57,8 +47,8 @@
     .menu {
         @apply .flex .flex-col .shadow .border-t-4 .text-secondary .border-b-4 .border-primary .shadow .rounded-lg .shadow-lg .p-1 .bg-primary;
     }
-}
 
+}
 
 .table {
     @apply .border-t-4 .border-b-4 .border-primary .rounded-lg .shadow-lg .bg-primary .text-secondary .p-3 .ml-3;

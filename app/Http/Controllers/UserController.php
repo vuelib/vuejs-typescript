@@ -35,10 +35,10 @@ class UserController extends Controller
         $user = auth()->user();
         $data = request()->validate($this->contact());
         if (!Hash::check($data['password'], $user->password)) {
-            return response(200, 'The specified password does not match the database password');
+            return response()->json('Hesla se neshodují', 404);
         } else {
 
-            $user->email = $data['email'];
+//            $user->email = $data['email'];
             $user->phone = $data['phone'];
             $user->push();
         }
@@ -50,11 +50,12 @@ class UserController extends Controller
         $user = auth()->user();
         $data = request()->validate($this->password());
         if (!Hash::check($data['old_password'], $user->password)) {
-            return back()->with('error', 'The specified password does not match the database password');
+            return response()->json('Hesla se neshodují', 404);
         } else {
 
             $user->password = Hash::make($data['password']);
             $user->push();
+            return response()->json('true', 200);
         }
     }
 
@@ -71,8 +72,8 @@ class UserController extends Controller
     {
         return [
             'password' => 'required:min:8|max:200',
-            'email' => 'required|unique:users|string|email|max:255',
-            'phone' => 'required|unique:users|max:13|min:9'
+            'phone' => 'required|unique:users|digits:9'
         ];
+//            'email' => 'required|unique:users|string|email|max:255',
     }
 }

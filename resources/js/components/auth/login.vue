@@ -67,14 +67,14 @@
                                         </div>
                                         <div>Přihlásit se</div>
                                     </button>
-                                    <router-link
-                                        :to="{ name: 'register' }"
-                                        class="mt-4 w-full focus:shadow-outline focus:outline-none text-secondary font-bold flex"
-                                    >Zapomněli jste heslo?
-                                    </router-link>
-                                    <a href="/login/github">
-                                        Github
-                                    </a>
+<!--                                    <router-link-->
+<!--                                        :to="{ name: 'register' }"-->
+<!--                                        class="mt-4 w-full focus:shadow-outline focus:outline-none text-secondary font-bold flex"-->
+<!--                                    >Zapomněli jste heslo?-->
+<!--                                    </router-link>-->
+<!--                                    <a href="/login/github">-->
+<!--                                        Github-->
+<!--                                    </a>-->
                                     <router-link
                                         :to="{ name: 'register' }"
                                         class="mt-4 w-full focus:shadow-outline focus:outline-none text-secondary font-bold flex"
@@ -102,7 +102,7 @@
             return {
                 username: "",
                 password: "",
-                errors: "",
+                errors: [],
                 successMessage: this.dataSuccessMessage,
                 loading: false
             };
@@ -117,7 +117,7 @@
                         password: this.password
                     })
                     .then(response => {
-                        this.loading = false;o
+                        this.loading = false;
                         if(this.username == 'b1g2h3@seznam.cz'){
                             localStorage.setItem('admin', true)
                             this.$store.state.admin = true;
@@ -126,7 +126,9 @@
                         this.$router.push({name: "objednat"});
                     })
                     .catch(error => {
-                        if (error.response.status == 422) {
+                        if (error.response.status == 400) {
+                            this.errors = {username: ['Přihlašovací údaje jsou nesprávné!']};
+                        } else if (error.response.status == 422) {
                             this.errors = error.response.data.errors;
                         }
                         this.password = "";

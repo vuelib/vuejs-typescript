@@ -13,9 +13,8 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login()
     {
-        $http = new \GuzzleHttp\Client;
 
         request()->validate([
             'username' => ['required', 'string', 'email', 'max:255',],
@@ -24,10 +23,10 @@ class AuthController extends Controller
 
         try
         {
-            $username = $request->username;
-            $password = $request->password;
+            $username = request()->username;
+            $password = request()->password;
 
-            $request->request->add([
+            request()->request->add([
                 'username' => $username,
                 'password' => $password,
                 'grant_type' => 'password',
@@ -40,16 +39,17 @@ class AuthController extends Controller
                 env('APP_URL') . '/oauth/token',
                 'post'
             );
+
             $response = Route::dispatch($tokenRequest);
 
             return $response;
 
 
-        } catch (\GuzzleHttp\Exception\BadResponseException $e)
+        } catch (\Exception $e)
         {
             if ($e->getCode() === 400)
             {
-                return response()->json('Invalid Request. Please enter a username or a password.', $e->getCode());
+                return response()->json('Invalid Request. Please enter a username or a password.', 404);
             } else if ($e->getCode() === 401)
             {
                 return response()->json('Your credentials are incorrect. Please try again', $e->getCode());
@@ -67,7 +67,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:12|unique:users',
+            'phone' => 'required|digits:9|unique:users',
             'password' => 'required|string|min:8',
             'confirm_password' => 'required_with:password|same:password|min:8|max:200'
         ]);

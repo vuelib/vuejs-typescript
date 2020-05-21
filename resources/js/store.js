@@ -3,14 +3,15 @@ import Vuex from "vuex";
 import axios from "axios";
 
 Vue.use(Vuex);
-axios.defaults.baseURL = "http://sotola.localhost/api";
-
+// axios.defaults.baseURL = "http://sotola.localhost/api";
+axios.defaults.baseURL = "http://127.0.0.1:8000/api";
 
 export const store = new Vuex.Store({
     state: {
         token: localStorage.getItem("access_token") || null,
         admin: localStorage.getItem("admin") || null,
         user: {},
+        invoice: null,
         allUsers: {},
         orders: [],
         order: { id: 0 },
@@ -52,7 +53,7 @@ export const store = new Vuex.Store({
             return state.token !== null;
         },
         invoice(state) {
-            return state.user.invoice !== null;
+            return state.invoice !== null;
         },
         ordersFilter(state) {
             return Array.isArray(state.orders) && state.orders.length;
@@ -111,9 +112,11 @@ export const store = new Vuex.Store({
         },
         getUser(state, user) {
             state.user = user;
+            state.invoice = user.invoice;
         },
         addInvoice(state, invoice) {
             state.user.invoice = invoice;
+            state.invoice = invoice;
         },
         fetchOrder(state, order) {
             state.order = order;
@@ -249,6 +252,7 @@ export const store = new Vuex.Store({
 
                         localStorage.setItem("access_token", token);
                         context.commit("retrieveToken", token);
+                        context.dispatch('getUser');
                         resolve(response);
                     })
                     .catch(error => {

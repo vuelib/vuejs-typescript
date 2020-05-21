@@ -201,12 +201,12 @@
                                 <button class="success" type="submit">
                                     Potvrdit údaje
                                 </button>
-                                <button
+                                <a
+                                    v-on:click="aresData = null"
                                     class="ml-2 shadow bg-red-800 hover:bg-red-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-                                    type="menu"
                                 >
                                     Zrušit
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </form>

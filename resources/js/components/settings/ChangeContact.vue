@@ -15,22 +15,22 @@
                     class="table"
                 >
                     <form @submit.prevent="changeContact" class="w-full max-w-lg p-5">
-                        <div class="flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full px-3">
-                                <label
-                                    class="ares-label"
-                                    for="email"
-                                >E-mailová adresa</label>
-                                <input
-                                    class="ares-input"
-                                    id="email"
-                                    type="email"
-                                    v-bind:class="{ 'border-red-500': errors.email }"
-                                    v-model="user.email"
-                                />
-                                <p class="text-red-500 text-xs italic" v-if="errors.email">{{errors.email[0]}}</p>
-                            </div>
-                        </div>
+<!--                        <div class="flex flex-wrap -mx-3 mb-6">-->
+<!--                            <div class="w-full px-3">-->
+<!--                                <label-->
+<!--                                    class="ares-label"-->
+<!--                                    for="email"-->
+<!--                                >E-mailová adresa</label>-->
+<!--                                <input-->
+<!--                                    class="ares-input"-->
+<!--                                    id="email"-->
+<!--                                    type="email"-->
+<!--                                    v-bind:class="{ 'border-red-500': errors.email }"-->
+<!--                                    v-model="user.email"-->
+<!--                                />-->
+<!--                                <p class="text-red-500 text-xs italic" v-if="errors.email">{{errors.email[0]}}</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <div class="flex flex-wrap -mx-3 mb-6">
                             <div class="w-full px-3">
                                 <label
@@ -108,6 +108,8 @@
                     .catch(error => {
                         if (error.response.status == 422) {
                             this.errors = error.response.data.errors;
+                        } else if(error.response.status == 404){
+                            this.errors = {password: ['Heslo není správné!']};
                         }
                     });
             }

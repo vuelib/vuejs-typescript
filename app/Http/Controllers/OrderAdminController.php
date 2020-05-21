@@ -76,6 +76,7 @@ class OrderAdminController extends Controller
         if (auth()->user()->email != env('ADMIN_EMAIL')) {
             return response()->json('Unauthorized', 400);
         }
+        return;
     }
 
 }
