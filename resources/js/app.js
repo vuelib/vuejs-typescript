@@ -4,7 +4,7 @@ window.Vue = require("vue");
 import App from "./App.vue";
 import VueRouter from "vue-router";
 import VueAxios from "vue-axios";
-import VueMeta from 'vue-meta'
+import VueMeta from "vue-meta";
 import axios from "axios";
 import { routes } from "./routes";
 import { store } from "./store";
@@ -35,20 +35,27 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    document.title = to.meta && to.meta.title ? to.meta.title : 'Šotola Miroslav';
+    document.title =
+        to.meta && to.meta.title ? to.meta.title : "Šotola Miroslav";
 
-    Array.from(document.querySelectorAll('[data-vue-meta]')).map(el => el.parentNode.removeChild(el));
+    Array.from(document.querySelectorAll("[data-vue-meta]")).map(el =>
+        el.parentNode.removeChild(el)
+    );
 
     if (to.meta && to.meta.metaTags) {
-        to.meta.metaTags.map(tagDef => {
-            let tag = document.createElement('meta');
+        to.meta.metaTags
+            .map(tagDef => {
+                let tag = document.createElement("meta");
 
-            Object.keys(tagDef).forEach(key => tag.setAttribute(key, tagDef[key]));
+                Object.keys(tagDef).forEach(key =>
+                    tag.setAttribute(key, tagDef[key])
+                );
 
-            tag.setAttribute('data-vue-meta', 'Test');
+                tag.setAttribute("data-vue-meta", "Test");
 
-            return tag;
-        }).forEach(tag => document.head.appendChild(tag));
+                return tag;
+            })
+            .forEach(tag => document.head.appendChild(tag));
     }
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -73,8 +80,6 @@ router.beforeEach((to, from, next) => {
         next();
     }
 });
-
-
 
 const app = new Vue({
     el: "#app",

@@ -20,11 +20,10 @@ class CreateOrdersTable extends Migration
             $table->string('description')->nullable();
             $table->string('status')->default(0);
             $table->timestamps();
-            
         });
 
         Schema::create('amount_order', function (Blueprint $table) {
-            
+
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('amount_id')->unsigned();
@@ -33,11 +32,9 @@ class CreateOrdersTable extends Migration
 
         Schema::table('amount_order', function (Blueprint $table) {
             $table->foreign('order_id')
-            ->references('id')->on('orders')
-            ->onDelete('cascade');
+                ->references('id')->on('orders')
+                ->onDelete('cascade');
         });
-
- 
     }
 
     /**

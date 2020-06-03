@@ -12,17 +12,16 @@
 */
 
 
-Auth::routes();
-Route::get('/seed',function(){
-    Artisan::call('db:seed');
-});
-Route::get('/migrate',function(){
-    Artisan::call('migrate:fresh');
-});
 
-Route::get('{any}', function () {
+Auth::routes();
+
+Route::get('/{any}', function () {
     return view('app');
 })->where('any', '.*');
-
-Route::get('/login/github', 'Auth\LoginController@redirectToProvider');
-Route::get('login/github/callback', 'Auth\LoginController@handleProviderCallback');
+    
+// Route::get('/seed', function () {
+//     Artisan::call('db:seed');
+// });
+// Route::get('/migrate', function () {
+//     Artisan::call('migrate:fresh');
+// });

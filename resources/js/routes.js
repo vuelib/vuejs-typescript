@@ -1,4 +1,4 @@
-import Domu from "./components/lib/Domu";
+ import Domu from './components/lib/Domu';
 import AllCategories from "./components/category/AllCategories";
 import ShowCategory from "./components/category/ShowCategory";
 import createCategory from "./components/category/CreateCategory";
@@ -10,6 +10,7 @@ import ShowOrder from "./components/order/ShowOrder";
 import IndexOrder from "./components/order/indexOrder";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
+import forgotpassowrd from "./components/auth/forgotpassowrd";
 import Logout from "./components/auth/Logout";
 import AddInvoice from "./components/invoice/AddInvoice";
 import addInvoice from "./components/admin/user/addInvoice";
@@ -115,6 +116,25 @@ export const routes = [{
         props: true,
         meta: {
             title: 'Šotola Miroslav - Registrovat',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Hlavní stránka'
+                },
+                {
+                    property: 'og:description',
+                    content: 'Hlavní stránka.'
+                }
+            ]
+        },
+    },
+    {
+        name: "forgotpassowrd",
+        path: "/zapomenute-heslo",
+        component: forgotpassowrd,
+        props: true,
+        meta: {
+            title: 'Šotola Miroslav - Zapomenuté heslo',
             metaTags: [
                 {
                     name: 'description',

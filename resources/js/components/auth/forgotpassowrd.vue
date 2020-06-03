@@ -92,7 +92,7 @@
 
 <script>
     export default {
-        name: "login",
+        name: "forgotpassowrd",
         props: {
             dataSuccessMessage: {
                 type: String

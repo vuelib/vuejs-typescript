@@ -20,7 +20,7 @@ export const store = new Vuex.Store({
         category: [],
         orderItems: [],
         products: [],
-        filter: 'all',
+        filter: "all",
         userProfile: [],
         theme: "theme-light",
         navbarlinks: [
@@ -36,15 +36,15 @@ export const store = new Vuex.Store({
             // { name: "Zboží", route: "zbozi" },
             { name: "Objednat zboží", route: "objednat", fa: "fa-plus-circle" },
             { name: "Objednávky", route: "Orders", fa: "fa-tasks" },
-            { name: "Nastavení", route: "settings", fa: "fa-cogs" },
+            { name: "Nastavení", route: "settings", fa: "fa-cogs" }
         ]
     },
     getters: {
         loogedInlinks(state) {
-            return state.navbarlinks
+            return state.navbarlinks;
         },
         isAdmin(state) {
-            return state.admin
+            return state.admin;
         },
         theme(state) {
             return state.theme;
@@ -89,16 +89,15 @@ export const store = new Vuex.Store({
             return state.allUsers;
         },
         allUsersFiltered(state) {
-            if (state.filter == 'all') {
-                return state.allUsers
-            } else if (state.filter == 'withinvoice') {
-                return state.allUsers.filter(user => user.invoice)
-            } else if (state.filter == 'withoutinvoice') {
-                return state.allUsers.filter(user => !user.invoice)
+            if (state.filter == "all") {
+                return state.allUsers;
+            } else if (state.filter == "withinvoice") {
+                return state.allUsers.filter(user => user.invoice);
+            } else if (state.filter == "withoutinvoice") {
+                return state.allUsers.filter(user => !user.invoice);
             }
-            return state.todos
-        },
-
+            return state.todos;
+        }
     },
     mutations: {
         getTheme(state, theme) {
@@ -128,14 +127,14 @@ export const store = new Vuex.Store({
                 created_at: order.created_at,
                 amounts: order.amounts,
                 user_id: order.user_id,
-                status: 'rozpracovaná',
-            })
+                status: "rozpracovaná"
+            });
         },
         confirmOrder(state, data) {
-            state.order.status = "potvrzena"
-            state.order.description = data.description
-            const index = state.orders.findIndex(item => item.id == data.id)
-            state.orders.splice(index, 1, state.order)
+            state.order.status = "potvrzena";
+            state.order.description = data.description;
+            const index = state.orders.findIndex(item => item.id == data.id);
+            state.orders.splice(index, 1, state.order);
         },
         deleteOrder(state, id) {
             const index = state.orders.findIndex(item => item.id == id);
@@ -175,7 +174,7 @@ export const store = new Vuex.Store({
             state.allUsers = allUsers;
         },
         updateFilter(state, filter) {
-            state.filter = filter
+            state.filter = filter;
         },
         retrieveToken(state, token) {
             state.token = token;
@@ -252,7 +251,7 @@ export const store = new Vuex.Store({
 
                         localStorage.setItem("access_token", token);
                         context.commit("retrieveToken", token);
-                        context.dispatch('getUser');
+                        context.dispatch("getUser");
                         resolve(response);
                     })
                     .catch(error => {
@@ -279,11 +278,15 @@ export const store = new Vuex.Store({
                 axios.defaults.headers.common["Authorization"] =
                     "Bearer " + context.state.token;
 
-                axios.get(`userprofile/${id}`)
+                axios
+                    .get(`userprofile/${id}`)
                     .then(response => {
                         resolve(response);
                         context.commit("getUserProfile", response.data.data);
-                        context.commit("retrieveOrders", response.data.data.orders);
+                        context.commit(
+                            "retrieveOrders",
+                            response.data.data.orders
+                        );
                     })
                     .catch(error => {
                         console.log(error);
@@ -422,22 +425,23 @@ export const store = new Vuex.Store({
                     })
                     .catch(error => {
                         console.log(error);
-                        reject(error)
-                    })
-            })
+                        reject(error);
+                    });
+            });
         },
         allUsers(context) {
             return new Promise((resolve, reject) => {
-                axios.get(`allusers`)
+                axios
+                    .get(`allusers`)
                     .then(response => {
                         context.commit("allUsers", response.data.data);
-                        resolve(response)
+                        resolve(response);
                     })
                     .catch(error => {
                         console.log(error);
-                        reject(error)
-                    })
-            })
-        },
+                        reject(error);
+                    });
+            });
+        }
     }
 });

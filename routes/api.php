@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
 
 
 Route::middleware('auth:api')->group(function () {
     //Users route
+    Route::post('change_password', 'AuthController@change_password');
     Route::post('user', 'InvoiceController@check');
     Route::post('logout', 'AuthController@logout');
     Route::put('changeContact', 'UserController@changeContact');
@@ -40,9 +40,9 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('amount/{amount}', 'AmountController@destroy');
 });
 
-
 Route::post('category/{category}', 'CategoryController@update');
 Route::post('/login', 'AuthController@login');
+Route::post('forgot_password', 'AuthController@forgot_password');
 Route::post('/register', 'AuthController@register');
 Route::post('contact', 'ContactController@store');
 
@@ -53,6 +53,3 @@ Route::get('categories', 'CategoryController@index');
 Route::get('category/{category}', 'CategoryController@show');
 //Product
 Route::get('products', 'ProductController@index');
-
-
-

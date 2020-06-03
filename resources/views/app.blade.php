@@ -13,7 +13,7 @@
 <body class="font-sans leading-normal tracking-normal">
 <div id="app">
 </div>
-<script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
+<script src="{{ mix('/js/app.js') }}"></script>
  <script>
         /*Toggle dropdown list*/
         function toggleDD(myDropMenu) {

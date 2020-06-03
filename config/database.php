@@ -48,9 +48,9 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'niceworkcz001'),
-            'username' => env('DB_USERNAME', 'niceworkcz'),
-            'password' => env('DB_PASSWORD', '1seremE2,'),
+            'database' => env('DB_DATABASE', ''),
+            'username' => env('DB_USERNAME', ''),
+            'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -68,9 +68,9 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'bexley.thinline.cz'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'niceworkcz'),
-            'username' => env('DB_USERNAME', 'niceworkcz001'),
-            'password' => env('DB_PASSWORD', '12345678'),
+            'database' => env('DB_DATABASE', ''),
+            'username' => env('DB_USERNAME', ''),
+            'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
@@ -123,7 +123,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [
