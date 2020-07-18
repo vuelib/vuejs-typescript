@@ -17,12 +17,15 @@
         "laravel/passport": "^8.4",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
+        "mll-lab/laravel-graphql-playground": "^2.2",
+        "nuwave/lighthouse": "^4.15",
         "pusher/pusher-php-server": "~3.0",
         "queueworker/sansdaemon": "^1.2"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
         "fzaninotto/faker": "^1.9.1",
+        "haydenpierce/class-finder": "^0.4.2",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^4.1",
         "phpunit/phpunit": "^8.5"

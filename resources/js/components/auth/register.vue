@@ -1,161 +1,78 @@
 <template>
-    <div>
-        <div>
-            <div>
-                <div class="max-w-3xl flex   flex-wrap  lg:my-0 p-5">
-                    <div id="register" class="w-full shadow-2xl bg-white mx-6 lg:mx-0">
-
-
-                        <div class="p-4 md:p-12  text-center lg:text-left">
-                            <h1 class="text-3xl font-bold pt-8 lg:pt-0">Zaregistrovat se</h1>
-                            <div class="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-teal-500 opacity-25"></div>
-                            <form @submit.prevent="register" class="w-full max-w-lg ">
-                                <div class="flex flex-wrap -mx-3 mb-6">
-                                    <div class="w-full px-3">
-                                        <label
-                                            class=" text-base font-bold flex pl-2 justify-start lg:justify-start"
-                                            for="email"
-                                        >E-mail</label>
-                                        <input
-                                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                            id="email"
-                                            type="email"
-                                            v-bind:class="{ 'border-red-500': errors.email }"
-                                            v-model="email"
-                                            autocomplete="username"
-                                        />
-                                        <p v-if="errors.email" class="text-red-500 text-xs italic">
-                                            {{errors.email[0]}}</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-wrap -mx-3 mb-6">
-                                    <div class="w-full px-3">
-                                        <label
-                                            class=" text-base font-bold flex pl-2 justify-start lg:justify-start"
-                                            for="phone"
-                                        >Telefonní číslo</label>
-                                        <input
-                                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                            id="phone"
-                                            type="phone"
-                                            v-bind:class="{ 'border-red-500': errors.phone }"
-                                            v-model="phone"
-                                            autocomplete="phone"
-                                        />
-                                        <p v-if="errors.phone" class="text-red-500 text-xs italic">
-                                            {{errors.phone[0]}}</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-wrap -mx-3 mb-6">
-                                    <div class="w-full px-3">
-                                        <label
-                                            class=" text-base font-bold flex pl-2 justify-start lg:justify-start"
-                                            for="password"
-                                        >Heslo</label>
-                                        <input
-                                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                            id="password"
-                                            type="password"
-                                            v-bind:class="{ 'border-red-500': errors.password }"
-                                            v-model="password"
-                                            autocomplete="new-password"
-                                        />
-                                        <p v-if="errors.password" class="text-red-500 text-xs italic">
-                                            {{errors.password[0]}}</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-wrap -mx-3 mb-6">
-                                    <div class="w-full px-3">
-                                        <label
-                                            class=" text-base font-bold flex pl-2 justify-start lg:justify-start"
-                                            for="password-confirm"
-                                        >Potvrďte heslo</label>
-                                        <input
-                                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                            id="password-confirm"
-                                            type="password"
-                                            v-bind:class="{ 'border-red-500': errors.confirm_password }"
-                                            v-model="confirm_password"
-                                            autocomplete="new-password"
-                                        />
-                                        <p
-                                            v-if="errors.confirm_password"
-                                            class="text-red-500 text-xs italic"
-                                        >{{errors.confirm_password[0]}}</p>
-                                    </div>
-                                </div>
-
-                                <div class="md:flex md:items-center">
-                                    <div class="w-full">
-                                        <button
-                                            class="shadow bg-blue-800 hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded flex"
-                                            type="submit" :disabled="loading"
-                                        >
-                                            <div v-if="loading" class="loader">
-                                                <div class="inner one"></div>
-                                                <div class="inner two"></div>
-                                                <div class="inner three"></div>
-                                            </div>
-                                            <div>
-                                                Registrovat se
-                                            </div>
-                                        </button>
-                                        <router-link
-                                            :to="{ name: 'login' }"
-                                            class="mt-4 w-full  focus:shadow-outline focus:outline-none text-secondary font-bold flex"
-                                        > Přihlásit se
-                                        </router-link>
-
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
+  <Box title="Zaregistrovat se">
+    <Form :onClick="register">
+      <customInput
+        v-model="user.email"
+        :error="errors.email"
+        label="E-mail"
+        name="email"
+        autofocus="true"
+        type="email"
+      />
+      <customInput v-model="user.phone" :error="errors.phone" label="Telefonní číslo" name="phone" />
+      <customInput
+        v-model="user.password"
+        :error="errors.password"
+        label="Heslo"
+        name="password"
+        type="password"
+      />
+      <customInput
+        v-model="user.confirm_password"
+        :error="errors.confirm_password"
+        label="Potvrďte heslo"
+        name="confirm_password"
+        type="password"
+      />
+      <customFormButton name="Registrovat se" :loading="loading" />
+      <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
+      <router-link :to="{ name: 'forgotpassowrd' }" class="router-link">Zapomněli jste heslo?</router-link>
+    </Form>
+  </Box>
 </template>
 
-<script>
-    export default {
-        data() {
-            return {
-                phone: "",
-                email: "",
-                password: "",
-                confirm_password: "",
-                errors: {},
-                loading: false
-            };
-        },
-        methods: {
-            register() {
-                this.$store
-                    .dispatch("register", {
-                        email: this.email,
-                        phone: this.phone,
-                        password: this.password,
-                        confirm_password: this.confirm_password
-                    })
-                    .then(response => {
-                        this.loading = false;
-                        this.successMessage = "Úspěšně jste byly zaregistrováni";
-                        this.$router.push({
-                            name: "login",
-                            params: {dataSuccessMessage: this.successMessage}
-                        });
-                    })
-                    .catch(error => {
-                        if (error.response.status == 422) {
-                            this.errors = error.response.data.errors;
-                        }
-                        this.password = "";
-                    });
-            }
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import Box from "../common/box.vue";
+import Form from "../common/form.vue";
+import customInput from "../common/formInput.vue";
+import customFormButton from "../common/formButton.vue";
+@Component({
+  name: "Register",
+  components: {
+    Box,
+    Form,
+    customInput,
+    customFormButton
+  }
+})
+export default class Register extends Vue {
+  private user = {
+    phone: "",
+    email: "",
+    password: "",
+    confirm_password: ""
+  };
+  private errors = {};
+  private loading?: Boolean = false;
+
+  register() {
+    this.$store
+      .dispatch("register", this.user)
+      .then(response => {
+        this.loading = false;
+        let successMessage = "Úspěšně jste byly zaregistrováni";
+        this.$router.push({
+          name: "login",
+          params: { dataSuccessMessage: successMessage }
+        });
+      })
+      .catch(error => {
+        if (error.response.status == 422) {
+          this.errors = error.response.data.errors;
         }
-    };
+        this.user.password = "";
+      });
+  }
+}
 </script>

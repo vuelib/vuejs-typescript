@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "strict": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": false,
+        "noImplicitThis": true,
+        "noImplicitReturns": false,
+        "sourceMap": true,
+        "types": ["node", "webpack-env"]
+    },
+    "paths": {
+        "@/*": ["resources/js*"]
+    },
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.vue"],
+    "files": ["resources/js/typings.d.ts"],
+    "exclude": ["node_modules"]
+}

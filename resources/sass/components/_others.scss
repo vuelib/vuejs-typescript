@@ -1,0 +1,57 @@
+.fa-pen {
+    @apply .text-blue-800;
+}
+
+.fa-check {
+    @apply .text-green-800;
+}
+
+.content-wrapper {
+    transition: background-color 0.25s;
+}
+
+.table {
+    @apply .border-t-4 .border-b-4 .border-primary .rounded-lg .shadow-lg .bg-primary .text-secondary .p-3 .ml-3;
+}
+
+.link {
+    @apply .text-left .p-2 .cursor-pointer;
+}
+
+.link:hover {
+    @apply .text-secondary .bg-darkergreen .font-bold;
+}
+
+.success {
+    @apply .mt-3 .bg-junglegreen .text-primary .font-semibold .py-2 .px-4 .border .border-junglegreen .rounded .ml-10 .w-auto;
+}
+
+.success:hover {
+    @apply .bg-button;
+}
+
+h3 {
+    @apply .font-semibold .text-secondary .pl-2 .text-xl;
+}
+
+.header {
+    @apply .mt-3 .p-3;
+}
+
+.component-fade-enter-active,
+.component-fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.component-fade-enter,
+.component-fade-leave-to {
+    opacity: 0;
+}
+
+.btn-blue {
+    @apply .bg-blue-500 .text-primary .font-bold;
+}
+
+.btn-blue:hover {
+    @apply .bg-blue-700;
+}

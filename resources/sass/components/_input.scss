@@ -1,0 +1,18 @@
+.input-group {
+    @apply .flex .flex-wrap .mt-4 .-mx-3 .mb-3;
+    .input-group-prepend {
+        @apply .w-full .px-3;
+        .label {
+            @apply .text-base .font-bold .flex .pl-2 .justify-start;
+        }
+        .form-control {
+            @apply .appearance-none .block .w-full .bg-gray-200 .text-gray-700 .border .border-gray-200 .rounded .py-3 px-4 .mb-3 .leading-tight;
+        }
+        .form-control:focus {
+            @apply .outline-none .bg-white .border-gray-500;
+        }
+        .error {
+            @apply .text-red-500 .text-xs .italic;
+        }
+    }
+}

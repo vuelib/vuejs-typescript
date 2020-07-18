@@ -3,19 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
+
     protected $fillable = ['name', 'id', 'imagePath'];
 
-    public function products()
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);
-    }
-
-    public function path()
-    {
-        return url("/kategorie/{$this->id}-" . Str::slug($this->name));
     }
 }

@@ -1,0 +1,23 @@
+.ares {
+    @apply .appearance-none .bg-transparent .border-none .w-full .text-gray-700 .mr-3 .py-1 .px-2 .leading-tight;
+}
+
+.ares:focus {
+    @apply .outline-none;
+}
+
+.ares-outline {
+    @apply .flex .items-center .border-b .border-b-2 .border-teal-500 .py-2;
+}
+
+.ares-input {
+    @apply .appearance-none .block .w-full .bg-gray-200 .text-gray-700 .border .border-gray-200 .rounded .py-3 .px-4 .mb-3 .leading-tight;
+}
+
+.ares-input:input {
+    @apply .outline-none .bg-white .border-gray-500;
+}
+
+.ares-label {
+    @apply .block .uppercase .tracking-wide .text-gray-700 .text-xs .font-bold .mb-2;
+}

@@ -3,15 +3,22 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Order extends Model
 {
 
     protected $fillable = ['user_id', 'description', 'status'];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function amounts(): BelongsToMany
+    {
+        return $this->belongsToMany(Amount::class);
     }
 
     public function getstatusAttribute($attribute)
@@ -21,11 +28,4 @@ class Order extends Model
             1 => 'potvrzena',
         ][$attribute];
     }
-
-    public function amounts()
-    {
-        return $this->belongsToMany(Amount::class);
-    }
-
-
 }

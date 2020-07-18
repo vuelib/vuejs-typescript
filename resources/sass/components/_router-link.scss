@@ -1,0 +1,7 @@
+.router-link {
+    @apply .mt-4 .w-full .text-secondary .font-bold .flex;
+
+    &:focus {
+        @apply .shadow-outline .outline-none;
+    }
+}

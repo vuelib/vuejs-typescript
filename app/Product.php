@@ -4,25 +4,22 @@ namespace App;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Product extends Model
 {
     protected $fillable = ['id', 'name', 'category_id', 'hmotnost'];
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function amounts()
+    public function amounts(): hasMany
     {
         return $this->hasMany(Product::class);
-    }
-
-    public function path()
-    {
-        return url("/produkt/{$this->id}-" . Str::slug($this->name));
     }
 
     public function search($id)
@@ -32,4 +29,3 @@ class Product extends Model
             ->get();
     }
 }
-

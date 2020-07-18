@@ -1,50 +1,53 @@
 <template>
-    <div :class="theme" class="w-full bg-junglegreen shadow-lg ">
-        <nav class="pt-2 px-1 mt-0 container mx-auto w-full z-20 top-0 text-primary">
-            <div class="flex flex-wrap ">
-                <logo/>
-                <menuItems :links="links" :logged-in="loggedIn" :looged-inlinks="loogedInlinks"
-                              :toggle-theme="toggleTheme" :user="user"/>
-            </div>
-        </nav>
-    </div>
+  <div class="w-full bg-junglegreen shadow-lg">
+    <nav class="pt-2 px-1 mt-0 container mx-auto w-full z-20 top-0 text-primary">
+      <div class="flex flex-wrap">
+        <logo />
+        <menuItems
+          :links="navbarlinks"
+          :logged-in="loggedIn"
+          :looged-inlinks="loogedInlinks"
+          :toggle-theme="toggleTheme"
+          :user="user"
+        />
+      </div>
+    </nav>
+  </div>
 </template>
-<script>
-    import Logo from "./Logo";
-    import MenuItems from "./MenuItems";
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+import { mapGetters, mapMutations } from "vuex";
+import logo from "./Logo.vue";
+import menuItems from "./MenuItems.vue";
+@Component({
+  components: {
+    menuItems,
+    logo
+  },
+  computed: mapGetters(["navbarlinks", "loogedInlinks", "loggedIn", "user"]),
+  methods: mapMutations(["setTheme"])
+})
+export default class Nav extends Vue {
+  THEME_DARK = "theme-dark";
+  THEME_LIGHT = "theme-light";
+  get theme(): string {
+    return this.$store.state.theme;
+  }
+  set theme(value: string) {
+    localStorage.setItem("theme", value);
+    this.$store.commit("setTheme", value);
+  }
+  navbarlinks!: Array<String>;
+  loogedInlinks!: Array<String>;
+  user!: Array<String>;
+  created(): void {
+    this.theme = localStorage.getItem("theme") || this.THEME_LIGHT;
+  }
 
-    export default {
-        name: 'navbar',
-        components: {MenuItems, Logo},
-        data() {
-            return {
-                theme: 'theme-light'
-            };
-        },
-        created() {
-            this.theme = localStorage.getItem('theme') || 'theme-light';
-            this.$store.commit('getTheme', this.theme);
-        },
-        computed: {
-            links() {
-                return this.$store.state.navbarlinks;
-            },
-            loogedInlinks() {
-                return this.$store.state.loogedInlinks;
-            },
-            loggedIn() {
-                return this.$store.getters.loggedIn;
-            },
-            user() {
-                return this.$store.getters.user;
-            }
-        },
-        methods: {
-            toggleTheme() {
-                this.theme = this.theme == 'theme-light' ? 'theme-dark' : 'theme-light';
-                localStorage.setItem('theme', this.theme);
-                this.$store.commit('getTheme', this.theme);
-            }
-        }
-    };
+  toggleTheme() {
+    this.theme =
+      this.theme === this.THEME_LIGHT ? this.THEME_DARK : this.THEME_LIGHT;
+  }
+}
 </script>

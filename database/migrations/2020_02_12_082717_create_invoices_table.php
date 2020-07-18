@@ -15,13 +15,13 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
-            $table->string('nazev');
-            $table->string('ulice');
-            $table->string('mesto');
-            $table->string('psc');
-            $table->string('zeme');
-            $table->string('ic')->unique();
-            $table->string('dic')->nullable();
+            $table->string('nazev', 100);
+            $table->string('ulice', 100);
+            $table->string('mesto', 100);
+            $table->string('psc', 5);
+            $table->enum('zeme', ['Česká republika', 'Slovensko']);
+            $table->string('ic', 9)->unique();
+            $table->string('dic', 13)->nullable();
             $table->timestamps();
         });
     }
