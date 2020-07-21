@@ -1,33 +1,44 @@
 import axios from "axios";
 
 interface Product {
-    products: Object;
+    products: any;
+    filteredProducts: any;
 }
 
 export default {
     state: () => ({
-        products: []
+        products: [],
+        filteredProducts: []
     }),
     getters: {
         products(state: Product) {
             return state.products;
+        },
+        filteredProducts(state: Product) {
+            return state.filteredProducts;
         }
     },
     mutations: {
-        fetchProducts(state: Product, products: Product) {
+        setProducts(state: Product, products) {
             state.products = products;
+            state.filteredProducts = products;
+        },
+        filterProducts(state: Product, category) {
+            state.filteredProducts =
+                state.filteredProducts && category.id
+                    ? state.products.filter(p => p.category_id == category.id)
+                    : state.products;
         }
     },
     actions: {
-        fetchProducts(context) {
-            axios
-                .get(`products`)
-                .then(response => {
-                    context.commit("fetchProducts", response.data.data);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+        async fetchProducts({ commit }) {
+            try {
+                let res = await axios.get(`products`);
+                res.data.map(p => (p.value = ""));
+                commit("setProducts", res.data);
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
 };

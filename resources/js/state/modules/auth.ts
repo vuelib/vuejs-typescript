@@ -58,7 +58,7 @@ export default {
         register(context, data) {
             return new Promise((resolve, reject) => {
                 axios
-                    .post("/api/register", {
+                    .post("register", {
                         phone: data.phone,
                         email: data.email,
                         password: data.password,
@@ -96,20 +96,16 @@ export default {
         retrieveToken({ commit, dispatch }, credentials) {
             return new Promise((resolve, reject) => {
                 axios
-                    .post("/api/login", {
-                        username: credentials.username,
-                        password: credentials.password
-                    })
+                    .post("login", credentials)
                     .then(response => {
                         const token = response.data.access_token;
 
                         localStorage.setItem("access_token", token);
                         commit("retrieveToken", token);
-                        dispatch("getUser");
+                        // dispatch("getUser");
                         resolve(response);
                     })
                     .catch(error => {
-                        console.log(error);
                         reject(error);
                     });
             });
@@ -136,7 +132,7 @@ export default {
                 "Bearer " + state.token;
 
             axios
-                .post("/user")
+                .post("user")
                 .then(response => {
                     commit("getUser", response.data);
                 })

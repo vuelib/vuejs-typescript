@@ -1,60 +1,58 @@
 <template>
-  <div class>
-    <div class="header">
-      <h3>{{category.name}}</h3>
+  <Content :title="category.name">
+    <div class="table" v-if="category.products">
+      <Table
+        :columns="columns"
+        :data="category.products"
+        :sortColumn="sortColumn"
+        :onSort="handleSort"
+      />
     </div>
-    <div class="flex flex-wrap">
-      <div class="w-full">
-        <div class="table">
-          <div v-if="category">
-            <table class="table-fixed">
-              <thead>
-                <tr>
-                  <th class="w-1/4 px-4 py-2">Číslo produktu</th>
-                  <th class="w-1/2 px-4 py-2">Název</th>
-                  <th class="w-1/4 px-4 py-2">Balení</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-bind:key="product.id" v-for="product in category.products">
-                  <td class="border px-4 py-2">{{product.id}}</td>
-                  <td class="border px-4 py-2">{{product.name}}</td>
-                  <td class="border px-4 py-2">{{product.hmotnost}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </Content>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { mapGetters, mapMutations } from "vuex";
+import Content from "../common/content.vue";
+import Table from "../common/table.vue";
+@Component({
   name: "ShowCategory",
-  props: {
-    id: ""
+  components: {
+    Content,
+    Table
   },
-  data() {
-    return {
-      loading: false
-    };
-  },
+  computed: mapGetters(["category"]),
+  methods: mapMutations(["fetchCategory"])
+})
+export default class ShowCategory extends Vue {
+  @Prop() id!: any;
+  loading?: Boolean = false;
+  columns: any = [
+    { path: "id", label: "Číslo produktu" },
+    { path: "name", label: "Název" },
+    { path: "hmotnost", label: "Balení" }
+  ];
+  get category() {
+    return this.$store.getters.category;
+  }
+  set category(order) {
+    console.log(order);
+  }
+  sortColumn?: any = { path: "id", order: "asc" };
+
+  handleSort = sortColumn => {
+    console.log(sortColumn);
+    this.sortColumn = sortColumn;
+  };
+
   created() {
     this.$store.dispatch("fetchCategory", this.id);
-  },
-  computed: {
-    category() {
-      return this.$store.getters.category;
-    }
-  },
-  watch: {
-    $route(to, from) {
-      if (from.params.id !== to.params.id) {
-        this.$store.dispatch("fetchCategory", this.id);
-      }
-    }
   }
-};
+
+  @Watch("$route", { immediate: true, deep: true })
+  onUrlChange(newVal: any) {
+    this.$store.dispatch("fetchCategory", this.id);
+  }
+}
 </script>

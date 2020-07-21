@@ -1,3 +1,4 @@
+import _ from "lodash";
 import axios from "axios";
 export default {
     state: () => ({
@@ -19,6 +20,13 @@ export default {
         setCategory(state, category) {
             state.category = category;
         },
+        filterCategory(state, sortColumn) {
+            state.category = _.orderBy(
+                state.category,
+                [sortColumn.path],
+                [sortColumn.order]
+            );
+        },
         deleteCategory(state, id) {
             const index = state.categories.findIndex(item => item.id == id);
             state.categories.splice(index, 1);
@@ -26,11 +34,11 @@ export default {
     },
     actions: {
         async fetchCategories({ commit }) {
-            let res = await axios.get(`/api/category`);
+            let res = await axios.get(`category`);
             commit("setCategories", res.data);
         },
         async fetchCategory({ commit }, id) {
-            let res = await axios.get(`/api/category/${id}`);
+            let res = await axios.get(`category/${id}`);
             commit("setCategory", res.data);
         },
 

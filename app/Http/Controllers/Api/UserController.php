@@ -22,6 +22,11 @@ class UserController extends Controller
         return $user;
     }
 
+    public function store()
+    {
+        return auth()->user()->load('orders.amounts.product', 'invoice');
+    }
+
     public function destroy($id)
     {
         $user = User::find($id);

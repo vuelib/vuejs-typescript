@@ -16,31 +16,31 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::where('user_id', auth()->user()->id)
+        $this->authorize('create', Order::class);
+        return Order::where('user_id', auth()->user()->id)
             ->orderBy('created_at', 'desc')
-            ->get();
-        return $orders;
+            ->get()->map->format();
     }
 
     public function store(Request $request)
     {
-        // $this->authorize('update', auth()->user()->invoice);
+        $this->authorize('create', Order::class);
         $data = request()->validate($this->rules());
         $order = auth()->user()->orders()->create();
-        foreach ($data['order'] as $prodId => $value) {
-            $mnozstvi = Amount::create(['product_id' => $prodId, 'mnozstvi' => $value]);
+        foreach ($data['orders'] as $product) {
+            $mnozstvi = Amount::create(['product_id' => $product['id'], 'mnozstvi' => $product['value']]);
             $order->amounts()->attach($mnozstvi->id);
         }
         $order->load('amounts.product');
-        broadcast($order);
+        // broadcast($order);
         return $order;
     }
 
 
     public function show(Order $order)
     {
-        $order->load('amounts.product');
-        return new $order;
+        $this->authorize('view', Order::class);
+        return $order->formatedRelatinship();
     }
 
     public function update(Order $order)
@@ -76,8 +76,8 @@ class OrderController extends Controller
     public function rules()
     {
         return [
-            'order' => 'required',
-            'order.*' => 'numeric',
+            'orders' => 'required',
+            'orders.*.value' => 'numeric',
         ];
     }
 }

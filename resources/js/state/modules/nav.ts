@@ -11,7 +11,7 @@ export default {
             { name: "Kontakt", route: "kontakt" },
             { name: "Přihlásit", route: "login" }
         ],
-        loogedInlinks: [
+        loggedInlinks: [
             { name: "Zboží", route: "zbozi" },
             { name: "Kontakt", route: "kontakt" }
         ],
@@ -26,7 +26,7 @@ export default {
         navbarlinks(state: nav): Array<String> {
             return state.navbarlinks;
         },
-        loogedInlinks(state: nav): Array<String> {
+        loggedInlinks(state: nav): Array<String> {
             return state.loogedInlinks;
         },
         sidebarlinks(state: nav): Array<String> {

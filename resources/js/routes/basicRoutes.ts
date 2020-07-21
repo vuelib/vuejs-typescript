@@ -20,7 +20,7 @@ const BasicRoutes = [
     {
         name: "kontakt",
         path: "/kontakt",
-        component: () => import("../components/contact/sendEmail.vue"),
+        component: () => import("../components/contact/index.vue"),
         meta: {
             title: "Šotola Miroslav - Kontakt",
             metaTags: [

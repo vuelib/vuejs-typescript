@@ -1,22 +1,39 @@
 <template>
-  <div class="boxContainer w-2/5">
-    <div class="w-full shadow-2xl bg-white mx-6 lg:mx-0">
-      <div class="p-4 md:p-12 text-center lg:text-left">
-        <h1 class="text-3xl font-bold pt-8 lg:pt-0">{{title}}</h1>
-        <div class="mx-auto lg:mx-0 w-100 pt-3 border-b-2 border-teal-500 opacity-25"></div>
-        <slot></slot>
+  <aside class="sidebar">
+    <div class="flex">
+      <div class="name w-4/6 md:w-full pt-2 md:pt-0">{{ name }}</div>
+    </div>
+    <div class="menu block">
+      <slot />
+      <div v-if="routerLink === true">
+        <router-link
+          v-for="item in items"
+          v-bind:key="item[_key]"
+          class="link block"
+          :to="param(item)"
+        >{{ item[type] }}</router-link>
+      </div>
+      <div v-else>
+        <div v-bind:key="item[_key]" v-for="item in items">
+          <div class="link" v-on:click="onSelect(item)">{{ item[type] }}</div>
+        </div>
       </div>
     </div>
-  </div>
+  </aside>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
-  name: "box"
+  name: "Sidebar"
 })
-export default class Container extends Vue {
-  @Prop() readonly title!: String;
+export default class Sidebar extends Vue {
+  @Prop({ required: true, type: String }) readonly name!: String;
+  @Prop({ default: true, type: Boolean }) readonly routerLink!: Boolean;
+  @Prop({ required: true }) readonly items!: Array<any>;
+  @Prop({ default: "name" }) readonly type!: String;
+  @Prop({ default: "id" }) readonly _key!: String;
+  @Prop() readonly onSelect?: Function;
+  @Prop() param?: Function;
 }
 </script>
-

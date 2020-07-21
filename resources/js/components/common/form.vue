@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onClick" class="w-full max-w-lg">
+  <form class="w-full max-w-lg">
     <div
       class="bg-blue-100 w-full border-t border-b border-blue-500 text-blue-700 px-4 py-3"
       role="alert"
@@ -17,7 +17,6 @@ import { Component, Prop, Vue } from "vue-property-decorator";
   name: "Form"
 })
 export default class Form extends Vue {
-  @Prop({ required: true }) readonly onClick!: Function;
   @Prop({}) readonly succesMessage?: String;
 }
 </script>

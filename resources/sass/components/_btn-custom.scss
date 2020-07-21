@@ -7,3 +7,27 @@
         @apply .bg-blue-600;
     }
 }
+
+.btn-edit {
+    @apply .inline-block .bg-blue-600 .text-sm .font-semibold .w-full .text-white .p-2 .text-center;
+
+    &:hover {
+        @apply .bg-blue-800;
+    }
+}
+
+.btn-delete {
+    @apply .inline-block .bg-red-600 .text-sm .font-semibold .w-full .text-white .p-2 .text-center;
+
+    &:hover {
+        @apply .bg-red-800;
+    }
+}
+
+.btn-search {
+    @apply .pt-2 .appearance-none .text-black .block .w-full  .border  .rounded .py-3 .px-4 .leading-tight;
+
+    &:hover {
+        @apply .outline-none .bg-white;
+    }
+}

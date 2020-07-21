@@ -20348,6 +20348,74 @@ main {
   background-color: rgba(49, 130, 206, var(--bg-opacity));
 }
 
+.btn-edit {
+  display: inline-block;
+  --bg-opacity: 1;
+  background-color: #3182ce;
+  background-color: rgba(49, 130, 206, var(--bg-opacity));
+  font-size: 0.875rem;
+  font-weight: 600;
+  width: 100%;
+  --text-opacity: 1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.btn-edit:hover {
+  --bg-opacity: 1;
+  background-color: #2c5282;
+  background-color: rgba(44, 82, 130, var(--bg-opacity));
+}
+
+.btn-delete {
+  display: inline-block;
+  --bg-opacity: 1;
+  background-color: #e53e3e;
+  background-color: rgba(229, 62, 62, var(--bg-opacity));
+  font-size: 0.875rem;
+  font-weight: 600;
+  width: 100%;
+  --text-opacity: 1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.btn-delete:hover {
+  --bg-opacity: 1;
+  background-color: #9b2c2c;
+  background-color: rgba(155, 44, 44, var(--bg-opacity));
+}
+
+.btn-search {
+  padding-top: 0.5rem;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  --text-opacity: 1;
+  color: #000;
+  color: rgba(0, 0, 0, var(--text-opacity));
+  display: block;
+  width: 100%;
+  border-width: 1px;
+  border-radius: 0.25rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  line-height: 1.25;
+}
+
+.btn-search:hover {
+  outline: 0;
+  --bg-opacity: 1;
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
+}
+
 .input-group {
   display: flex;
   flex-wrap: wrap;

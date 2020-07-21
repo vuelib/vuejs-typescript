@@ -1,6 +1,6 @@
 <template>
   <Box title="Zaregistrovat se">
-    <Form :onClick="register">
+    <Form>
       <customInput
         v-model="user.email"
         :error="errors.email"
@@ -9,7 +9,13 @@
         autofocus="true"
         type="email"
       />
-      <customInput v-model="user.phone" :error="errors.phone" label="Telefonní číslo" name="phone" />
+      <customInput
+        v-model="user.phone"
+        :error="errors.phone"
+        label="Telefonní číslo"
+        type="phone"
+        name="phone"
+      />
       <customInput
         v-model="user.password"
         :error="errors.password"
@@ -24,7 +30,7 @@
         name="confirm_password"
         type="password"
       />
-      <customFormButton name="Registrovat se" :loading="loading" />
+      <customFormButton :onClick="register" name="Registrovat se" :loading="loading" />
       <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
       <router-link :to="{ name: 'forgotpassowrd' }" class="router-link">Zapomněli jste heslo?</router-link>
     </Form>

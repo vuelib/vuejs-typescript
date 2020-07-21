@@ -6,7 +6,8 @@ use App\Order;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class OrderPolicy{
+class OrderPolicy
+{
     use HandlesAuthorization;
 
     /**
@@ -17,7 +18,7 @@ class OrderPolicy{
      */
     public function viewAny(User $user)
     {
-        //
+        return isset(auth()->user()->invoice);
     }
 
     /**
@@ -27,9 +28,9 @@ class OrderPolicy{
      * @param  \App\Order  $order
      * @return mixed
      */
-    public function view(User $user, Order $order)
+    public function view()
     {
-        //
+        return isset(auth()->user()->invoice);
     }
 
     /**
@@ -40,9 +41,14 @@ class OrderPolicy{
      */
     public function create()
     {
-        return auth()->user()->email == 'b1g2h3@seznam.cz';
-        
+        return isset(auth()->user()->invoice);
     }
+
+    private $roles = [
+        'webmaster',
+        'author',
+        'admin'
+    ];
 
     /**
      * Determine whether the user can update the order.
@@ -53,7 +59,7 @@ class OrderPolicy{
      */
     public function update(User $user, Order $order)
     {
-        //
+        return isset(auth()->user()->invoice);
     }
 
     /**

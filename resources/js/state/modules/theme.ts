@@ -4,7 +4,7 @@ interface theme {
 
 export default {
     state: () => ({
-        theme: "theme-light"
+        theme: ""
     }),
     getters: {
         theme(state: theme): String {
@@ -12,7 +12,8 @@ export default {
         }
     },
     mutations: {
-        setTheme(state: theme, theme: String) {
+        setTheme(state, theme) {
+            console.log(theme);
             state.theme = theme;
         }
     }

@@ -62,28 +62,31 @@ export default {
         }
     },
     actions: {
-        fetchOrders(context) {
+        fetchOrders({ rootState, commit }) {
+            return new Promise((resolve, reject) => {
             axios.defaults.headers.common["Authorization"] =
-                "Bearer " + context.state.token;
+                "Bearer " + rootState.auth.token;
 
             axios
-                .get("/orders")
-                .then(response => {
-                    context.commit("setOrders", response.data.data);
+                .get("/order")
+                .then(res => {
+                    commit("setOrders", res.data);
+                    resolve(res)
                 })
                 .catch(error => {
-                    console.log(error);
+                    reject(error);
                 });
+            }
         },
-        fetchOrder(context, id) {
+        fetchOrder({ rootState, commit }, id) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common["Authorization"] =
-                    "Bearer " + context.state.token;
+                    "Bearer " + rootState.auth.token;
 
                 axios
                     .get(`order/${id}`)
                     .then(response => {
-                        context.commit("setOrder", response.data.data);
+                        commit("setOrder", response.data);
                         resolve(response);
                     })
                     .catch(error => {

@@ -1,5 +1,5 @@
 <template>
-  <button :disabled="loading" class="btn-custom" type="submit">
+  <button @click.prevent="onClick" :disabled="loading" class="btn-custom" type="submit">
     <span class="loader" v-if="loading">Loading</span>
     <span class="pl-2">{{name}}</span>
   </button>
@@ -13,6 +13,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 export default class Button extends Vue {
   @Prop({ default: "Potvrdit" }) readonly name!: String;
   @Prop({ required: true, default: false }) readonly loading!: Boolean;
+  @Prop() readonly onClick!: Function;
 }
 </script>
 

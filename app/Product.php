@@ -28,4 +28,16 @@ class Product extends Model
             ->where('product_id', 'like', $id)
             ->get();
     }
+
+    public function format()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'mnozstvi' => $this->hmotnost,
+            'category_id' => $this->category_id,
+            'created_at' => $this->created_at->format('d.m'),
+            'value' => ''
+        ];
+    }
 }

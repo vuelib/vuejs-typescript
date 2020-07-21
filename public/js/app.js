@@ -31232,14 +31232,12 @@ var invariant$1 = invariant;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_class_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-class-component */ "./node_modules/vue-class-component/dist/vue-class-component.esm.js");
-/* harmony import */ var _src_navbar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/navbar.vue */ "./resources/js/components/src/navbar.vue");
-/* harmony import */ var _src_sidebar_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/sidebar.vue */ "./resources/js/components/src/sidebar.vue");
-/* harmony import */ var _src_shortcutLinks_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./src/shortcutLinks.vue */ "./resources/js/components/src/shortcutLinks.vue");
-/* harmony import */ var _src_foot_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./src/foot.vue */ "./resources/js/components/src/foot.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
+/* harmony import */ var _src_navbar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/navbar.vue */ "./resources/js/components/src/navbar.vue");
+/* harmony import */ var _src_sidebar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/sidebar.vue */ "./resources/js/components/src/sidebar.vue");
+/* harmony import */ var _src_shortcutLinks_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/shortcutLinks.vue */ "./resources/js/components/src/shortcutLinks.vue");
+/* harmony import */ var _src_foot_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./src/foot.vue */ "./resources/js/components/src/foot.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -31265,29 +31263,42 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-
 var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Object.defineProperty(App.prototype, "loggedIn", {
+        get: function () {
+            return this.$store.getters.loggedIn;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(App.prototype, "thene", {
+        get: function () {
+            return this.$store.getters.thene;
+        },
+        enumerable: false,
+        configurable: true
+    });
     App.prototype.created = function () {
         this.loggedIn ? this.$store.dispatch("getUser") : "";
     };
     App = __decorate([
-        Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["default"])({
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             components: {
-                navbar: _src_navbar_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-                sidebar: _src_sidebar_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-                shortcutLinks: _src_shortcutLinks_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-                foot: _src_foot_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+                navbar: _src_navbar_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+                sidebar: _src_sidebar_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+                shortcutLinks: _src_shortcutLinks_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+                footerC: _src_foot_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
             },
-            computed: Object(vuex__WEBPACK_IMPORTED_MODULE_6__["mapGetters"])(["auth", "theme"]),
-            methods: Object(vuex__WEBPACK_IMPORTED_MODULE_6__["mapMutations"])(["getUser"])
+            computed: Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])(["auth", "theme"]),
+            methods: Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapMutations"])(["getUser"])
         })
     ], App);
     return App;
-}(vue__WEBPACK_IMPORTED_MODULE_0___default.a));
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));
 /* harmony default export */ __webpack_exports__["default"] = (App);
 
 
@@ -31326,8 +31337,30 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var MenuItems = /** @class */ (function (_super) {
     __extends(MenuItems, _super);
     function MenuItems() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.visible = false;
+        _this.THEME_DARK = "theme-dark";
+        _this.THEME_LIGHT = "theme-light";
+        return _this;
     }
+    Object.defineProperty(MenuItems.prototype, "theme", {
+        get: function () {
+            return this.$store.getters.theme;
+        },
+        set: function (value) {
+            localStorage.setItem("theme", value);
+            this.$store.commit("setTheme", value);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MenuItems.prototype.created = function () {
+        this.theme = localStorage.getItem("theme") || this.THEME_LIGHT;
+    };
+    MenuItems.prototype.toggleTheme = function () {
+        this.theme =
+            this.theme === this.THEME_LIGHT ? this.THEME_DARK : this.THEME_LIGHT;
+    };
     __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])()
     ], MenuItems.prototype, "links", void 0);
@@ -31335,8 +31368,8 @@ var MenuItems = /** @class */ (function (_super) {
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])()
     ], MenuItems.prototype, "user", void 0);
     __decorate([
-        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ required: true })
-    ], MenuItems.prototype, "toggleTheme", void 0);
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])()
+    ], MenuItems.prototype, "loggedInlinks", void 0);
     __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: false, type: Boolean })
     ], MenuItems.prototype, "loggedIn", void 0);
@@ -31359,12 +31392,10 @@ var MenuItems = /** @class */ (function (_super) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_class_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-class-component */ "./node_modules/vue-class-component/dist/vue-class-component.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _Logo_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Logo.vue */ "./resources/js/components/src/Logo.vue");
-/* harmony import */ var _MenuItems_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MenuItems.vue */ "./resources/js/components/src/MenuItems.vue");
+/* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _Logo_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Logo.vue */ "./resources/js/components/src/Logo.vue");
+/* harmony import */ var _MenuItems_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MenuItems.vue */ "./resources/js/components/src/MenuItems.vue");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -31388,45 +31419,23 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-
 var Nav = /** @class */ (function (_super) {
     __extends(Nav, _super);
     function Nav() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.THEME_DARK = "theme-dark";
-        _this.THEME_LIGHT = "theme-light";
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(Nav.prototype, "theme", {
-        get: function () {
-            return this.$store.state.theme;
-        },
-        set: function (value) {
-            localStorage.setItem("theme", value);
-            this.$store.commit("setTheme", value);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Nav.prototype.created = function () {
-        this.theme = localStorage.getItem("theme") || this.THEME_LIGHT;
-    };
-    Nav.prototype.toggleTheme = function () {
-        this.theme =
-            this.theme === this.THEME_LIGHT ? this.THEME_DARK : this.THEME_LIGHT;
-    };
     Nav = __decorate([
-        Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["default"])({
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             components: {
-                menuItems: _MenuItems_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-                logo: _Logo_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+                menuItems: _MenuItems_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+                logo: _Logo_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
             },
-            computed: Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(["navbarlinks", "loogedInlinks", "loggedIn", "user"]),
-            methods: Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapMutations"])(["setTheme"])
+            computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["navbarlinks", "loggedInlinks", "loggedIn", "user"]),
+            methods: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(["setTheme"])
         })
     ], Nav);
     return Nav;
-}(vue__WEBPACK_IMPORTED_MODULE_0___default.a));
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));
 /* harmony default export */ __webpack_exports__["default"] = (Nav);
 
 
@@ -34211,7 +34220,7 @@ var render = function() {
       _vm._v(" "),
       _c("sidebar"),
       _vm._v(" "),
-      _c("shortcutLinks"),
+      _c("shortcut-links"),
       _vm._v(" "),
       _c(
         "main",
@@ -34220,7 +34229,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("foot")
+      _c("footerC")
     ],
     1
   )
@@ -34322,7 +34331,7 @@ var render = function() {
               "list-reset flex justify-between flex-1 md:flex-none items-center font-bold"
           },
           [
-            _vm._l(_vm.loogedInlinks, function(link, index) {
+            _vm._l(_vm.loggedInlinks, function(link, index) {
               return _c(
                 "li",
                 { key: index, staticClass: "flex-1 md:flex-none" },
@@ -34345,95 +34354,114 @@ var render = function() {
               "li",
               { staticClass: "flex-1 md:flex-none md:mr-3 bg-junglegreen" },
               [
-                _c("div", { staticClass: "relative inline-block m-2" }, [
-                  _vm.user
-                    ? _c(
-                        "button",
-                        {
-                          staticClass:
-                            "drop-button focus:outline-none font-bold",
-                          attrs: { onclick: "toggleDD('myDropdown')" }
-                        },
-                        [
-                          _vm._v(
-                            "\n          " +
-                              _vm._s(
-                                _vm.user.invoice
-                                  ? _vm.user.invoice.nazev
-                                  : _vm.user.email
-                              ) +
-                              "\n          "
-                          ),
-                          _c(
-                            "svg",
-                            {
-                              staticClass: "h-3 fill-current inline",
-                              attrs: {
-                                viewBox: "0 0 20 20",
-                                xmlns: "http://www.w3.org/2000/svg"
+                _c(
+                  "div",
+                  { staticClass: "relative inline-block m-2" },
+                  [
+                    _vm.user
+                      ? _c(
+                          "button",
+                          {
+                            staticClass:
+                              "drop-button focus:outline-none font-bold",
+                            on: {
+                              click: function($event) {
+                                _vm.visible = !_vm.visible
                               }
-                            },
-                            [
-                              _c("path", {
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n          " +
+                                _vm._s(
+                                  _vm.user.invoice
+                                    ? _vm.user.invoice.nazev
+                                    : _vm.user.email
+                                ) +
+                                "\n          "
+                            ),
+                            _c(
+                              "svg",
+                              {
+                                staticClass: "h-3 fill-current inline",
                                 attrs: {
-                                  d:
-                                    "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                  viewBox: "0 0 20 20",
+                                  xmlns: "http://www.w3.org/2000/svg"
                                 }
-                              })
-                            ]
-                          )
-                        ]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "dropdownlist absolute bg-button right-0 mt-3 p-3 overflow-auto z-30 invisible",
-                      attrs: { id: "myDropdown" }
-                    },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass:
-                            "p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block",
-                          attrs: { to: { name: "settings" } }
-                        },
-                        [_vm._v("Nastavení")]
-                      ),
-                      _vm._v(" "),
+                              },
+                              [
+                                _c("path", {
+                                  attrs: {
+                                    d:
+                                      "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                  }
+                                })
+                              ]
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("transition", [
                       _c(
                         "div",
                         {
-                          staticClass:
-                            "p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.toggleTheme($event)
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.visible,
+                              expression: "visible"
                             }
-                          }
-                        },
-                        [_vm._v("DarkMode")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "border border-bg-ivory" }),
-                      _vm._v(" "),
-                      _c(
-                        "router-link",
-                        {
+                          ],
                           staticClass:
-                            "p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block",
-                          attrs: { to: { name: "logout" } }
+                            "dropdownlist absolute bg-button right-0 mt-3 p-3 overflow-auto z-30",
+                          attrs: { id: "myDropdown" }
                         },
-                        [_vm._v("Odhlásit se")]
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass:
+                                "p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block",
+                              attrs: { to: { name: "settings" } }
+                            },
+                            [_vm._v("Nastavení")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.toggleTheme($event)
+                                }
+                              }
+                            },
+                            [_vm._v("DarkMode")]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "border border-bg-ivory" }),
+                          _vm._v(" "),
+                          _c(
+                            "router-link",
+                            {
+                              staticClass:
+                                "p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block",
+                              attrs: { to: { name: "logout" } }
+                            },
+                            [_vm._v("Odhlásit se")]
+                          )
+                        ],
+                        1
                       )
-                    ],
-                    1
-                  )
-                ])
+                    ])
+                  ],
+                  1
+                )
               ]
             )
           ],
@@ -34558,8 +34586,7 @@ var render = function() {
               attrs: {
                 links: _vm.navbarlinks,
                 "logged-in": _vm.loggedIn,
-                "looged-inlinks": _vm.loogedInlinks,
-                "toggle-theme": _vm.toggleTheme,
+                loggedInlinks: _vm.loggedInlinks,
                 user: _vm.user
               }
             })
@@ -34600,58 +34627,52 @@ var render = function() {
             "hidden md:block w-full bg-button font-bold text-primary p-2"
         },
         [
-          _vm.isAdmin
-            ? _c(
-                "div",
-                { staticClass: "flex justify-center" },
-                [
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "pl-2",
-                      attrs: { to: { name: "showUsers" } }
-                    },
-                    [_vm._v("Přehled uživatelů")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "pl-2",
-                      attrs: { to: { name: "showAllOrders" } }
-                    },
-                    [_vm._v("Přehled objednávek")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "router-link",
-                    { staticClass: "pl-2", attrs: { to: { name: "admin" } } },
-                    [_vm._v("Úpravy")]
-                  )
-                ],
-                1
+          _c(
+            "div",
+            { staticClass: "flex justify-center" },
+            [
+              _c(
+                "router-link",
+                { staticClass: "pl-2", attrs: { to: { name: "showUsers" } } },
+                [_vm._v("Přehled uživatelů")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass: "pl-2",
+                  attrs: { to: { name: "showAllOrders" } }
+                },
+                [_vm._v("Přehled objednávek")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                { staticClass: "pl-2", attrs: { to: { name: "admin" } } },
+                [_vm._v("Úpravy")]
               )
-            : _c(
-                "div",
-                { staticClass: "flex justify-center" },
-                [
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "pl-2",
-                      attrs: { to: { name: "objednat" } }
-                    },
-                    [_vm._v("Objednat zboží")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "router-link",
-                    { staticClass: "pl-2", attrs: { to: { name: "Orders" } } },
-                    [_vm._v("Přehled objednávek")]
-                  )
-                ],
-                1
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "flex justify-center" },
+            [
+              _c(
+                "router-link",
+                { staticClass: "pl-2", attrs: { to: { name: "objednat" } } },
+                [_vm._v("Objednat zboží")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                { staticClass: "pl-2", attrs: { to: { name: "Orders" } } },
+                [_vm._v("Přehled objednávek")]
               )
+            ],
+            1
+          )
         ]
       )
     : _vm._e()
@@ -54108,6 +54129,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+axios__WEBPACK_IMPORTED_MODULE_6___default.a.defaults.baseURL = "http://127.0.0.1:8000/api";
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_meta__WEBPACK_IMPORTED_MODULE_5__["default"], {
     refreshOnceOnNavigation: true
 });
@@ -54736,14 +54758,14 @@ var Admin = [
                 name: "createCategory",
                 path: "vytvorit-kategorii",
                 component: function () {
-                    return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ../components/category/createCategory.vue */ "./resources/js/components/category/createCategory.vue"));
+                    return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! ../components/category/createCategory.vue */ "./resources/js/components/category/createCategory.vue"));
                 }
             },
             {
                 name: "editCategory",
                 path: "upravit-kategorii/:id",
                 component: function () {
-                    return __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! ../components/category/editCategory.vue */ "./resources/js/components/category/editCategory.vue"));
+                    return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ../components/category/editCategory.vue */ "./resources/js/components/category/editCategory.vue"));
                 },
                 props: true
             },
@@ -54751,7 +54773,7 @@ var Admin = [
                 name: "createProduct",
                 path: "vytvorit-produkt",
                 component: function () {
-                    return __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! ../components/product/createProduct.vue */ "./resources/js/components/product/createProduct.vue"));
+                    return __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! ../components/product/createProduct.vue */ "./resources/js/components/product/createProduct.vue"));
                 }
             }
         ]
@@ -54787,13 +54809,13 @@ var Admin = [
             {
                 name: "showOrder",
                 path: "objednavka/:idc",
-                component: function () { return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(29)]).then(__webpack_require__.bind(null, /*! ../components/order/showOrder.vue */ "./resources/js/components/order/showOrder.vue")); },
+                component: function () { return Promise.all(/*! import() */[__webpack_require__.e(31), __webpack_require__.e(30)]).then(__webpack_require__.bind(null, /*! ../components/order/showOrder.vue */ "./resources/js/components/order/showOrder.vue")); },
                 props: true
             },
             {
                 name: "addInvoice",
                 path: "pridat-fakturacni-udaje",
-                component: function () { return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../components/invoice/AddInvoice.vue */ "./resources/js/components/invoice/AddInvoice.vue")); },
+                component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ../components/invoice/AddInvoice.vue */ "./resources/js/components/invoice/AddInvoice.vue")); },
                 props: true
             },
             {
@@ -54808,7 +54830,7 @@ var Admin = [
                 name: "addOrder",
                 path: "pridat-objednavku",
                 component: function () {
-                    return Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! ../components/admin/order/addOrder.vue */ "./resources/js/components/admin/order/addOrder.vue"));
+                    return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! ../components/admin/order/addOrder.vue */ "./resources/js/components/admin/order/addOrder.vue"));
                 },
                 props: true
             },
@@ -54816,7 +54838,7 @@ var Admin = [
                 name: "editOrderUser",
                 path: "upravit-objednavku",
                 component: function () {
-                    return Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(9)]).then(__webpack_require__.bind(null, /*! ../components/admin/order/EditOrder.vue */ "./resources/js/components/admin/order/EditOrder.vue"));
+                    return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(9)]).then(__webpack_require__.bind(null, /*! ../components/admin/order/EditOrder.vue */ "./resources/js/components/admin/order/EditOrder.vue"));
                 },
                 props: true
             }
@@ -54841,7 +54863,7 @@ var Auth = [
     {
         name: "login",
         path: "/prihlasit-se",
-        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! ../components/auth/login.vue */ "./resources/js/components/auth/login.vue")); },
+        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(27)]).then(__webpack_require__.bind(null, /*! ../components/auth/login.vue */ "./resources/js/components/auth/login.vue")); },
         props: true,
         meta: {
             title: "Šotola Miroslav - Přihlásit se",
@@ -54860,7 +54882,7 @@ var Auth = [
     {
         name: "register",
         path: "/registrovat",
-        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ../components/auth/register.vue */ "./resources/js/components/auth/register.vue")); },
+        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(28)]).then(__webpack_require__.bind(null, /*! ../components/auth/register.vue */ "./resources/js/components/auth/register.vue")); },
         props: true,
         meta: {
             title: "Šotola Miroslav - Registrovat",
@@ -54879,7 +54901,7 @@ var Auth = [
     {
         name: "forgotpassowrd",
         path: "/zapomenute-heslo",
-        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ../components/auth/forgotPassowrd.vue */ "./resources/js/components/auth/forgotPassowrd.vue")); },
+        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(26)]).then(__webpack_require__.bind(null, /*! ../components/auth/forgotPassowrd.vue */ "./resources/js/components/auth/forgotPassowrd.vue")); },
         props: true,
         meta: {
             title: "Šotola Miroslav - Zapomenuté heslo",
@@ -54919,7 +54941,7 @@ var BasicRoutes = [
     {
         name: "home",
         path: "/",
-        component: function () { return __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ../components/lib/Domu.vue */ "./resources/js/components/lib/Domu.vue")); },
+        component: function () { return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ../components/lib/Domu.vue */ "./resources/js/components/lib/Domu.vue")); },
         meta: {
             title: "Šotola Miroslav - Úvodní stránka",
             metaTags: [
@@ -54937,7 +54959,7 @@ var BasicRoutes = [
     {
         name: "kontakt",
         path: "/kontakt",
-        component: function () { return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ../components/contact/sendEmail.vue */ "./resources/js/components/contact/sendEmail.vue")); },
+        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ../components/contact/index.vue */ "./resources/js/components/contact/index.vue")); },
         meta: {
             title: "Šotola Miroslav - Kontakt",
             metaTags: [
@@ -54955,7 +54977,7 @@ var BasicRoutes = [
     {
         name: "kestazeni",
         path: "/ke-stazeni",
-        component: function () { return __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! ../components/lib/kestazeni.vue */ "./resources/js/components/lib/kestazeni.vue")); }
+        component: function () { return __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! ../components/lib/kestazeni.vue */ "./resources/js/components/lib/kestazeni.vue")); }
     }
 ];
 /* harmony default export */ __webpack_exports__["default"] = (BasicRoutes);
@@ -54976,7 +54998,7 @@ var Category = [
     {
         name: "zbozi",
         path: "/zbozi",
-        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(7), __webpack_require__.e(31)]).then(__webpack_require__.bind(null, /*! ../components/category/allCategories.vue */ "./resources/js/components/category/allCategories.vue")); },
+        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(29)]).then(__webpack_require__.bind(null, /*! ../components/category/allCategories.vue */ "./resources/js/components/category/allCategories.vue")); },
         props: true,
         meta: {
             title: "Šotola Miroslav - Zboží",
@@ -54996,7 +55018,7 @@ var Category = [
                 name: "category_show",
                 path: ":id/:slug?",
                 component: function () {
-                    return __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! ../components/category/showCategory.vue */ "./resources/js/components/category/showCategory.vue"));
+                    return Promise.all(/*! import() */[__webpack_require__.e(20), __webpack_require__.e(32)]).then(__webpack_require__.bind(null, /*! ../components/category/showCategory.vue */ "./resources/js/components/category/showCategory.vue"));
                 },
                 props: true
             }
@@ -55061,7 +55083,7 @@ var Orders = [
     {
         name: "Orders",
         path: "/objednavky",
-        component: function () { return __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ../components/order/allOrders.vue */ "./resources/js/components/order/allOrders.vue")); },
+        component: function () { return __webpack_require__.e(/*! import() */ 33).then(__webpack_require__.bind(null, /*! ../components/order/allOrders.vue */ "./resources/js/components/order/allOrders.vue")); },
         meta: {
             requiresAuth: true,
             requiredInvoice: true
@@ -55070,7 +55092,7 @@ var Orders = [
             {
                 name: "ShowOrder",
                 path: ":id",
-                component: function () { return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(29)]).then(__webpack_require__.bind(null, /*! ../components/order/showOrder.vue */ "./resources/js/components/order/showOrder.vue")); },
+                component: function () { return Promise.all(/*! import() */[__webpack_require__.e(31), __webpack_require__.e(30)]).then(__webpack_require__.bind(null, /*! ../components/order/showOrder.vue */ "./resources/js/components/order/showOrder.vue")); },
                 props: true
             }
         ]
@@ -55078,13 +55100,13 @@ var Orders = [
     {
         name: "objednat",
         path: "/objednat-zbozi",
-        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(7), __webpack_require__.e(30)]).then(__webpack_require__.bind(null, /*! ../components/order/addOrder.vue */ "./resources/js/components/order/addOrder.vue")); },
+        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(20), __webpack_require__.e(0)]).then(__webpack_require__.bind(null, /*! ../components/order/addOrder.vue */ "./resources/js/components/order/addOrder.vue")); },
         meta: { requiresAuth: true, requiredInvoice: true }
     },
     {
         name: "EditOrder",
         path: "/objednavka/:id/upravit",
-        component: function () { return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! ../components/order/editOrder.vue */ "./resources/js/components/order/editOrder.vue")); },
+        component: function () { return __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ../components/order/editOrder.vue */ "./resources/js/components/order/editOrder.vue")); },
         props: true,
         meta: {
             requiresAuth: true,
@@ -55110,7 +55132,7 @@ var Settings = [
     {
         name: "settings",
         path: "/nastaveni",
-        component: function () { return __webpack_require__.e(/*! import() */ 28).then(__webpack_require__.bind(null, /*! ../components/settings/index.vue */ "./resources/js/components/settings/index.vue")); },
+        component: function () { return __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! ../components/settings/index.vue */ "./resources/js/components/settings/index.vue")); },
         meta: {
             requiresAuth: true,
             requiredInvoice: true
@@ -55120,14 +55142,14 @@ var Settings = [
                 name: "ChangePassword",
                 path: "zmenit-heslo",
                 component: function () {
-                    return __webpack_require__.e(/*! import() */ 27).then(__webpack_require__.bind(null, /*! ../components/settings/ChangePassword.vue */ "./resources/js/components/settings/ChangePassword.vue"));
+                    return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! ../components/settings/ChangePassword.vue */ "./resources/js/components/settings/ChangePassword.vue"));
                 }
             },
             {
                 name: "ChangeContact",
                 path: "zmena-kontaktni-udaju",
                 component: function () {
-                    return __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.bind(null, /*! ../components/settings/ChangeContact.vue */ "./resources/js/components/settings/ChangeContact.vue"));
+                    return __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ../components/settings/ChangeContact.vue */ "./resources/js/components/settings/ChangeContact.vue"));
                 }
             }
         ]
@@ -55135,7 +55157,7 @@ var Settings = [
     {
         name: "invoice",
         path: "/fakturacni-udaje",
-        component: function () { return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../components/invoice/AddInvoice.vue */ "./resources/js/components/invoice/AddInvoice.vue")); },
+        component: function () { return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ../components/invoice/AddInvoice.vue */ "./resources/js/components/invoice/AddInvoice.vue")); },
         meta: {
             requiresAuth: true
         }
@@ -55340,7 +55362,7 @@ __webpack_require__.r(__webpack_exports__);
         register: function (context, data) {
             return new Promise(function (resolve, reject) {
                 axios__WEBPACK_IMPORTED_MODULE_0___default.a
-                    .post("/api/register", {
+                    .post("register", {
                     phone: data.phone,
                     email: data.email,
                     password: data.password,
@@ -55379,19 +55401,15 @@ __webpack_require__.r(__webpack_exports__);
             var commit = _a.commit, dispatch = _a.dispatch;
             return new Promise(function (resolve, reject) {
                 axios__WEBPACK_IMPORTED_MODULE_0___default.a
-                    .post("/api/login", {
-                    username: credentials.username,
-                    password: credentials.password
-                })
+                    .post("login", credentials)
                     .then(function (response) {
                     var token = response.data.access_token;
                     localStorage.setItem("access_token", token);
                     commit("retrieveToken", token);
-                    dispatch("getUser");
+                    // dispatch("getUser");
                     resolve(response);
                 })
                     .catch(function (error) {
-                    console.log(error);
                     reject(error);
                 });
             });
@@ -55418,7 +55436,7 @@ __webpack_require__.r(__webpack_exports__);
             axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common["Authorization"] =
                 "Bearer " + state.token;
             axios__WEBPACK_IMPORTED_MODULE_0___default.a
-                .post("/user")
+                .post("user")
                 .then(function (response) {
                 commit("getUser", response.data);
             })
@@ -55441,8 +55459,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -55480,6 +55500,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
     }
 };
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     state: function () { return ({
         categories: [],
@@ -55500,6 +55521,9 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         setCategory: function (state, category) {
             state.category = category;
         },
+        filterCategory: function (state, sortColumn) {
+            state.category = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.orderBy(state.category, [sortColumn.path], [sortColumn.order]);
+        },
         deleteCategory: function (state, id) {
             var index = state.categories.findIndex(function (item) { return item.id == id; });
             state.categories.splice(index, 1);
@@ -55512,7 +55536,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
                 var res;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0: return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/category")];
+                        case 0: return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("category")];
                         case 1:
                             res = _b.sent();
                             commit("setCategories", res.data);
@@ -55527,7 +55551,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
                 var res;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0: return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/category/" + id)];
+                        case 0: return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("category/" + id)];
                         case 1:
                             res = _b.sent();
                             commit("setCategory", res.data);
@@ -55537,9 +55561,9 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
             });
         },
         deleteCategory: function (context, id) {
-            axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common["Authorization"] =
+            axios__WEBPACK_IMPORTED_MODULE_1___default.a.defaults.headers.common["Authorization"] =
                 "Bearer " + context.state.token;
-            axios__WEBPACK_IMPORTED_MODULE_0___default.a
+            axios__WEBPACK_IMPORTED_MODULE_1___default.a
                 .delete("api/category/" + id)
                 .then(function (response) {
                 context.commit("deleteCategory", id);
@@ -55595,7 +55619,7 @@ __webpack_require__.r(__webpack_exports__);
             { name: "Kontakt", route: "kontakt" },
             { name: "Přihlásit", route: "login" }
         ],
-        loogedInlinks: [
+        loggedInlinks: [
             { name: "Zboží", route: "zbozi" },
             { name: "Kontakt", route: "kontakt" }
         ],
@@ -55610,7 +55634,7 @@ __webpack_require__.r(__webpack_exports__);
         navbarlinks: function (state) {
             return state.navbarlinks;
         },
-        loogedInlinks: function (state) {
+        loggedInlinks: function (state) {
             return state.loogedInlinks;
         },
         sidebarlinks: function (state) {
@@ -55695,26 +55719,31 @@ __webpack_require__.r(__webpack_exports__);
         }
     },
     actions: {
-        fetchOrders: function (context) {
-            axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common["Authorization"] =
-                "Bearer " + context.state.token;
-            axios__WEBPACK_IMPORTED_MODULE_0___default.a
-                .get("/orders")
-                .then(function (response) {
-                context.commit("setOrders", response.data.data);
-            })
-                .catch(function (error) {
-                console.log(error);
-            });
-        },
-        fetchOrder: function (context, id) {
+        fetchOrders: function (_a) {
+            var rootState = _a.rootState, commit = _a.commit;
             return new Promise(function (resolve, reject) {
                 axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common["Authorization"] =
-                    "Bearer " + context.state.token;
+                    "Bearer " + rootState.auth.token;
+                axios__WEBPACK_IMPORTED_MODULE_0___default.a
+                    .get("/order")
+                    .then(function (res) {
+                    commit("setOrders", res.data);
+                    resolve(res);
+                })
+                    .catch(function (error) {
+                    reject(error);
+                });
+            });
+        },
+        fetchOrder: function (_a, id) {
+            var rootState = _a.rootState, commit = _a.commit;
+            return new Promise(function (resolve, reject) {
+                axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common["Authorization"] =
+                    "Bearer " + rootState.auth.token;
                 axios__WEBPACK_IMPORTED_MODULE_0___default.a
                     .get("order/" + id)
                     .then(function (response) {
-                    context.commit("setOrder", response.data.data);
+                    commit("setOrder", response.data);
                     resolve(response);
                 })
                     .catch(function (error) {
@@ -55787,30 +55816,90 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     state: function () { return ({
-        products: []
+        products: [],
+        filteredProducts: []
     }); },
     getters: {
         products: function (state) {
             return state.products;
+        },
+        filteredProducts: function (state) {
+            return state.filteredProducts;
         }
     },
     mutations: {
-        fetchProducts: function (state, products) {
+        setProducts: function (state, products) {
             state.products = products;
+            state.filteredProducts = products;
+        },
+        filterProducts: function (state, category) {
+            state.filteredProducts =
+                state.filteredProducts && category.id
+                    ? state.products.filter(function (p) { return p.category_id == category.id; })
+                    : state.products;
         }
     },
     actions: {
-        fetchProducts: function (context) {
-            axios__WEBPACK_IMPORTED_MODULE_0___default.a
-                .get("products")
-                .then(function (response) {
-                context.commit("fetchProducts", response.data.data);
-            })
-                .catch(function (error) {
-                console.log(error);
+        fetchProducts: function (_a) {
+            var commit = _a.commit;
+            return __awaiter(this, void 0, void 0, function () {
+                var res, err_1;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _b.trys.push([0, 2, , 3]);
+                            return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("products")];
+                        case 1:
+                            res = _b.sent();
+                            res.data.map(function (p) { return (p.value = ""); });
+                            commit("setProducts", res.data);
+                            return [3 /*break*/, 3];
+                        case 2:
+                            err_1 = _b.sent();
+                            console.log(err_1);
+                            return [3 /*break*/, 3];
+                        case 3: return [2 /*return*/];
+                    }
+                });
             });
         }
     }
@@ -55830,7 +55919,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
     state: function () { return ({
-        theme: "theme-light"
+        theme: ""
     }); },
     getters: {
         theme: function (state) {
@@ -55839,6 +55928,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     mutations: {
         setTheme: function (state, theme) {
+            console.log(theme);
             state.theme = theme;
         }
     }
@@ -55867,7 +55957,7 @@ __webpack_require__.r(__webpack_exports__);
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-    strict: true,
+    strict: false,
     modules: _modules__WEBPACK_IMPORTED_MODULE_2__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (store);

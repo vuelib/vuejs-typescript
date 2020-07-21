@@ -12,7 +12,7 @@
       <transition v-bind:key="amount.id" v-for="amount in order.amounts" name="fade">
         <tr>
           <td class="border px-4 py-2">{{ amount.product.name }}</td>
-          <td class="border px-4 py-2 text-center">{{ amount.product.hmotnost }}</td>
+          <td class="border px-4 py-2 text-center">{{ amount.product.mnozstvi }}</td>
           <td class="border px-4 py-2">
             <div
               class="text-center w-20"
@@ -22,24 +22,23 @@
             <input
               :value="amount.mnozstvi"
               @input="
-                                        _updateProduct($event, amount)
+              _updateProduct($event, amount)
                                     "
               class="w-20 p-1 text-center appearance-none block bg-white text-gray-700 border border-blue-700 rounded border-blue-900 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               type="number"
               v-on:keyup.enter="editProduct(amount, false)"
-              v-show="amount.edit == true"
+              v-show="amount"
             />
           </td>
           <td class="border px-4 py-2 flex justify-between" v-if="order.status == 'rozpracovaná'">
             <button
               class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-              v-if="!amount.edit"
+              v-if="!amount"
               v-on:click="
                                         editProduct(amount, true)
                                     "
             >
               <i class="fas fa-edit text-blue-800"></i>
-              Upravit
             </button>
             <button
               class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
@@ -58,7 +57,6 @@
                                     "
             >
               <i class="far fa-trash-alt text-blackhover:text-white"></i>
-              Odstranit
             </button>
           </td>
         </tr>

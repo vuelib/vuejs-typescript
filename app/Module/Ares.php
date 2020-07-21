@@ -25,25 +25,24 @@ class Ares
     public function getData()
     {
         $url = $this->ares_url . $this->ic;
-        $xml = $this->getXML($url);
-        if ($this->ic == $this->getIcFromXML($xml)) {
-            return array(
-                'ic' => $this->ic,
-                'dic' => $this->getDicFromXML($xml),
-                'nazev' => $this->getAddressFromXML(str_replace($this->reaplace(), '', $xml)),
-                'ulice' => $this->getStreetFromXML(str_replace('<D:UC>', '', $xml)),
-                'mesto' => $this->getCityFromXML(str_replace('<D:N>', '', $xml)),
-                'zeme' => $this->getStateFromXML(str_replace('<D:NS>', '', $xml)),
-                'psc' => $this->getPSCFromXML($xml),
-            );
+        $file = $this->getXML($url);
+        if ($file) $xml = simplexml_load_string($file);
+        if (isset($xml)) {
+            $ns = $xml->getDocNamespaces();
+            $data = $xml->children($ns['are']);
+            $el = $data->children($ns['D'])->VBAS;
+            return [
+                'ic' => strval($el->ICO),
+                'dic' => strval($el->DIC),
+                'nazev' => strval($el->OF),
+                'ulice' => strval($el->AD->UC),
+                'mesto' => strval($el->AA->N),
+                'zeme' => strval($el->AA->NS),
+                'psc' => strval($el->AA->PSC),
+            ];
+            // if ($this->ic === strval($el->ICO))
         }
         return false;
-    }
-
-    private function reaplace()
-    {
-        $replace = array('<D:OF zdroj="OR">', '<D:OF zdroj="RZP">', '<D:OF zdroj="RES">');
-        return $replace;
     }
 
     /**
@@ -53,14 +52,10 @@ class Ares
     private function getDicFromXML($xml)
     {
         $pattern = '/([0-9]*)<\/D:DIC>/';
-        preg_match($pattern, $xml, $matches);
+        simplexml_load_string($pattern, $xml, $matches);
         return isset($matches[1]) ? 'CZ' . $matches[1] : false;
     }
 
-    /**
-     * @param string $xml
-     * @return string
-     */
 
     /**
      * @param string $xml
@@ -68,16 +63,15 @@ class Ares
      */
     private function getIcFromXML($xml)
     {
-        $pattern = '/([0-9]*)<\/D:ICO>/';
-        preg_match($pattern, $xml, $matches);
-        return isset($matches[1]) ? $matches[1] : false;
-
+        $ic = simplexml_load_string($xml);
+        dump($ic);
+        return isset($ic) ? $ic : false;
     }
 
 
     /**
      * @param string $xml
-     * @return string
+     * @return strings
      */
     private function getAddressFromXML($xml)
     {

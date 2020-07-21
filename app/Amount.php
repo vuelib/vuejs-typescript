@@ -10,7 +10,7 @@ class Amount extends Model
 {
     protected $fillable = ['product_id', 'mnozstvi', 'order_id'];
 
-    public function orders(): BelongsToMany
+    public function order(): BelongsToMany
     {
         return $this->belongsToMany(Order::class);
     }
@@ -18,5 +18,16 @@ class Amount extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function format()
+    {
+        return [
+            'id' => $this->id,
+            'mnozstvi' => $this->mnozstvi,
+            'edit' => false,
+            'created_at' => $this->created_at->format('d.m'),
+            'product' => $this->product->format(),
+        ];
     }
 }

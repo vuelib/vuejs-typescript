@@ -28,4 +28,22 @@ class Order extends Model
             1 => 'potvrzena',
         ][$attribute];
     }
+
+    public function format()
+    {
+        return [
+            'id' => $this->id,
+            'status' => $this->status,
+            'description' => $this->description,
+            'created_at' => $this->created_at->format('d.m'),
+            'updated_at' => $this->updated_at->diffForHumans(),
+        ];
+    }
+
+    public function formatedRelatinship()
+    {
+        return array_merge($this->format(), [
+            'amounts' =>  $this->amounts->map->format()
+        ]);
+    }
 }

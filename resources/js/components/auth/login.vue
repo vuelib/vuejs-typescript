@@ -1,6 +1,6 @@
 <template>
   <Box title="Přihlásit se">
-    <Form :onClick="login" :succesMessage="dataSuccessMessage">
+    <Form :succesMessage="dataSuccessMessage">
       <customInput
         v-model="user.username"
         :error="errors.username"
@@ -16,7 +16,7 @@
         name="password"
         type="password"
       />
-      <customFormButton name="Přihlásit se" :loading="loading" />
+      <customFormButton :onClick="login" name="Přihlásit se" :loading="loading" />
       <router-link :to="{ name: 'register' }" class="router-link">Registrovat se</router-link>
       <router-link :to="{ name: 'forgotpassowrd' }" class="router-link">Zapomněli jste heslo?</router-link>
     </Form>
@@ -44,7 +44,6 @@ export default class Login extends Vue {
     username: "",
     password: ""
   };
-  password!: String;
   public errors = {};
   loading?: Boolean = false;
 
@@ -60,8 +59,12 @@ export default class Login extends Vue {
       .catch(error => {
         if (error.response.status == 422) {
           this.errors = error.response.data.errors;
+        } else if (error.response.status === 400) {
+          this.errors["username"] = [
+            "Chybně zadané heslo nebo uživatelské jméno."
+          ];
+          console.log(error.response.data);
         }
-        this.password = "";
         this.loading = false;
       });
   }

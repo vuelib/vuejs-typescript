@@ -4,7 +4,7 @@
       class="list-reset flex justify-between flex-1 md:flex-none items-center font-bold"
       v-if="loggedIn"
     >
-      <li class="flex-1 md:flex-none" v-bind:key="index" v-for="(link, index) in loogedInlinks">
+      <li class="flex-1 md:flex-none" v-bind:key="index" v-for="(link, index) in loggedInlinks">
         <router-link
           :to="{ name: link.route }"
           class="inline-block py-2 px-4 no-underline bg-junglegreen"
@@ -14,7 +14,7 @@
         <div class="relative inline-block m-2">
           <button
             class="drop-button focus:outline-none font-bold"
-            onclick="toggleDD('myDropdown')"
+            @click="visible = !visible"
             v-if="user"
           >
             {{user.invoice ?
@@ -27,24 +27,27 @@
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
             </svg>
           </button>
-          <div
-            class="dropdownlist absolute bg-button right-0 mt-3 p-3 overflow-auto z-30 invisible"
-            id="myDropdown"
-          >
-            <router-link
-              :to="{ name: 'settings'}"
-              class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
-            >Nastavení</router-link>
+          <transition>
             <div
-              @click.prevent="toggleTheme"
-              class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
-            >DarkMode</div>
-            <div class="border border-bg-ivory"></div>
-            <router-link
-              :to="{ name: 'logout'}"
-              class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
-            >Odhlásit se</router-link>
-          </div>
+              v-show="visible"
+              class="dropdownlist absolute bg-button right-0 mt-3 p-3 overflow-auto z-30"
+              id="myDropdown"
+            >
+              <router-link
+                :to="{ name: 'settings'}"
+                class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
+              >Nastavení</router-link>
+              <div
+                @click.prevent="toggleTheme"
+                class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
+              >DarkMode</div>
+              <div class="border border-bg-ivory"></div>
+              <router-link
+                :to="{ name: 'logout'}"
+                class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
+              >Odhlásit se</router-link>
+            </div>
+          </transition>
         </div>
       </li>
     </ul>
@@ -64,7 +67,24 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 export default class MenuItems extends Vue {
   @Prop() readonly links!: Array<String>;
   @Prop() readonly user!: Array<String>;
-  @Prop({ required: true }) readonly toggleTheme!: Function;
+  @Prop() readonly loggedInlinks!: Array<String>;
   @Prop({ default: false, type: Boolean }) readonly loggedIn!: Boolean;
+  private visible?: Boolean = false;
+  THEME_DARK = "theme-dark";
+  THEME_LIGHT = "theme-light";
+  get theme(): string {
+    return this.$store.getters.theme;
+  }
+  set theme(value: string) {
+    localStorage.setItem("theme", value);
+    this.$store.commit("setTheme", value);
+  }
+  created(): void {
+    this.theme = localStorage.getItem("theme") || this.THEME_LIGHT;
+  }
+  toggleTheme() {
+    this.theme =
+      this.theme === this.THEME_LIGHT ? this.THEME_DARK : this.THEME_LIGHT;
+  }
 }
 </script>

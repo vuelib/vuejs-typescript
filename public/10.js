@@ -40,8 +40,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "addOrderToUser",
@@ -191,7 +189,7 @@ var render = function() {
             }),
             _vm._v(" "),
             _c("div", { staticClass: "link", on: { click: _vm.allProduct } }, [
-              _vm._v("\n                Všechny produkty\n            ")
+              _vm._v("Všechny produkty")
             ]),
             _vm._v(" "),
             _vm._l(_vm.categories, function(category) {
@@ -206,13 +204,7 @@ var render = function() {
                       }
                     }
                   },
-                  [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(category.name) +
-                        "\n                "
-                    )
-                  ]
+                  [_vm._v(_vm._s(category.name))]
                 )
               ])
             })

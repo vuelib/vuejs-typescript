@@ -13,7 +13,7 @@
 <body class="font-sans leading-normal tracking-normal">
 <div id="app">
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.4/gsap.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.4/gsap.min.js"></script> --}}
 <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 

@@ -20,26 +20,27 @@ class AuthController extends Controller
     public function login()
     {
 
-        request()->validate([
+        $data = request()->validate([
             'username' => ['required', 'string', 'email', 'max:255',],
             'password' => ['required', 'string', 'min:8', 'max:255'],
         ]);
 
+        $httpHost = request()->getSchemeAndHttpHost();
+        $httpHost .= "/oauth/token";
+
         try {
-            $username = request()->username;
-            $password = request()->password;
 
             request()->request->add([
-                'username' => $username,
-                'password' => $password,
+                'username' => $data['username'],
+                'password' => $data['password'],
                 'grant_type' => 'password',
-                'client_id' => config('services.passport.client_id'),
-                'client_secret' => config('services.passport.client_secret'),
+                'client_id' => '4',
+                'client_secret' => 'Ibw7dk37rcQLHPGPlALre90hrQ4YY6Anuv3a3zKa',
                 'scope' => '*'
             ]);
 
             $tokenRequest = Request::create(
-                env('APP_URL') . '/oauth/token',
+                $httpHost,
                 'post'
             );
 
@@ -48,12 +49,12 @@ class AuthController extends Controller
             return $response;
         } catch (\Exception $e) {
             if ($e->getCode() === 400) {
-                return response()->json('Invalid Request. Please enter a username or a password.', 404);
+                return response()->json('Špatné heslo nebo jméno.', 404);
             } else if ($e->getCode() === 401) {
-                return response()->json('Your credentials are incorrect. Please try again', $e->getCode());
+                return response()->json('Vaše přihlašovací údaje jsou nesprávné, zkuste to znovu.', $e->getCode());
             }
 
-            return response()->json('Something went wrong on the server.', $e->getCode());
+            return response()->json('Něco špatného se stalo na serveru..', $e->getCode());
         }
     }
 

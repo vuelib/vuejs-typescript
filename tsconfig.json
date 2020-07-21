@@ -5,6 +5,7 @@
         "module": "esnext",
         "moduleResolution": "node",
         "experimentalDecorators": true,
+        "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": false,
         "noImplicitThis": true,
@@ -15,7 +16,11 @@
     "paths": {
         "@/*": ["resources/js*"]
     },
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.vue"],
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.vue",
+        "resources/js/utils/urlSlug.ts"
+    ],
     "files": ["resources/js/typings.d.ts"],
     "exclude": ["node_modules"]
 }

@@ -1,44 +1,54 @@
 <template>
-    <div>
-        <div class="flex mb-4">
-            <aside class="sidebar">
-                <div class="name">Objednávky</div>
-                <div class="menu">
-                    <div class="link" v-if="!ordersFilter">
-                        Nemáte žádné objednávky
-                    </div>
-                    <router-link :class="order.id == activeOrder.id ? 'font-bold text-junglegreen font-base' : ''" :to="{ name: 'ShowOrder', params: {id: order.id} }" class="link" v-bind:key="order.id"
-                                 v-for="order in orders"
-                                 v-if="orders"
-                    >č. {{order.id}}
-                        <i :class="order.status == 'rozpracovaná' ? 'fa-pen' : 'fa-check'" class="fas"></i>
-                        {{order.created_at | formatDate }}
-                    </router-link>
-                </div>
-            </aside>
-            <transition mode="out-in" name="component-fade">
-                <router-view/>
-            </transition>
-        </div>
-    </div>
+  <Container :loading="loadComponent">
+    <Sidebar name="Objednávky" :items="orders" type="name" :param="setParam" />
+    <transition mode="out-in" name="component-fade">
+      <router-view />
+    </transition>
+  </Container>
 </template>
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { mapGetters, mapMutations } from "vuex";
+import Container from "../common/container.vue";
+import Sidebar from "../common/sidebar.vue";
+@Component({
+  name: "allOrders",
+  components: {
+    Container,
+    Sidebar
+  },
+  computed: mapGetters(["orders"]),
+  methods: mapMutations(["fetchOrders"])
+})
+export default class allOrders extends Vue {
+  @Prop() successMessage?: String;
+  errors!: [];
+  loadComponent?: Boolean = false;
 
-<script>
-    export default {
-        name: "AllOrders",
-        created() {
-            this.$store.dispatch("retrieveOrders");
-        },
-        computed: {
-            orders() {
-                return this.$store.getters.orders;
-            },
-            ordersFilter() {
-                return this.$store.getters.ordersFilter;
-            },
-            activeOrder() {
-                return this.$store.getters.order;
-            },
-        }
+  get orders() {
+    const orders = this.$store.getters.orders;
+    let orderMap = orders.map(p => {
+      let status = `${p.id} ${p.status} ${p.created_at}`;
+      return { name: status, ...p };
+    });
+    return orderMap;
+  }
+
+  setParam = order => {
+    return {
+      name: "ShowOrder",
+      params: { id: order.id }
     };
+  };
+
+  beforeMount() {
+    this.loadComponent = true;
+    this.$store
+      .dispatch("fetchOrders")
+      .then(res => (this.loadComponent = false))
+      .catch(error => {
+        console.log(error);
+      });
+  }
+}
 </script>

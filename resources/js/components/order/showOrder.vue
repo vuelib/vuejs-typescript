@@ -1,121 +1,55 @@
 <template>
-  <div>
-    <div class="header">
-      <h3>
-        Objednávka č.
-        <span class="text-junglegreen">{{ newAnimatedNumber }}</span>
-      </h3>
+  <Content :title="`Objednávka č. ${order.id}`">
+    <div class="table"><user=t /></div>
+    <div class="table">
+      <tableOrderList />
     </div>
-
-    <div class="flex flex-wrap">
-      <div class="w-full">
-        <div class="table">
-          <userDetails />
-        </div>
-        <div class="table mt-3">
-          <tableOrderList />
-        </div>
-        <div class="table mt-3">
-          <div v-if="order.status == 'rozpracovaná'">
-            <div class="flex flex-wrap">
-              <div class="w-full px-3">
-                <label
-                  class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 pt-2"
-                  for="message"
-                >Podrobnosti</label>
-                <textarea
-                  class="no-resize appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-24 resize-none"
-                  id="message"
-                  placeholder="Místo pro vaši poznámku?"
-                  v-model="description"
-                ></textarea>
-              </div>
-            </div>
-            <div class="p-3">
-              <button
-                class="bg-transparent hover:bg-green-700 text-black font-semibold hover:text-white py-2 px-4 border border-green-700 hover:border-transparent rounded"
-                v-on:click="confirmOrder"
-              >Potvrdit objednávku</button>
-              <button
-                class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                v-on:click="editOrder"
-              >Upravit objednávku</button>
-              <button
-                class="bg-transparent hover:bg-red-700 text-black font-semibold hover:text-white py-2 px-4 border border-red-700 hover:border-transparent rounded"
-                v-on:click="deleteOrder"
-              >Zrušit objednávku</button>
-            </div>
-          </div>
-          <div class="p-4" v-else>
-            <div class="text-bold uppercase font-bold">Objednávka je {{ order.status }}</div>
-            <div v-if="order.description">
-              <span class="font-bold">Vaše poznámka:</span>
-              {{ order.description }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </Content>
 </template>
 
-<script>
-import userDetails from "./userDetails";
-import tableOrderList from "./tableOrderList";
-
-export default {
-  name: "ShowOrder",
+<script lang="ts">
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { mapGetters, mapMutations } from "vuex";
+import Content from "../common/content.vue";
+import tableHead from "../common/tableHead.vue";
+import userDetails from "./userDetails.vue";
+import tableOrderList from "./tableOrderList.vue";
+@Component({
+  name: "shoOrder",
   components: {
-    tableOrderList,
-    userDetails
+    Content,
+    tableHead,
+    userDetails,
+    tableOrderList
   },
-  props: {
-    id: ""
-  },
-  data() {
-    return {
-      loading: false,
-      description: null,
-      animateNumber: this.id,
-      successMessage: ""
-    };
-  },
-  mounted() {
-    this.$store.dispatch("fetchOrder", this.id);
-  },
-  computed: {
-    order() {
-      return this.$store.getters.order;
-    },
-    newAnimatedNumber: function() {
-      return this.animateNumber.toFixed(0);
-    }
-  },
-  watch: {
-    $route(to, from) {
-      if (from.params.id !== to.params.id) {
-        this.$store.dispatch("fetchOrder", this.id);
-        gsap.to(this.$data, { duration: 0.3, animateNumber: this.id });
-      }
-    }
-  },
-  methods: {
-    confirmOrder() {
-      let data = { id: this.id, description: this.description };
-      this.$store.dispatch("confirmOrder", data);
-    },
-    deleteOrder() {
-      this.$store.dispatch("deleteOrder", this.id);
-      this.$router.push({
-        name: "Orders"
-      });
-    },
-    editOrder() {
-      this.$router.push({
-        name: "EditOrder",
-        params: { id: this.id }
-      });
-    }
+  computed: mapGetters(["order"]),
+  methods: mapMutations(["fetchOrder"])
+})
+export default class shoOrder extends Vue {
+  @Prop() id!: any;
+  loading?: Boolean = false;
+  columns = [
+    { path: "id", label: "Produkt" },
+    { path: "hmotnost", label: "Hmotnost" },
+    { path: "value", label: "Množství" },
+    { path: "mnozstvi", label: "Možnosti" }
+  ];
+  get order() {
+    return this.$store.getters.order;
   }
-};
+  set order(order) {
+    console.log(order);
+  }
+  sortColumn?: any = { path: "id", order: "asc" };
+
+  handleSort = sortColumn => {
+    console.log(sortColumn);
+    this.sortColumn = sortColumn;
+  };
+
+  @Watch("$route", { immediate: true, deep: true })
+  onUrlChange(newVal) {
+    this.$store.dispatch("fetchOrder", this.id);
+  }
+}
 </script>
