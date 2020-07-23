@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div class="lg:w-130">
     <div class="header">
       <h3>{{title}}</h3>
     </div>

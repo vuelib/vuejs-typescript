@@ -1,8 +1,20 @@
 <template>
   <Content :title="`Objednávka č. ${order.id}`">
-    <div class="table"><user=t /></div>
-    <div class="table">
-      <tableOrderList />
+    <userDetails />
+    <tableOrderList :loading="loadComponenct" />
+    <div class="table w-full mt-5">
+      <customTextarea
+        v-model="order.description"
+        :error="errors.description"
+        :rows="1"
+        label="Vaše poznámka"
+        name="description"
+      />
+      <div class="flex">
+        <customFormButton name="Potvrdit" :loading="loading" :onClick="confirmOrder" />
+        <customFormButton name="Upravit" class="ml-2" :loading="loading" :onClick="editOrder" />
+        <customFormButton name="Odstranit" class="ml-2" :loading="loading" :onClick="deleteOrder" />
+      </div>
     </div>
   </Content>
 </template>
@@ -14,42 +26,53 @@ import Content from "../common/content.vue";
 import tableHead from "../common/tableHead.vue";
 import userDetails from "./userDetails.vue";
 import tableOrderList from "./tableOrderList.vue";
+import customTextarea from "../common/formTextarea.vue";
+import customFormButton from "../common/formButton.vue";
 @Component({
   name: "shoOrder",
   components: {
     Content,
     tableHead,
     userDetails,
-    tableOrderList
+    tableOrderList,
+    customTextarea,
+    customFormButton
   },
-  computed: mapGetters(["order"]),
   methods: mapMutations(["fetchOrder"])
 })
 export default class shoOrder extends Vue {
-  @Prop() id!: any;
+  @Prop() id?: String;
   loading?: Boolean = false;
-  columns = [
-    { path: "id", label: "Produkt" },
-    { path: "hmotnost", label: "Hmotnost" },
-    { path: "value", label: "Množství" },
-    { path: "mnozstvi", label: "Možnosti" }
-  ];
+  loadComponenct?: Boolean = false;
+  errors?: any = [];
+
   get order() {
     return this.$store.getters.order;
   }
-  set order(order) {
-    console.log(order);
+  confirmOrder() {
+    this.$store.dispatch("confirmOrder", this.order);
   }
-  sortColumn?: any = { path: "id", order: "asc" };
 
-  handleSort = sortColumn => {
-    console.log(sortColumn);
-    this.sortColumn = sortColumn;
-  };
+  editOrder() {
+    this.$router.push({
+      name: "EditOrder",
+      params: { id: this.order.id }
+    });
+  }
+
+  deleteOrder() {
+    this.$store.dispatch("deleteOrder", this.id);
+    this.$router.push({
+      name: "Orders"
+    });
+  }
 
   @Watch("$route", { immediate: true, deep: true })
-  onUrlChange(newVal) {
-    this.$store.dispatch("fetchOrder", this.id);
+  fetchOrder(id) {
+    this.loadComponenct = true;
+    this.$store.dispatch("fetchOrder", this.id).then(res => {
+      this.loadComponenct = false;
+    });
   }
 }
 </script>

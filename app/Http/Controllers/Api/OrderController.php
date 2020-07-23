@@ -17,9 +17,12 @@ class OrderController extends Controller
     public function index()
     {
         $this->authorize('create', Order::class);
-        return Order::where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->get()->map->format();
+        $order = Order::where('user_id', auth()->user()->id)
+            ->orderBy('created_at', 'desc')->paginate(10);
+        $order->setCollection(
+            $order->getCollection()->map->format()
+        );
+        return $order;
     }
 
     public function store(Request $request)
@@ -27,9 +30,12 @@ class OrderController extends Controller
         $this->authorize('create', Order::class);
         $data = request()->validate($this->rules());
         $order = auth()->user()->orders()->create();
-        foreach ($data['orders'] as $product) {
-            $mnozstvi = Amount::create(['product_id' => $product['id'], 'mnozstvi' => $product['value']]);
-            $order->amounts()->attach($mnozstvi->id);
+        foreach ($data['amounts'] as $product) {
+            $product = array_merge($product, [
+                'product_id' => $product['id'],
+                'order_id' => $order->id,
+            ]);
+            Amount::create($product);
         }
         $order->load('amounts.product');
         // broadcast($order);
@@ -45,13 +51,22 @@ class OrderController extends Controller
 
     public function update(Order $order)
     {
+        // $this->authorize('update', Order::class);
         $data = request()->validate($this->rules());
-        $order->amounts()->delete();
-        foreach ($data['order'] as $prodId => $value) {
-            $mnozstvi = Amount::create(['product_id' => $prodId, 'mnozstvi' => $value]);
-            $order->amounts()->attach($mnozstvi->id);
-        }
-        broadcast(new OrderAdded($order));
+        $amounts = collect($data['amounts']);
+        $deleteAmounts = collect($data['delete']);
+        $deleteAmounts->map(function ($a) {
+            Amount::find($a['amount_id'])->delete();
+        });
+        $amounts->map(function ($a) use ($order) {
+            Amount::updateOrCreate([
+                'id' => isset($a['amount_id']) ? $a['amount_id'] : '',
+                'product_id' => $a['id'],
+                'order_id' => $order['id'],
+            ], ['value' =>  $a['value'],]);;
+        });
+        // broadcast(new OrderAdded($order));   
+        return $order;
     }
 
     public function confirm(Order $order)
@@ -76,8 +91,9 @@ class OrderController extends Controller
     public function rules()
     {
         return [
-            'orders' => 'required',
-            'orders.*.value' => 'numeric',
+            'amounts' => 'required',
+            'amounts.*.value' => 'numeric',
+            'delete' => ''
         ];
     }
 }

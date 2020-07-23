@@ -16,7 +16,8 @@ class CreateAmountsTable extends Migration
         Schema::create('amounts', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->unsignedInteger('product_id');
-            $table->string('mnozstvi', 10);
+            $table->unsignedInteger('order_id');
+            $table->string('value');
             $table->timestamps();
         });
     }

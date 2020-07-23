@@ -13,7 +13,6 @@ export default {
     },
     mutations: {
         setTheme(state, theme) {
-            console.log(theme);
             state.theme = theme;
         }
     }

@@ -1,7 +1,9 @@
 <template>
   <button @click.prevent="onClick" :disabled="loading" class="btn-custom" type="submit">
-    <span class="loader" v-if="loading">Loading</span>
-    <span class="pl-2">{{name}}</span>
+    <span class="pl-2">
+      <i v-show="loading" class="fa fa-spinner fa-spin"></i>
+      {{name}}
+    </span>
   </button>
 </template>
 

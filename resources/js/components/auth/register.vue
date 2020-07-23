@@ -1,44 +1,47 @@
 <template>
-  <Box title="Zaregistrovat se">
-    <Form>
-      <customInput
-        v-model="user.email"
-        :error="errors.email"
-        label="E-mail"
-        name="email"
-        autofocus="true"
-        type="email"
-      />
-      <customInput
-        v-model="user.phone"
-        :error="errors.phone"
-        label="Telefonní číslo"
-        type="phone"
-        name="phone"
-      />
-      <customInput
-        v-model="user.password"
-        :error="errors.password"
-        label="Heslo"
-        name="password"
-        type="password"
-      />
-      <customInput
-        v-model="user.confirm_password"
-        :error="errors.confirm_password"
-        label="Potvrďte heslo"
-        name="confirm_password"
-        type="password"
-      />
-      <customFormButton :onClick="register" name="Registrovat se" :loading="loading" />
-      <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
-      <router-link :to="{ name: 'forgotpassowrd' }" class="router-link">Zapomněli jste heslo?</router-link>
-    </Form>
-  </Box>
+  <Container>
+    <Box title="Zaregistrovat se" class="w-128">
+      <Form>
+        <customInput
+          v-model="user.email"
+          :error="errors.email"
+          label="E-mail"
+          name="email"
+          autofocus="true"
+          type="email"
+        />
+        <customInput
+          v-model="user.phone"
+          :error="errors.phone"
+          label="Telefonní číslo"
+          type="phone"
+          name="phone"
+        />
+        <customInput
+          v-model="user.password"
+          :error="errors.password"
+          label="Heslo"
+          name="password"
+          type="password"
+        />
+        <customInput
+          v-model="user.confirm_password"
+          :error="errors.confirm_password"
+          label="Potvrďte heslo"
+          name="confirm_password"
+          type="password"
+        />
+        <customFormButton :onClick="register" name="Registrovat se" :loading="loading" />
+        <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
+        <router-link :to="{ name: 'forgotpassowrd' }" class="router-link">Zapomněli jste heslo?</router-link>
+      </Form>
+    </Box>
+  </Container>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import Container from "../common/container.vue";
 import Box from "../common/box.vue";
 import Form from "../common/form.vue";
 import customInput from "../common/formInput.vue";
@@ -46,6 +49,7 @@ import customFormButton from "../common/formButton.vue";
 @Component({
   name: "Register",
   components: {
+    Container,
     Box,
     Form,
     customInput,

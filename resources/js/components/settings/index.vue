@@ -1,33 +1,43 @@
 <template>
-    <div>
-        <div class="md:flex">
-            <aside class="sidebar">
-                <div class="name">Nastavení</div>
-                <div class="menu">
-                    <router-link :to="{ name: 'ChangeContact'}" class="link">Změnit kontaktní údaje</router-link>
-                    <!-- <router-link  class="link" :to="{ name: 'ChangeInvoice'} ">Změnit fakturační údaje</router-link>       -->
-                    <router-link :to="{ name: 'ChangePassword'}" class="link">Změnit heslo</router-link>
-                    <router-link :to="{ name: 'logout'}" class="link">Odhlásit se</router-link>
-                </div>
-            </aside>
-            <transition mode="out-in" name="component-fade">
-                <router-view/>
-            </transition>
-        </div>
-    </div>
+  <Container :loading="loadComponent">
+    <Sidebar name="Nastavení" :items="links" type="name" :param="setParam"></Sidebar>
+    <transition mode="out-in" name="component-fade">
+      <router-view />
+    </transition>
+  </Container>
 </template>
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { mapGetters, mapMutations } from "vuex";
+import Container from "../common/container.vue";
+import Sidebar from "../common/sidebar.vue";
+@Component({
+  name: "allOrders",
+  components: {
+    Container,
+    Sidebar
+  }
+})
+export default class allOrders extends Vue {
+  @Prop() successMessage?: String;
+  errors!: [];
+  loadComponent?: Boolean = false;
 
-<script>
-    export default {
-        name: "AllOrders",
-        data() {
-            return {
-                user: []
-            };
-        },
+  links?: any = [
+    { name: "Změnit kontaktní údaje", link: "ChangeContact" },
+    { name: "Změnit heslo", link: "ChangePassword" },
+    { name: "Odhlásit se", link: "logout" }
+  ];
+  setParam = route => {
+    return { name: route.link };
+  };
 
-        created() {
-        },
-        methods: {}
-    };
+  beforeMount() {
+    this.loadComponent = true;
+  }
+
+  mounted() {
+    this.loadComponent = false;
+  }
+}
 </script>

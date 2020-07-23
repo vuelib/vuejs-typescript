@@ -21,20 +21,6 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
-
-        Schema::create('amount_order', function (Blueprint $table) {
-
-            $table->engine = 'InnoDB';
-            $table->increments('id')->unsigned();
-            $table->integer('amount_id')->unsigned();
-            $table->integer('order_id')->unsigned();
-        });
-
-        Schema::table('amount_order', function (Blueprint $table) {
-            $table->foreign('order_id')
-                ->references('id')->on('orders')
-                ->onDelete('cascade');
-        });
     }
 
     /**
@@ -45,6 +31,5 @@ class CreateOrdersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('orders');
-        Schema::dropIfExists('amount_order');
     }
 }

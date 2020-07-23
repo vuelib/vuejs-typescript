@@ -22,19 +22,13 @@ class Product extends Model
         return $this->hasMany(Product::class);
     }
 
-    public function search($id)
-    {
-        return DB::table('amounts')
-            ->where('product_id', 'like', $id)
-            ->get();
-    }
 
     public function format()
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'mnozstvi' => $this->hmotnost,
+            'baleni' => $this->hmotnost,
             'category_id' => $this->category_id,
             'created_at' => $this->created_at->format('d.m'),
             'value' => ''

@@ -40,88 +40,8 @@ class Ares
                 'zeme' => strval($el->AA->NS),
                 'psc' => strval($el->AA->PSC),
             ];
-            // if ($this->ic === strval($el->ICO))
         }
         return false;
-    }
-
-    /**
-     * @param string $xml
-     * @return string
-     */
-    private function getDicFromXML($xml)
-    {
-        $pattern = '/([0-9]*)<\/D:DIC>/';
-        simplexml_load_string($pattern, $xml, $matches);
-        return isset($matches[1]) ? 'CZ' . $matches[1] : false;
-    }
-
-
-    /**
-     * @param string $xml
-     * @return string
-     */
-    private function getIcFromXML($xml)
-    {
-        $ic = simplexml_load_string($xml);
-        dump($ic);
-        return isset($ic) ? $ic : false;
-    }
-
-
-    /**
-     * @param string $xml
-     * @return strings
-     */
-    private function getAddressFromXML($xml)
-    {
-        $pattern = '/(.*)<\/D:OF>/';
-        preg_match($pattern, $xml, $matches);
-        return isset($matches[1]) ? $matches[1] : false;
-    }
-
-    /**
-     * @param string $xml
-     * @return string
-     */
-    private function getStreetFromXML($xml)
-    {
-        $pattern = '/(.*)<\/D:UC>/';
-        preg_match($pattern, $xml, $matches);
-        return isset($matches[1]) ? $matches[1] : false;
-    }
-
-    /**
-     * @param string $xml
-     * @return string
-     */
-    private function getCityFromXML($xml)
-    {
-        $pattern = '/(.*)<\/D:N>/';
-        preg_match($pattern, $xml, $matches);
-        return isset($matches[1]) ? $matches[1] : false;
-    }
-
-    /**
-     * @param string $xml
-     * @return string
-     */
-    private function getPSCFromXML($xml)
-    {
-        $pattern = '/([0-9]*)<\/D:PSC>/';
-        preg_match($pattern, $xml, $matches);
-        return isset($matches[1]) ? $matches[1] : false;
-    }
-
-    /**
-     * @param string $xml
-     * @return string
-     */
-    private function getStateFromXML($xml)
-    {
-        $pattern = '/(.*)<\/D:NS>/';
-        preg_match($pattern, $xml, $matches);
-        return isset($matches[1]) ? $matches[1] : false;
     }
 
 

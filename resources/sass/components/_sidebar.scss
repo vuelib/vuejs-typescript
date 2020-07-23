@@ -1,5 +1,8 @@
 .sidebar {
     @apply .flex .flex-col .text-primary .font-semibold;
+
+    min-width: 12rem;
+
     .name {
         @apply .text-center .text-junglegreen .mt-6 .mb-3 .text-xl .bg-transparent;
     }

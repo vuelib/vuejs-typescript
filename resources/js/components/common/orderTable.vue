@@ -15,7 +15,7 @@
       <div v-show="!collapsed">
         <div
           v-show="orders.length === 0"
-          class="w-full text-center text-2xl"
+          class="w-full text-center text-xl"
         >Nemáte vybrané žádné produkty</div>
       </div>
     </div>
@@ -23,13 +23,7 @@
       <formButton :name="buttonName" :loading="loading" :onClick="onClick" />
     </div>
     <div class="table w-full">
-      <Table
-        :columns="columnsProduct"
-        :data="products"
-        :sortColumn="sortColumn"
-        :onSort="handleSortOrders"
-      />
-      <!-- <table class="table w-full">
+      <table class="table w-full">
         <table-head :columns="columns" :sortColumn="sortColumn" :onSort="handleSortProducts" />
         <tbody>
           <tr v-for="product in products" :key="product.id">
@@ -37,7 +31,7 @@
             <td class="border py-2 px-2 text-center">{{product.name}}</td>
             <td class="border py-2 px-2 text-center products-inputs">
               <input
-                class="text-center"
+                class="text-center input-table"
                 v-model="product.value"
                 :name="product.id"
                 @keydown.up.exact.prevent="focusPrevious(true)"
@@ -46,7 +40,7 @@
             </td>
           </tr>
         </tbody>
-      </table>-->
+      </table>
     </div>
   </div>
 </template>
@@ -77,12 +71,8 @@ export default class orderTable extends Vue {
   @Prop() onClick!: Function;
   public collapsed?: Boolean = false;
 
-  get allProducts() {
-    return this.$store.getters.products;
-  }
   get menuItems() {
-    return true;
-    // return document.querySelectorAll(".products-inputs input");
+    return document.querySelectorAll(".products-inputs input");
   }
   focusedIndex: any = 0;
   columns: any = [
@@ -117,21 +107,21 @@ export default class orderTable extends Vue {
     // this.sortColumn = sortColumn;
   };
 
-  // focusPrevious(isArrowKey) {
-  //   this.focusedIndex = this.focusedIndex - 1;
-  //   if (isArrowKey) {
-  //     this.focusItem();
-  //   }
-  // }
-  // focusNext(isArrowKey) {
-  //   this.focusedIndex = this.focusedIndex + 1;
-  //   if (isArrowKey) {
-  //     this.focusItem();
-  //   }
-  // }
-  // focusItem() {
-  // this.menuItems[this.focusedIndex].focus();
-  // }
+  focusPrevious(isArrowKey) {
+    this.focusedIndex = this.focusedIndex - 1;
+    if (isArrowKey) {
+      this.focusItem();
+    }
+  }
+  focusNext(isArrowKey) {
+    this.focusedIndex = this.focusedIndex + 1;
+    if (isArrowKey) {
+      this.focusItem();
+    }
+  }
+  focusItem() {
+    this.menuItems[this.focusedIndex].focus();
+  }
 }
 </script>
 

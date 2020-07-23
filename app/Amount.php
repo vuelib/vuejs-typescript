@@ -4,15 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Amount extends Model
 {
-    protected $fillable = ['product_id', 'mnozstvi', 'order_id'];
+    protected $fillable = ['product_id', 'value', 'order_id'];
 
-    public function order(): BelongsToMany
+    public function order(): BelongsTo
     {
-        return $this->belongsToMany(Order::class);
+        return $this->BelongsTo(Order::class);
     }
 
     public function product(): BelongsTo
@@ -24,7 +23,7 @@ class Amount extends Model
     {
         return [
             'id' => $this->id,
-            'mnozstvi' => $this->mnozstvi,
+            'value' => $this->value,
             'edit' => false,
             'created_at' => $this->created_at->format('d.m'),
             'product' => $this->product->format(),

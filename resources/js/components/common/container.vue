@@ -1,10 +1,10 @@
 <template>
-  <div class="md:flex">
+  <main class="flex justify-center">
     <div class="h-full w-full mt-5" v-if="loading">
       <div class="loading"></div>
     </div>
     <slot v-else></slot>
-  </div>
+  </main>
 </template>
 
 

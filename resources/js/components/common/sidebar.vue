@@ -19,6 +19,7 @@
         </div>
       </div>
     </div>
+    <slot name="bottom" />
   </aside>
 </template>
 

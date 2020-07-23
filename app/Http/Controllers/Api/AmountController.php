@@ -10,10 +10,10 @@ class AmountController extends Controller
 
     public function update(Amount $amount)
     {
-        $item = request()->validate([
-            'mnozstvi' => 'required|max:9999|numeric'
+        $data = request()->validate([
+            'value' => 'required|numeric|max:9999'
         ]);
-        $amount->mnozstvi = $item['mnozstvi'];
+        $amount->value = $data['value'];
         $amount->push();
     }
 

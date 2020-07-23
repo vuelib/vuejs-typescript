@@ -1,30 +1,33 @@
 <template>
-  <Box title="Přihlásit se">
-    <Form :succesMessage="dataSuccessMessage">
-      <customInput
-        v-model="user.username"
-        :error="errors.username"
-        label="E-mail"
-        name="email"
-        autofocus="true"
-        type="email"
-      />
-      <customInput
-        v-model="user.password"
-        :error="errors.password"
-        label="Heslo"
-        name="password"
-        type="password"
-      />
-      <customFormButton :onClick="login" name="Přihlásit se" :loading="loading" />
-      <router-link :to="{ name: 'register' }" class="router-link">Registrovat se</router-link>
-      <router-link :to="{ name: 'forgotpassowrd' }" class="router-link">Zapomněli jste heslo?</router-link>
-    </Form>
-  </Box>
+  <Container>
+    <Box title="Přihlásit se" class="w-128">
+      <Form :succesMessage="dataSuccessMessage">
+        <customInput
+          v-model="user.username"
+          :error="errors.username"
+          label="E-mail"
+          name="email"
+          autofocus="true"
+          type="email"
+        />
+        <customInput
+          v-model="user.password"
+          :error="errors.password"
+          label="Heslo"
+          name="password"
+          type="password"
+        />
+        <customFormButton :onClick="login" name="Přihlásit se" :loading="loading" />
+        <router-link :to="{ name: 'register' }" class="router-link">Registrovat se</router-link>
+        <router-link :to="{ name: 'forgotpassowrd' }" class="router-link">Zapomněli jste heslo?</router-link>
+      </Form>
+    </Box>
+  </Container>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import Container from "../common/container.vue";
 import Box from "../common/box.vue";
 import Form from "../common/form.vue";
 import customInput from "../common/formInput.vue";
@@ -32,6 +35,7 @@ import customFormButton from "../common/formButton.vue";
 @Component({
   name: "Login",
   components: {
+    Container,
     Box,
     Form,
     customInput,
@@ -63,7 +67,6 @@ export default class Login extends Vue {
           this.errors["username"] = [
             "Chybně zadané heslo nebo uživatelské jméno."
           ];
-          console.log(error.response.data);
         }
         this.loading = false;
       });

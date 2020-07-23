@@ -1,5 +1,5 @@
 <?php
 
-// Auth::routes();
+Auth::routes();
 
 Route::get('/{any}', 'AppController@show')->where('any', '.*');

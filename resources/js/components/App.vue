@@ -3,9 +3,7 @@
     <navbar />
     <sidebar />
     <shortcut-links />
-    <main class="flex justify-center">
-      <router-view />
-    </main>
+    <router-view />
     <footerC />
   </div>
 </template>

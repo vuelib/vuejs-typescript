@@ -10,7 +10,7 @@
     </sidebar>
     <Content :title="category.name">
       <order-table
-        :products="products"
+        :products="filteredProducts"
         :orders="orders"
         :onClick="addOrder"
         buttonName="Vytvořit objednávku"
@@ -34,12 +34,10 @@ import orderTable from "../common/orderTable.vue";
     sidebar,
     orderTable
   },
-  computed: mapGetters(["categories", "category"]),
+  computed: mapGetters(["category", "filteredProducts"]),
   methods: mapMutations(["fetchCategories", "fetchProducts"])
 })
 export default class addOrder extends Vue {
-  private _products: any = [];
-  private _orders: any;
   private _search: any;
 
   get categories() {
@@ -48,14 +46,12 @@ export default class addOrder extends Vue {
       ...this.$store.getters.categories
     ];
   }
-  get category() {
-    return this.$store.getters.category;
+
+  get products() {
+    return this.$store.getters.products;
   }
   get orders() {
     return this.products.filter(p => p.value !== "");
-  }
-  get products() {
-    return this.$store.getters.filteredProducts;
   }
 
   get search() {
@@ -63,12 +59,10 @@ export default class addOrder extends Vue {
   }
   set search(search) {
     this._search = search;
-    let products = this.products.filter(product => {
-      product.name.toLowerCase().includes(search.toLowerCase());
-    });
+    // let products = this.products.filter(product => {
+    //   product.name.toLowerCase().includes(search.toLowerCase());
+    // });
   }
-  val!: String;
-  data!: any;
   loadComponent?: Boolean = false;
   loading?: Boolean = false;
 
@@ -94,7 +88,7 @@ export default class addOrder extends Vue {
     this.axios
       .post(
         `/order`,
-        { orders: this.orders },
+        { amounts: this.orders },
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("access_token")

@@ -2,8 +2,7 @@ import axios from "axios";
 export default {
     state: () => ({
         orders: [],
-        order: { id: 0 },
-        orderItems: []
+        order: { id: 0 }
     }),
     getters: {
         ordersFilter(state) {
@@ -14,9 +13,6 @@ export default {
         },
         order(state) {
             return state.order;
-        },
-        orderItems(state) {
-            return state.orderItems;
         }
     },
     mutations: {
@@ -47,36 +43,35 @@ export default {
             state.orders.splice(index, 1);
             state.order = [];
         },
-        orderItems(state, item) {
-            console.log(item);
+        setAmount(state, amount) {
+            const amounts = [...state.order.amounts];
+            const index = amounts.findIndex(i => i == amount);
+            amounts[index] = amount;
+            state.order.amounts = amounts;
         },
-        updateOrderItem(state, amount) {
-            const index = state.order.amounts.findIndex(
-                item => item.id == amount.id
-            );
-            state.orders.amounts.splice(index, 1, amount);
-        },
-        deleteOrderItem(state, id) {
-            const index = state.order.amounts.findIndex(item => item.id == id);
-            state.order.amounts.splice(index, 1);
+        unsetAmount(state, amount) {
+            const amounts = [...state.order.amounts];
+            const index = amounts.findIndex(i => i == amount);
+            amounts.splice(index, 1);
+            state.order.amounts = amounts;
         }
     },
     actions: {
-        fetchOrders({ rootState, commit }) {
+        fetchOrders({ rootState, commit }, page) {
             return new Promise((resolve, reject) => {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + rootState.auth.token;
+                axios.defaults.headers.common["Authorization"] =
+                    "Bearer " + rootState.auth.token;
 
-            axios
-                .get("/order")
-                .then(res => {
-                    commit("setOrders", res.data);
-                    resolve(res)
-                })
-                .catch(error => {
-                    reject(error);
-                });
-            }
+                axios
+                    .get("/order?page=" + page)
+                    .then(res => {
+                        commit("setOrders", res.data);
+                        resolve(res);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
         },
         fetchOrder({ rootState, commit }, id) {
             return new Promise((resolve, reject) => {
@@ -85,39 +80,14 @@ export default {
 
                 axios
                     .get(`order/${id}`)
-                    .then(response => {
-                        commit("setOrder", response.data);
-                        resolve(response);
+                    .then(res => {
+                        commit("setOrder", res.data);
+                        resolve(res);
                     })
                     .catch(error => {
-                        console.log(error);
+                        reject(error);
                     });
             });
-        },
-        deleteOrder(context, id) {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + context.state.token;
-
-            axios
-                .delete(`order/${id}`)
-                .then(response => {
-                    context.commit("deleteOrder", id);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
-        updateOrderItem(context, amount) {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + context.state.token;
-            axios
-                .put(`amount/${amount.id}`, amount)
-                .then(response => {
-                    context.commit("updateOrderItem", amount);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
         },
         confirmOrder(context, data) {
             axios.defaults.headers.common["Authorization"] =
@@ -131,18 +101,52 @@ export default {
                     console.log(error);
                 });
         },
-        deleteOrderItem(context, id) {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + context.state.token;
+        deleteOrder({ rootState, commit }, id) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common["Authorization"] =
+                    "Bearer " + rootState.auth.token;
 
-            axios
-                .delete(`amount/${id}`)
-                .then(response => {
-                    context.commit("deleteOrderItem", id);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+                axios
+                    .delete(`order/${id}`)
+                    .then(res => {
+                        commit("deleteOrder", id);
+                        resolve(res);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        },
+        updateAmount({ rootState, commit }, amount) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common["Authorization"] =
+                    "Bearer " + rootState.auth.token;
+                axios
+                    .put(`amount/${amount.id}`, amount)
+                    .then(res => {
+                        commit("setAmount", amount);
+                        resolve(res);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        },
+        deleteAmount({ rootState, commit }, amount) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common["Authorization"] =
+                    "Bearer " + rootState.auth.token;
+
+                axios
+                    .delete(`amount/${amount.id}`)
+                    .then(res => {
+                        commit("unsetAmount", amount);
+                        resolve(res);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
         }
     }
 };

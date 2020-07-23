@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\hasMany;
 
 class Order extends Model
 {
@@ -16,9 +16,9 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function amounts(): BelongsToMany
+    public function amounts(): hasMany
     {
-        return $this->belongsToMany(Amount::class);
+        return $this->hasMany(Amount::class);
     }
 
     public function getstatusAttribute($attribute)

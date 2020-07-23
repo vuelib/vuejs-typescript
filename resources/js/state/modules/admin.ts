@@ -39,12 +39,11 @@ export default {
             return new Promise((resolve, reject) => {
                 axios
                     .get(`allorders`)
-                    .then(response => {
-                        context.commit("allOrders", response.data.data);
-                        resolve(response);
+                    .then(res => {
+                        context.commit("allOrders", res.data);
+                        resolve(res);
                     })
                     .catch(error => {
-                        console.log(error);
                         reject(error);
                     });
             });
@@ -53,12 +52,11 @@ export default {
             return new Promise((resolve, reject) => {
                 axios
                     .get(`allusers`)
-                    .then(response => {
-                        context.commit("allUsers", response.data.data);
-                        resolve(response);
+                    .then(res => {
+                        context.commit("allUsers", res.data);
+                        resolve(res);
                     })
                     .catch(error => {
-                        console.log(error);
                         reject(error);
                     });
             });

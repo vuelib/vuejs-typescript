@@ -1,6 +1,10 @@
 <template>
   <Container :loading="loadComponent">
-    <Sidebar name="Objednávky" :items="orders" type="name" :param="setParam" />
+    <Sidebar name="Objednávky" :items="orders.data" type="name" :param="setParam">
+      <template v-slot:bottom>
+        <pagination :items="orders" />
+      </template>
+    </Sidebar>
     <transition mode="out-in" name="component-fade">
       <router-view />
     </transition>
@@ -11,11 +15,13 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 import Container from "../common/container.vue";
 import Sidebar from "../common/sidebar.vue";
+import Pagination from "../common/Pagination.vue";
 @Component({
   name: "allOrders",
   components: {
     Container,
-    Sidebar
+    Sidebar,
+    Pagination
   },
   computed: mapGetters(["orders"]),
   methods: mapMutations(["fetchOrders"])
@@ -26,12 +32,14 @@ export default class allOrders extends Vue {
   loadComponent?: Boolean = false;
 
   get orders() {
-    const orders = this.$store.getters.orders;
-    let orderMap = orders.map(p => {
+    const order = this.$store.getters.orders;
+    if (order.length == 0) return;
+    const { data } = order;
+    order["data"] = data.map(p => {
       let status = `${p.id} ${p.status} ${p.created_at}`;
       return { name: status, ...p };
     });
-    return orderMap;
+    return order;
   }
 
   setParam = order => {
@@ -44,7 +52,7 @@ export default class allOrders extends Vue {
   beforeMount() {
     this.loadComponent = true;
     this.$store
-      .dispatch("fetchOrders")
+      .dispatch("fetchOrders", 1)
       .then(res => (this.loadComponent = false))
       .catch(error => {
         console.log(error);

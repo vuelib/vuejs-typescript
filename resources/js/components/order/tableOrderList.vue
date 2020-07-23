@@ -1,109 +1,83 @@
 <template>
-  <table class="table-fixed">
-    <thead>
-      <tr>
-        <th class="px-4 py-2">Produkt</th>
-        <th class="px-4 py-2">Hmotnost</th>
-        <th class="px-4 py-2">Množství</th>
-        <th class="px-4 py-2" v-if="order.status == 'rozpracovaná'">Možnosti</th>
-      </tr>
-    </thead>
-    <tbody>
-      <transition v-bind:key="amount.id" v-for="amount in order.amounts" name="fade">
-        <tr>
-          <td class="border px-4 py-2">{{ amount.product.name }}</td>
-          <td class="border px-4 py-2 text-center">{{ amount.product.mnozstvi }}</td>
-          <td class="border px-4 py-2">
-            <div
-              class="text-center w-20"
-              v-on:click="order.status == 'rozpracovaná' ? editProduct(amount, true) : ''"
-              v-show="amount.edit == false"
-            >{{ amount.mnozstvi }}</div>
-            <input
-              :value="amount.mnozstvi"
-              @input="
-              _updateProduct($event, amount)
-                                    "
-              class="w-20 p-1 text-center appearance-none block bg-white text-gray-700 border border-blue-700 rounded border-blue-900 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              type="number"
-              v-on:keyup.enter="editProduct(amount, false)"
-              v-show="amount"
-            />
-          </td>
-          <td class="border px-4 py-2 flex justify-between" v-if="order.status == 'rozpracovaná'">
-            <button
-              class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-              v-if="!amount"
-              v-on:click="
-                                        editProduct(amount, true)
-                                    "
-            >
-              <i class="fas fa-edit text-blue-800"></i>
-            </button>
-            <button
-              class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-              v-else
-              v-on:click="
-                                        editProduct(amount, false)
-                                    "
-            >Aktualizovat</button>
-
-            <button
-              class="bg-transparent hover:bg-red-700 text-black font-semibold hover:text-white py-2 px-4 border border-red-700 hover:border-transparent rounded"
-              v-on:click="
-                                        deleteOrderItem(
-                                            amount.pivot.amount_id
-                                        )
-                                    "
-            >
-              <i class="far fa-trash-alt text-blackhover:text-white"></i>
-            </button>
-          </td>
-        </tr>
-      </transition>
-    </tbody>
-  </table>
+  <div class="table w-full">
+    <div v-if="loading" class="loading"></div>
+    <table class="table-fixed" v-else>
+      <table-head :columns="columns" :sortColumn="sortColumn" :onSort="handleSort" />
+      <tbody>
+        <transition v-bind:key="amount.id" v-for="amount in order.amounts" name="fade">
+          <tr>
+            <td class="border px-4 py-2">{{ amount.product.name }}</td>
+            <td class="border px-4 py-2 text-center">{{ amount.product.baleni }}</td>
+            <td class="border px-4 py-2 text-center">
+              <input
+                v-model="amount.value"
+                v-if="amount.edit"
+                class="input-table"
+                type="number"
+                v-on:keyup.enter="editAmount(amount)"
+              />
+              <div
+                class="w-full h-full"
+                v-else
+                @click.prevent="editAmount(amount) "
+              >{{amount.value }}</div>
+            </td>
+            <td class="border px-4 py-2">
+              <button class="btn-edit-trans" @click.prevent="editAmount(amount)">
+                <i class="fas fa-edit text-blue-800"></i>
+              </button>
+              <button class="btn-delete-trans" @click.prevent="deleteAmount(amount)">
+                <i class="far fa-trash-alt text-black hover:text-white"></i>
+              </button>
+            </td>
+          </tr>
+        </transition>
+      </tbody>
+    </table>
+  </div>
 </template>
 
-<script>
-export default {
-  name: "orderTable",
-  data() {
-    return {
-      description: {
-        desc: ""
-      },
-      mnozstvi: "",
-      amounts: {}
-    };
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { mapGetters, mapMutations } from "vuex";
+import tableHead from "../common/tableHead.vue";
+import formButton from "../common/formButton.vue";
+
+@Component({
+  name: "tableOrderList",
+  components: {
+    tableHead,
+    formButton
   },
-  computed: {
-    order() {
-      return this.$store.getters.order;
-    }
-  },
-  methods: {
-    _updateProduct: function($event, amount) {
-      let product = parseInt($event.target.value);
-      this.amounts[amount.pivot.amount_id] = product;
-    },
-    deleteOrderItem(id) {
-      this.$store.dispatch("deleteOrderItem", id);
-    },
-    editProduct(amount, cond) {
-      amount.edit = cond;
-      this.amounts[amount.pivot.amount_id] === undefined
-        ? ""
-        : this.updateProduct(this.amounts[amount.pivot.amount_id], amount);
-    },
-    updateProduct(value, amount) {
-      amount.mnozstvi = value;
-      this.$store.dispatch("updateOrderItem", amount);
-    }
+  computed: mapGetters(["order"])
+})
+export default class tableOrderList extends Vue {
+  @Prop({ default: false, type: Boolean }) readonly loading?;
+  columns: any = [
+    { path: "name", label: "Název produktu" },
+    { path: "product.baleni", label: "Balení" },
+    { path: "value", label: "Množství" },
+    { key: "value", label: "Možnosti" }
+  ];
+  sortColumn?: any = { path: "id", order: "asc" };
+
+  handleSort = sortColumn => {
+    this.sortColumn = sortColumn;
+  };
+  editAmount(amount) {
+    amount.edit = !amount.edit;
+    if (amount.edit) return;
+    this.updateAmount(amount);
   }
-};
+  updateAmount(amount) {
+    this.$store.dispatch("updateAmount", amount);
+  }
+  deleteAmount(amount) {
+    this.$store.dispatch("deleteAmount", amount);
+  }
+}
 </script>
-<style>
+<style scoped>
 .fade-before-enter,
 .fade-enter-active,
 .fade-leave-active {

@@ -1,22 +1,25 @@
 <template>
-  <Box title="Zapomenuté heslo">
-    <Form :onClick="login" :succesMessage="dataSuccessMessage">
-      <customInput
-        v-model="user.email"
-        :error="errors.email"
-        label="Váš E-mail"
-        name="email"
-        autofocus="true"
-      />
-      <customFormButton name="Odeslat nové heslo" :loading="loading" />
-      <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
-      <router-link :to="{ name: 'register' }" class="router-link">Registrovat se</router-link>
-    </Form>
-  </Box>
+  <Container>
+    <Box title="Zapomenuté heslo" class="w-128">
+      <Form :onClick="forgotPassword" :succesMessage="dataSuccessMessage">
+        <customInput
+          v-model="user.email"
+          :error="errors.email"
+          label="Váš E-mail"
+          name="email"
+          autofocus="true"
+        />
+        <customFormButton name="Odeslat nové heslo" :loading="loading" />
+        <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
+        <router-link :to="{ name: 'register' }" class="router-link">Registrovat se</router-link>
+      </Form>
+    </Box>
+  </Container>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import Container from "../common/container.vue";
 import Box from "../common/box.vue";
 import Form from "../common/form.vue";
 import customInput from "../common/formInput.vue";
@@ -24,6 +27,7 @@ import customFormButton from "../common/formButton.vue";
 @Component({
   name: "ForgotPassowrd",
   components: {
+    Container,
     Box,
     Form,
     customInput,
@@ -38,11 +42,11 @@ export default class ForgotPassowrd extends Vue {
   public errors = {};
   loading?: Boolean = false;
 
-  login() {
+  forgotPassword = () => {
     this.errors = {};
     this.loading = true;
     this.$store
-      .dispatch("retrieveToken", this.user)
+      .dispatch("forgotPassword", this.user)
       .then(response => {
         this.loading = false;
         this.$router.push({ name: "objednat" });
@@ -53,6 +57,6 @@ export default class ForgotPassowrd extends Vue {
         }
         this.loading = false;
       });
-  }
+  };
 }
 </script>
