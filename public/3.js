@@ -223,7 +223,7 @@ var orderTable = /** @class */ (function (_super) {
         _this.columns = [
             { path: "id", label: "Číslo produktu" },
             { path: "name", label: "Název" },
-            { path: "value", label: "Množství" }
+            { path: "value", label: "Množství" },
         ];
         _this.columnsProduct = [
             { path: "id", label: "Číslo produktu" },
@@ -235,11 +235,11 @@ var orderTable = /** @class */ (function (_super) {
                     props: function (product) {
                         return {
                             ":value": product.value,
-                            name: product.name
+                            name: product.name,
                         };
-                    }
-                }
-            }
+                    },
+                },
+            },
         ];
         _this.sortColumn = { path: "id", order: "asc" };
         _this.handleSortOrders = function (sortColumn) {
@@ -296,8 +296,8 @@ var orderTable = /** @class */ (function (_super) {
                 tableHead: _common_tableHead_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
                 tableBody: _common_tableBody_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
                 customInput: _common_customInput_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-                formButton: _common_formButton_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
-            }
+                formButton: _common_formButton_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+            },
         })
     ], orderTable);
     return orderTable;
@@ -576,7 +576,7 @@ var render = function() {
                     expression: "orders.length === 0"
                   }
                 ],
-                staticClass: "w-full text-center text-xl"
+                staticClass: "w-full text-center font-bold"
               },
               [_vm._v("Nemáte vybrané žádné produkty")]
             )
@@ -628,9 +628,7 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "td",
-                  {
-                    staticClass: "border py-2 px-2 text-center products-inputs"
-                  },
+                  { staticClass: "border py-2 px-2 flex justify-around" },
                   [
                     _c("input", {
                       directives: [
@@ -674,6 +672,30 @@ var render = function() {
                                 "Down",
                                 "ArrowDown"
                               ])
+                            ) {
+                              return null
+                            }
+                            if (
+                              $event.ctrlKey ||
+                              $event.shiftKey ||
+                              $event.altKey ||
+                              $event.metaKey
+                            ) {
+                              return null
+                            }
+                            $event.preventDefault()
+                            return _vm.focusNext(true)
+                          },
+                          function($event) {
+                            if (
+                              !$event.type.indexOf("key") &&
+                              _vm._k(
+                                $event.keyCode,
+                                "enter",
+                                13,
+                                $event.key,
+                                "Enter"
+                              )
                             ) {
                               return null
                             }

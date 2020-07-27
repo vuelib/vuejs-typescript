@@ -41,8 +41,6 @@ class UserController extends Controller
         if (!Hash::check($data['password'], $user->password)) {
             return response()->json('Hesla se neshodují', 404);
         } else {
-
-            //            $user->email = $data['email'];
             $user->phone = $data['phone'];
             $user->push();
         }
@@ -50,14 +48,13 @@ class UserController extends Controller
 
     public function changePassword()
     {
-
         $user = auth()->user();
         $data = request()->validate($this->password());
         if (!Hash::check($data['old_password'], $user->password)) {
             return response()->json('Hesla se neshodují', 404);
         } else {
             $user->password = Hash::make($data['password']);
-            $user->push();
+            $user->save();
             return response()->json('true', 200);
         }
     }

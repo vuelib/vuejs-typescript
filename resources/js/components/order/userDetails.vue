@@ -19,11 +19,11 @@
           {{ user.phone }}
         </div>
         <div>
-          <span class="font-bold">IC:</span>
+          <span class="font-bold">IČ:</span>
           <span class="text-junglegreen font-semibold">{{ user.invoice.ic }}</span>
         </div>
         <div v-if="user.invoice.dic">
-          <span class="font-bold">DIC:</span>
+          <span class="font-bold">DIČ:</span>
           <span class="text-junglegreen font-semibold">{{ user.invoice.dic }}</span>
         </div>
       </div>
@@ -54,9 +54,9 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { mapGetters } from "vuex";
 @Component({
   name: "userDetail",
-  computed: mapGetters(["user"])
 })
 export default class userDetail extends Vue {
+  @Prop({ required: true }) user;
   visible?: Boolean = true;
 }
 </script>

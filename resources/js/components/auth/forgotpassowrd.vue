@@ -1,7 +1,7 @@
 <template>
-  <Container>
+  <Content>
     <Box title="Zapomenuté heslo" class="w-128">
-      <Form :onClick="forgotPassword" :succesMessage="dataSuccessMessage">
+      <Form :succesMessage="dataSuccessMessage">
         <customInput
           v-model="user.email"
           :error="errors.email"
@@ -9,12 +9,12 @@
           name="email"
           autofocus="true"
         />
-        <customFormButton name="Odeslat nové heslo" :loading="loading" />
+        <customFormButton :onClick="forgotPassword" name="Odeslat nové heslo" :loading="loading" />
         <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
         <router-link :to="{ name: 'register' }" class="router-link">Registrovat se</router-link>
       </Form>
     </Box>
-  </Container>
+  </Content>
 </template>
 
 <script lang="ts">
@@ -31,32 +31,35 @@ import customFormButton from "../common/formButton.vue";
     Box,
     Form,
     customInput,
-    customFormButton
-  }
+    customFormButton,
+  },
 })
 export default class ForgotPassowrd extends Vue {
-  @Prop() readonly dataSuccessMessage!: any;
+  @Prop() dataSuccessMessage!: any;
   public user = {
-    email: ""
+    email: "",
   };
   public errors = {};
   loading?: Boolean = false;
 
-  forgotPassword = () => {
+  forgotPassword() {
     this.errors = {};
     this.loading = true;
     this.$store
       .dispatch("forgotPassword", this.user)
-      .then(response => {
+      .then((res) => {
         this.loading = false;
-        this.$router.push({ name: "objednat" });
+        this.dataSuccessMessage = res.data.status;
+        // this.$router.push({ name: "objednat" });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response.status == 422) {
           this.errors = error.response.data.errors;
+        } else if (error.response.status == 400) {
+          this.errors = { email: [error.response.data.email] };
         }
         this.loading = false;
       });
-  };
+  }
 }
 </script>

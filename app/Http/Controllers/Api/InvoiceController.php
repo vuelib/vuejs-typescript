@@ -12,7 +12,7 @@ class InvoiceController extends Controller
     public function check()
     {
         $user = auth()->user()->load('invoice');
-        return new UserResource($user);
+        return $user;
     }
 
     public function store()

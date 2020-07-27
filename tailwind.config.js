@@ -25,6 +25,7 @@ module.exports = {
                 darkergreen: "var(--bg-background-darkergreen)"
             },
             spacing: {
+                "86": "18rem",
                 "96": "24rem",
                 "128": "32rem",
                 "130": "36rem"

@@ -1,7 +1,12 @@
 <template>
   <div class="input-group">
     <div class="input-group-prepend">
-      <label class="label lg:justify-start" :for="name">{{label}}</label>
+      <label class="label lg:justify-start relative" :for="name">
+        {{label}}
+        <div
+          class="ml-2 hidden bg-black text-white text-xs rounded py-1 px-4 right-0 bottom-full"
+        >{{tooltip}}</div>
+      </label>
       <textarea
         class="form-control"
         :id="name"
@@ -22,10 +27,11 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
-  name: "Input"
+  name: "Input",
 })
 export default class Input extends Vue {
   @Prop({ required: true }) value!: String;
+  @Prop({ default: String }) tooltip!: String;
   @Prop({ required: true }) readonly name!: String;
   @Prop({ default: false }) readonly autofocus?: Boolean;
   @Prop({ required: true }) readonly error!: Object;

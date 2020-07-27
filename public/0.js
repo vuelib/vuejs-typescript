@@ -38,9 +38,12 @@ var Form = /** @class */ (function (_super) {
     __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
     ], Form.prototype, "succesMessage", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: "" })
+    ], Form.prototype, "enctype", void 0);
     Form = __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            name: "Form"
+            name: "Form",
         })
     ], Form);
     return Form;
@@ -188,7 +191,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "form",
-    { staticClass: "w-full max-w-lg" },
+    {
+      staticClass: "w-full max-w-lg",
+      attrs: { method: "POST", enctype: _vm.enctype }
+    },
     [
       _vm.succesMessage
         ? _c(

@@ -3,7 +3,7 @@ export default {
     state: () => ({
         token: localStorage.getItem("access_token") || null,
         user: {},
-        invoice: null,
+        invoice: localStorage.getItem("invoice") || null,
         userProfile: []
     }),
     getters: {
@@ -32,7 +32,10 @@ export default {
         },
         getUser(state, user) {
             state.user = user;
-            state.invoice = user.invoice;
+            if (user.invoice) {
+                localStorage.setItem("invoice", "true");
+                state.invoice = user.invoice;
+            }
         },
         addInvoice(state, invoice) {
             state.user.invoice = invoice;
@@ -66,6 +69,30 @@ export default {
                     })
                     .then(response => {
                         resolve(response);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        },
+        forgotPassword(context, user) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .post("password/email", user)
+                    .then(res => {
+                        resolve(res);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        },
+        resetPassword(context, user) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .post("password/reset", user)
+                    .then(res => {
+                        resolve(res);
                     })
                     .catch(error => {
                         reject(error);
@@ -116,11 +143,11 @@ export default {
                     "Bearer " + state.token;
 
                 axios
-                    .get(`userprofile/${id}`)
+                    .get(`user/${id}`)
                     .then(response => {
                         resolve(response);
                         commit("getUserProfile", response.data);
-                        commit("retrieveOrders", response.data.data.orders);
+                        commit("fetchOrders", response.data.orders);
                     })
                     .catch(error => {
                         console.log(error);

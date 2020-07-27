@@ -1,5 +1,5 @@
 @component('mail::message')
-# Zpráva od {{$data['firstname']}} {{$data['lastname']}}
+# Zpráva od {{$data['email']}}
 
 <strong>Email:</strong>{{$data['email']}}
 

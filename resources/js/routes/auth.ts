@@ -57,6 +57,33 @@ const Auth = [
         }
     },
     {
+        name: "resetpassword",
+        path: "/vytvorit-nove-heslo",
+        component: () => import("../components/auth/resetPassword.vue"),
+        props: true,
+        meta: {
+            title: "Šotola Miroslav - Vytvořit nové heslo",
+            metaTags: [
+                {
+                    name: "description",
+                    content: "Hlavní stránka"
+                },
+                {
+                    property: "og:description",
+                    content: "Hlavní stránka."
+                }
+            ]
+        }
+    },
+    {
+        props: true,
+        path: "/api/password/reset",
+        redirect: to => ({
+            name: "resetpassword",
+            props: { token: to.params.token, email: to.params.email }
+        })
+    },
+    {
         name: "logout",
         path: "/logout",
         component: () => import("../components/auth/Logout.vue")

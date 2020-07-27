@@ -2,7 +2,7 @@ import axios from "axios";
 export default {
     state: () => ({
         orders: [],
-        order: { id: 0 }
+        order: []
     }),
     getters: {
         ordersFilter(state) {
@@ -38,10 +38,12 @@ export default {
             const index = state.orders.findIndex(item => item.id == data.id);
             state.orders.splice(index, 1, state.order);
         },
-        deleteOrder(state, id) {
-            const index = state.orders.findIndex(item => item.id == id);
-            state.orders.splice(index, 1);
-            state.order = [];
+        deleteOrder(state, order) {
+            const orders = [...state.orders.data];
+            const index = orders.findIndex(o => o.id == order.id);
+            orders.splice(index, 1);
+            state.orders.data = orders;
+            state.order = orders;
         },
         setAmount(state, amount) {
             const amounts = [...state.order.amounts];
@@ -89,27 +91,27 @@ export default {
                     });
             });
         },
-        confirmOrder(context, data) {
+        confirmOrder({ rootState, commit }, order) {
             axios.defaults.headers.common["Authorization"] =
-                "Bearer " + context.state.token;
+                "Bearer " + rootState.auth.token;
             axios
-                .post(`order/${data.id}/confirm`, data)
-                .then(response => {
-                    context.commit("confirmOrder", data);
+                .put(`order/${order.id}/confirm`, order)
+                .then(res => {
+                    commit("confirmOrder", res.data);
                 })
                 .catch(error => {
                     console.log(error);
                 });
         },
-        deleteOrder({ rootState, commit }, id) {
+        deleteOrder({ rootState, commit }, order) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common["Authorization"] =
                     "Bearer " + rootState.auth.token;
 
                 axios
-                    .delete(`order/${id}`)
+                    .delete(`order/${order.id}/confirm`)
                     .then(res => {
-                        commit("deleteOrder", id);
+                        commit("deleteOrder", order);
                         resolve(res);
                     })
                     .catch(error => {

@@ -1,93 +1,81 @@
 <template>
-    <div>
-        <div class="loader" v-if="loading">
-            <div class="inner one"></div>
-            <div class="inner two"></div>
-            <div class="inner three"></div>
+  <Content title="Vytvořit kategorii">
+    <div class="table">
+      <Form :succesMessage="successMessage" enctype="multipart/form-data">
+        <customInput
+          v-model="category.name"
+          :error="errors.name"
+          label="Název kategorie"
+          name="name"
+          autofocus="true"
+        />
+        <div class="flex flex-wrap -mx-3 mb-6">
+          <div class="w-full px-3">
+            <label class="ares-label" for="name">Obrázek kategorie</label>
+            <input @change="processFile($event)" type="file" />
+            <p class="text-red-500 text-xs italname" v-if="errors.image">{{errors.image[0]}}</p>
+          </div>
         </div>
-
-        <div
-            class="header"
-        >
-            <h3>Vytvořit kategorii</h3>
-        </div>
-
-        <div class="flex flex-wrap">
-            <div class="w-full">
-                <div
-                    class="table"
-                >
-                    <form @submit.prevent="createCategory" class="w-full max-w-lg p-5">
-                        <div class="flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full px-3">
-                                <label class="ares-label" for="name">Název kategorie</label>
-                                <input
-                                    class="ares-input"
-                                    id="name"
-                                    type="text"
-                                    v-bind:class="{ 'border-red-500': errors.name }"
-                                    v-model="category.name"
-                                />
-                                <p class="text-red-500 text-xs italname" v-if="errors.name">{{errors.name[0]}}</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full px-3">
-                                <label class="ares-label" for="name">Obrázek kategorie</label>
-                                <input @change="processFile($event)" type="file">
-                                <p class="text-red-500 text-xs italname" v-if="errors.image">{{errors.image[0]}}</p>
-                            </div>
-                        </div>
-                        <div class="md:flex md:items-center">
-                            <div class="w-full">
-                                <button
-                                    class="success"
-                                    type="submit"
-                                >Vytvořit kategorii
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <customFormButton :onClick="createCategory" name="Vytvořit kategorii" :loading="loading" />
+      </Form>
     </div>
+  </Content>
 </template>
 
-<script>
-    export default {
-        name: "createCategory",
-        props: {
-            id: ""
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import Content from "../common/content.vue";
+import Form from "../common/form.vue";
+import customInput from "../common/formInput.vue";
+import customFormButton from "../common/formButton.vue";
+@Component({
+  name: "createCategory",
+  components: {
+    Content,
+    Form,
+    customInput,
+    customFormButton,
+  },
+})
+export default class createCategory extends Vue {
+  @Prop() successMessage!: any;
+  private category = {
+    name: "",
+    image: "",
+  };
+  public errors = {};
+  loading?: Boolean = false;
+
+  processFile(event) {
+    this.category.image = event.target.files[0];
+  }
+  createCategory() {
+    this.errors = [];
+    this.loading = true;
+    let fd = new FormData();
+    fd.append("name", this.category.name);
+    fd.append("image", this.category.image);
+    this.axios
+      .post("/category", fd, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
-        data() {
-            return {
-                loading: false,
-                category: {},
-                errors: ""
-            };
-        },
-        methods: {
-            createCategory() {
-                this.errors = [];
-                this.axios
-                    .post(`category`, this.category, {
-                        headers: {
-                            Authorization: "Bearer " + localStorage.getItem("access_token")
-                        }
-                    })
-                    .then(res => {
-                        this.$router.push({name: "zbozi"});
-                    })
-                    .catch(error => {
-                        if (error.response.status == 422) {
-                            this.errors = error.response.data.errors;
-                        }
-                    });
-            },
-            processFile(event) {
-                this.category.image = event.target.files[0];
-            }
+      })
+      .then((response) => {
+        this.loading = false;
+        this.$router.push({ name: "zbozi" });
+      })
+      .catch((error) => {
+        if (error.response.status == 422) {
+          this.errors = error.response.data.errors;
+        } else if (error.response.status == 404) {
+          this.errors = error.response.data.errors;
         }
-    };
+        this.loading = false;
+      });
+  }
+}
 </script>
+
+

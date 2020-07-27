@@ -45,28 +45,33 @@ var ForgotPassowrd = /** @class */ (function (_super) {
     function ForgotPassowrd() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.user = {
-            email: ""
+            email: "",
         };
         _this.errors = {};
         _this.loading = false;
-        _this.forgotPassword = function () {
-            _this.errors = {};
-            _this.loading = true;
-            _this.$store
-                .dispatch("forgotPassword", _this.user)
-                .then(function (response) {
-                _this.loading = false;
-                _this.$router.push({ name: "objednat" });
-            })
-                .catch(function (error) {
-                if (error.response.status == 422) {
-                    _this.errors = error.response.data.errors;
-                }
-                _this.loading = false;
-            });
-        };
         return _this;
     }
+    ForgotPassowrd.prototype.forgotPassword = function () {
+        var _this = this;
+        this.errors = {};
+        this.loading = true;
+        this.$store
+            .dispatch("forgotPassword", this.user)
+            .then(function (res) {
+            _this.loading = false;
+            _this.dataSuccessMessage = res.data.status;
+            // this.$router.push({ name: "objednat" });
+        })
+            .catch(function (error) {
+            if (error.response.status == 422) {
+                _this.errors = error.response.data.errors;
+            }
+            else if (error.response.status == 400) {
+                _this.errors = { email: [error.response.data.email] };
+            }
+            _this.loading = false;
+        });
+    };
     __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])()
     ], ForgotPassowrd.prototype, "dataSuccessMessage", void 0);
@@ -78,8 +83,8 @@ var ForgotPassowrd = /** @class */ (function (_super) {
                 Box: _common_box_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
                 Form: _common_form_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
                 customInput: _common_formInput_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-                customFormButton: _common_formButton_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
-            }
+                customFormButton: _common_formButton_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+            },
         })
     ], ForgotPassowrd);
     return ForgotPassowrd;
@@ -211,7 +216,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "Container",
+    "Content",
     [
       _c(
         "Box",
@@ -219,12 +224,7 @@ var render = function() {
         [
           _c(
             "Form",
-            {
-              attrs: {
-                onClick: _vm.forgotPassword,
-                succesMessage: _vm.dataSuccessMessage
-              }
-            },
+            { attrs: { succesMessage: _vm.dataSuccessMessage } },
             [
               _c("customInput", {
                 attrs: {
@@ -243,7 +243,11 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("customFormButton", {
-                attrs: { name: "Odeslat nové heslo", loading: _vm.loading }
+                attrs: {
+                  onClick: _vm.forgotPassword,
+                  name: "Odeslat nové heslo",
+                  loading: _vm.loading
+                }
               }),
               _vm._v(" "),
               _c(

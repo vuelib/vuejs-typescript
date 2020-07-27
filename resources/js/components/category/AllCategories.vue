@@ -27,7 +27,7 @@
           >
             <div class="w-full h-full absolute bg-black opacity-0 hover:opacity-0 cursor-pointer"></div>
             <div class="text-xl text-junglegreen font-bold">{{ category.name }}</div>
-            <img :src="category.imagePath" />
+            <img :src="`/storage/${category.imagePath}`" />
           </router-link>
         </div>
         <div>
@@ -57,10 +57,10 @@ import { urlSlug } from "../../utils/urlSlug";
   name: "AllCategories",
   components: {
     Container,
-    Sidebar
+    Sidebar,
   },
   computed: mapGetters(["categories"]),
-  methods: mapMutations(["fetchCategories"])
+  methods: mapMutations(["fetchCategories"]),
 })
 export default class AllCategories extends Vue {
   @Prop() successMessage?: String;
@@ -70,13 +70,13 @@ export default class AllCategories extends Vue {
     this.$store.dispatch("fetchCategories");
   }
 
-  setParam = category => {
+  setParam = (category) => {
     return {
       name: "category_show",
       params: {
         id: category.id,
-        slug: this.setSlug(category.name)
-      }
+        slug: this.setSlug(category.name),
+      },
     };
   };
 
@@ -89,10 +89,10 @@ export default class AllCategories extends Vue {
     this.successMessage = "";
     this.$store
       .dispatch("deleteCategory", id)
-      .then(response => {
+      .then((response) => {
         this.successMessage = "Úspěšně jste odstranili kategorii";
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response.status == 422) {
           this.errors = error.response.data.errors;
         }

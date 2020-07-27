@@ -16,7 +16,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapGetters, mapMutations } from "vuex";
 @Component({
-  computed: mapGetters(["isAdmin", "loggedIn"])
+  computed: mapGetters(["isAdmin", "loggedIn"]),
 })
 export default class shortcuLinks extends Vue {
   isAdmin!: Boolean;

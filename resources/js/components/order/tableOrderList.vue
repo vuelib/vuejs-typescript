@@ -10,6 +10,7 @@
             <td class="border px-4 py-2 text-center">{{ amount.product.baleni }}</td>
             <td class="border px-4 py-2 text-center">
               <input
+                v-show="order.status !== 'potvrzena'"
                 v-model="amount.value"
                 v-if="amount.edit"
                 class="input-table"
@@ -22,7 +23,7 @@
                 @click.prevent="editAmount(amount) "
               >{{amount.value }}</div>
             </td>
-            <td class="border px-4 py-2">
+            <td class="border px-4 py-2" v-show="order.status !== 'potvrzena'">
               <button class="btn-edit-trans" @click.prevent="editAmount(amount)">
                 <i class="fas fa-edit text-blue-800"></i>
               </button>
@@ -47,9 +48,9 @@ import formButton from "../common/formButton.vue";
   name: "tableOrderList",
   components: {
     tableHead,
-    formButton
+    formButton,
   },
-  computed: mapGetters(["order"])
+  computed: mapGetters(["order"]),
 })
 export default class tableOrderList extends Vue {
   @Prop({ default: false, type: Boolean }) readonly loading?;
@@ -57,11 +58,11 @@ export default class tableOrderList extends Vue {
     { path: "name", label: "Název produktu" },
     { path: "product.baleni", label: "Balení" },
     { path: "value", label: "Množství" },
-    { key: "value", label: "Možnosti" }
+    { key: "value", label: "Možnosti" },
   ];
   sortColumn?: any = { path: "id", order: "asc" };
 
-  handleSort = sortColumn => {
+  handleSort = (sortColumn) => {
     this.sortColumn = sortColumn;
   };
   editAmount(amount) {

@@ -1,6 +1,7 @@
 <template>
   <Container :loading="loadComponent">
     <Sidebar name="Objednávky" :items="orders.data" type="name" :param="setParam">
+      <div v-show="orders.data.length === 0">Nemáte žádné objednávky</div>
       <template v-slot:bottom>
         <pagination :items="orders" />
       </template>
@@ -21,10 +22,10 @@ import Pagination from "../common/Pagination.vue";
   components: {
     Container,
     Sidebar,
-    Pagination
+    Pagination,
   },
   computed: mapGetters(["orders"]),
-  methods: mapMutations(["fetchOrders"])
+  methods: mapMutations(["fetchOrders"]),
 })
 export default class allOrders extends Vue {
   @Prop() successMessage?: String;
@@ -33,19 +34,18 @@ export default class allOrders extends Vue {
 
   get orders() {
     const order = this.$store.getters.orders;
-    if (order.length == 0) return;
     const { data } = order;
-    order["data"] = data.map(p => {
+    order.data = data.map((p) => {
       let status = `${p.id} ${p.status} ${p.created_at}`;
       return { name: status, ...p };
     });
     return order;
   }
 
-  setParam = order => {
+  setParam = (order) => {
     return {
       name: "ShowOrder",
-      params: { id: order.id }
+      params: { id: order.id },
     };
   };
 
@@ -53,8 +53,8 @@ export default class allOrders extends Vue {
     this.loadComponent = true;
     this.$store
       .dispatch("fetchOrders", 1)
-      .then(res => (this.loadComponent = false))
-      .catch(error => {
+      .then((res) => (this.loadComponent = false))
+      .catch((error) => {
         console.log(error);
       });
   }

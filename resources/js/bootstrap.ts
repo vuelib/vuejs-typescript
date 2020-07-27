@@ -1,7 +1,6 @@
 import axios from "axios";
 // import Echo from "laravel-echo";
-// import Pusher from "pusher-js";
-var _ = require("lodash");
+// window.Pusher = require("pusher-js");
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 

@@ -3,7 +3,7 @@ export default {
     state: () => ({
         allUsers: {},
         allOrders: {},
-        filter: "all"
+        filterUsers: "all"
     }),
     getters: {
         allOrders(state) {
@@ -15,9 +15,9 @@ export default {
         allUsersFiltered(state) {
             if (state.filter == "all") {
                 return state.allUsers;
-            } else if (state.filter == "withinvoice") {
+            } else if (state.filterUsers == "withinvoice") {
                 return state.allUsers.filter(user => user.invoice);
-            } else if (state.filter == "withoutinvoice") {
+            } else if (state.filterUsers == "withoutinvoice") {
                 return state.allUsers.filter(user => !user.invoice);
             }
             return state.allUsers;
@@ -31,14 +31,14 @@ export default {
             state.allUsers = allUsers;
         },
         updateFilter(state, filter) {
-            state.filter = filter;
+            state.filterUsers = filter;
         }
     },
     actions: {
         allOrders(context) {
             return new Promise((resolve, reject) => {
                 axios
-                    .get(`allorders`)
+                    .get(`order`)
                     .then(res => {
                         context.commit("allOrders", res.data);
                         resolve(res);
@@ -51,7 +51,7 @@ export default {
         allUsers(context) {
             return new Promise((resolve, reject) => {
                 axios
-                    .get(`allusers`)
+                    .get(`user`)
                     .then(res => {
                         context.commit("allUsers", res.data);
                         resolve(res);

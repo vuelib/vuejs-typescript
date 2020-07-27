@@ -19,22 +19,20 @@ class CategoryController extends Controller
         return $categories;
     }
 
-    public function store(Request $request)
+    public function store()
     {
         $data = request()->validate($this->rules());
         if (request('image')) {
             $imagePath = request('image')->store('category', 'public');
             $image = Image::make(public_path("storage/{$imagePath}"));
             $image->save();
-
-            $imageArray = ['image' => $imagePath];
+            $imageArray = ['imagePath' => $imagePath];
         }
         Category::create(array_merge(
             $data,
             $imageArray ?? []
         ));
-
-        broadcast(new ItemAdded());
+        // broadcast(new ItemAdded());
         return response('success');
     }
 
@@ -46,21 +44,21 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $data = request()->validate($this->rules());
-        if (request('image')) {
-            $image = $request->get('image');
-            $imageName = time() . '.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-            Image::make($request->get('image'))->save(public_path('images/') . $imageName)->fit(1000, 1000);
-            $imagePath = "/images/" . $imageName;
-            $imageArray = ['imagePath' => $imagePath];
-        }
+        dump(request('image'));
+        // $data = request()->validate($this->rules());
+        // if (request('image')) {
+        //     $imagePath = request('image')->store('category', 'public');
+        //     $image = Image::make(public_path("storage/{$imagePath}"));
+        //     $image->save();
+        //     $imageArray = ['imagePath' => $imagePath];
+        // }
 
-        $category->update(array_merge(
-            $data,
-            $imageArray ?? []
-        ));
-        broadcast(new ItemAdded());
-        return response('success');
+        // $category->update(array_merge(
+        //     $data,
+        //     $imageArray ?? []
+        // ));
+        // // broadcast(new ItemAdded());
+        // return response('success');
     }
 
     public function destroy(Category $category)

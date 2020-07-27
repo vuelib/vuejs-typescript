@@ -17,6 +17,7 @@ class ProductController extends Controller
     {
         $data = request()->validate($this->rules());
         Product::create($data);
+        return response()->json(['Produkt byl úspěšně vytvořen']);
     }
 
     public function rules()

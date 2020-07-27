@@ -15,7 +15,7 @@
       <div v-show="!collapsed">
         <div
           v-show="orders.length === 0"
-          class="w-full text-center text-xl"
+          class="w-full text-center font-bold"
         >Nemáte vybrané žádné produkty</div>
       </div>
     </div>
@@ -29,13 +29,14 @@
           <tr v-for="product in products" :key="product.id">
             <td class="border py-2 px-2 text-center">{{product.id}}</td>
             <td class="border py-2 px-2 text-center">{{product.name}}</td>
-            <td class="border py-2 px-2 text-center products-inputs">
+            <td class="border py-2 px-2 flex justify-around">
               <input
                 class="text-center input-table"
                 v-model="product.value"
                 :name="product.id"
                 @keydown.up.exact.prevent="focusPrevious(true)"
                 @keydown.down.exact.prevent="focusNext(true)"
+                @keydown.enter.exact.prevent="focusNext(true)"
               />
             </td>
           </tr>
@@ -60,8 +61,8 @@ import formButton from "../common/formButton.vue";
     tableHead,
     tableBody,
     customInput,
-    formButton
-  }
+    formButton,
+  },
 })
 export default class orderTable extends Vue {
   @Prop({ required: true }) readonly products!: any;
@@ -78,7 +79,7 @@ export default class orderTable extends Vue {
   columns: any = [
     { path: "id", label: "Číslo produktu" },
     { path: "name", label: "Název" },
-    { path: "value", label: "Množství" }
+    { path: "value", label: "Množství" },
   ];
 
   columnsProduct: any = [
@@ -88,21 +89,21 @@ export default class orderTable extends Vue {
       key: "value",
       comp: {
         component: customInput,
-        props: product => {
+        props: (product) => {
           return {
             ":value": product.value,
-            name: product.name
+            name: product.name,
           };
-        }
-      }
-    }
+        },
+      },
+    },
   ];
   sortColumn?: any = { path: "id", order: "asc" };
 
-  handleSortOrders = sortColumn => {
+  handleSortOrders = (sortColumn) => {
     console.log(sortColumn);
   };
-  handleSortProducts = sortColumn => {
+  handleSortProducts = (sortColumn) => {
     console.log(sortColumn);
     // this.sortColumn = sortColumn;
   };

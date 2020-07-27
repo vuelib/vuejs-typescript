@@ -2,7 +2,7 @@
   <Content :title="`Objednávka č. ${order.id}`">
     <userDetails />
     <tableOrderList :loading="loadComponenct" />
-    <div class="table w-full mt-5">
+    <div v-if="order.status === 'rozpracovaná'" class="table w-full mt-5">
       <customTextarea
         v-model="order.description"
         :error="errors.description"
@@ -15,6 +15,10 @@
         <customFormButton name="Upravit" class="ml-2" :loading="loading" :onClick="editOrder" />
         <customFormButton name="Odstranit" class="ml-2" :loading="loading" :onClick="deleteOrder" />
       </div>
+    </div>
+    <div v-else class="table w-full mt-5">
+      {{order.description}}
+      <customFormButton name="Vytvořit znovu" :loading="loading" :onClick="createSame" />
     </div>
   </Content>
 </template>
@@ -36,9 +40,9 @@ import customFormButton from "../common/formButton.vue";
     userDetails,
     tableOrderList,
     customTextarea,
-    customFormButton
+    customFormButton,
   },
-  methods: mapMutations(["fetchOrder"])
+  methods: mapMutations(["fetchOrder"]),
 })
 export default class shoOrder extends Vue {
   @Prop() id?: String;
@@ -56,21 +60,28 @@ export default class shoOrder extends Vue {
   editOrder() {
     this.$router.push({
       name: "EditOrder",
-      params: { id: this.order.id }
+      params: { id: this.order.id },
     });
   }
 
   deleteOrder() {
-    this.$store.dispatch("deleteOrder", this.id);
+    this.$store.dispatch("deleteOrder", this.order);
     this.$router.push({
-      name: "Orders"
+      name: "Orders",
+    });
+  }
+
+  createSame() {
+    this.$store.dispatch("deleteOrder", this.order);
+    this.$router.push({
+      name: "Orders",
     });
   }
 
   @Watch("$route", { immediate: true, deep: true })
   fetchOrder(id) {
     this.loadComponenct = true;
-    this.$store.dispatch("fetchOrder", this.id).then(res => {
+    this.$store.dispatch("fetchOrder", this.id).then((res) => {
       this.loadComponenct = false;
     });
   }

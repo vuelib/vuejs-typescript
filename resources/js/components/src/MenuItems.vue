@@ -11,43 +11,39 @@
         >{{link.name}}</router-link>
       </li>
       <li class="flex-1 md:flex-none md:mr-3 bg-junglegreen">
-        <div class="relative inline-block m-2">
-          <button
-            class="drop-button focus:outline-none font-bold"
-            @click="visible = !visible"
-            v-if="user"
-          >
-            {{user.invoice ?
-            user.invoice.nazev : user.email}}
-            <svg
-              class="h-3 fill-current inline"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
+        <div class="relative flex w-20 text-2xl justify-end align-content-right">
+          <button @click="visibleNotification = !visibleNotification" v-if="user">
+            <i class="far focus:outline-none fa-envelope current text-darkergreen"></i>
           </button>
-          <transition>
+          <button class="ml-4 focus:outline-none" @click="visible = !visible" v-if="user">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div
+            v-show="visible"
+            class="absolute shadow-xs dropdown-menu text-secondary w-56 bg-lightblue right-0 mt-8 p-3 overflow-auto z-30"
+          >
             <div
-              v-show="visible"
-              class="dropdownlist absolute bg-button right-0 mt-3 p-3 overflow-auto z-30"
-              id="myDropdown"
+              class="p-2 hover:text-button text-sm no-underline hover:no-underline block cursor-pointer"
             >
-              <router-link
-                :to="{ name: 'settings'}"
-                class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
-              >Nastavení</router-link>
-              <div
-                @click.prevent="toggleTheme"
-                class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
-              >DarkMode</div>
-              <div class="border border-bg-ivory"></div>
-              <router-link
-                :to="{ name: 'logout'}"
-                class="p-2 hover:bg-gray-800 text-sm no-underline hover:no-underline block"
-              >Odhlásit se</router-link>
+              {{user.invoice ?
+              user.invoice.nazev : user.email}}
             </div>
-          </transition>
+            <div class="border border-bg-ivory"></div>
+            <router-link
+              :to="{ name: 'settings'}"
+              class="p-2 hover:text-button text-sm no-underline hover:no-underline block"
+            >Nastavení</router-link>
+            <div
+              @click.prevent="toggleTheme"
+              class="p-2 hover:text-button text-sm no-underline cursor-pointer hover:no-underline block"
+            >DarkMode</div>
+            <div class="border border-bg-ivory"></div>
+            <router-link
+              :to="{ name: 'logout'}"
+              class="p-2 hover:text-button text-sm no-underline hover:no-underline block"
+            >Odhlásit se</router-link>
+          </div>
+          <notifications v-show="visibleNotification" />
         </div>
       </li>
     </ul>
@@ -63,13 +59,20 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-@Component
+import notifications from "./notifications.vue";
+
+@Component({
+  components: {
+    notifications,
+  },
+})
 export default class MenuItems extends Vue {
   @Prop() readonly links!: Array<String>;
   @Prop() readonly user!: Array<String>;
   @Prop() readonly loggedInlinks!: Array<String>;
   @Prop({ default: false, type: Boolean }) readonly loggedIn!: Boolean;
   private visible?: Boolean = false;
+  private visibleNotification?: Boolean = false;
   THEME_DARK = "theme-dark";
   THEME_LIGHT = "theme-light";
   get theme(): string {

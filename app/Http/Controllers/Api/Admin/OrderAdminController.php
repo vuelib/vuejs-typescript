@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Amount;
 use App\Http\Resources\Order as OrderResource;
 use App\Mail\OrderFormMail;
+use App\Mail\AdminOrderFormMail;
 use App\Order;
 use App\User;
+use App\Role;
 use Illuminate\Support\Facades\Mail;
 
 class OrderAdminController extends Controller
@@ -41,9 +43,8 @@ class OrderAdminController extends Controller
         return new OrderResource($order);
     }
 
-    public function confirm(Order $order, $userId)
+    public function confirm(Order $order)
     {
-        $this->isAdmin();
         $user = User::find($userId);
         $data = request()->validate([
             'desc' => ''
@@ -51,10 +52,12 @@ class OrderAdminController extends Controller
         $order->description = request()->input('desc');
         $order->status = 1;
         $order->push();
+        $author = Role::find('author')->with('user')->get();
+
         $url = 'http://127.0.0.1:8000/objednavky/' . $order->id;
         Mail::to($user->email)->send(new OrderFormMail($user, $order, $url));
-        // Mail::to('sotola@sotola.cz')->send(new AdminOrderFormMail($user, $order, $url));
-        return response()->json('true');
+        Mail::to($author->email)->send(new AdminOrderFormMail($user, $order, $url));
+        return response()->json('Vaše objednávka byla potvrzena');
     }
 
     public function destroy(Order $order)
@@ -70,13 +73,4 @@ class OrderAdminController extends Controller
             'order.*' => 'numeric',
         ];
     }
-
-    protected function isAdmin()
-    {
-        if (auth()->user()->email != env('ADMIN_EMAIL')) {
-            return response()->json('Unauthorized', 400);
-        }
-        return;
-    }
-
 }
