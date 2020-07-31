@@ -10,21 +10,34 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        $users->load('invoice');
-        return $users;
+        $user = User::query();
+        if (request('filter')) {
+            switch (request('filter')) {
+                case 'withinvoice':
+                    $user->has('invoice')->with('invoice');
+                    break;
+                case 'withoutinvoice':
+                    $user->whereDoesntHave('invoice');
+                    break;
+                default:
+                    $user->with('invoice');
+                    break;
+            }
+        }
+
+        return $user->orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function show($id)
     {
         $user = User::find($id);
-        $user->load('orders.amounts.product', 'invoice');
+        $user->load('invoice');
         return $user;
     }
 
     public function store()
     {
-        return auth()->user()->load('orders.amounts.product', 'invoice');
+        return auth()->user()->load('orders', 'invoice');
     }
 
     public function destroy($id)

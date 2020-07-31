@@ -41,7 +41,7 @@ const Admin = [
     {
         name: "showAllOrders",
         path: "/prehled-objednavek",
-        component: () => import("../components/admin/order/showAllOrders.vue"),
+        component: () => import("../components/admin/order/allOrders.vue"),
         meta: {
             requiresAdmin: true,
             requiresAuth: true
@@ -60,13 +60,15 @@ const Admin = [
             {
                 name: "showOrder",
                 path: "objednavka/:idc",
-                component: () => import("../components/order/showOrder.vue"),
+                component: () =>
+                    import("../components/admin/order/showOrder.vue"),
                 props: true
             },
             {
                 name: "addInvoice",
                 path: "pridat-fakturacni-udaje",
-                component: () => import("../components/invoice/AddInvoice.vue"),
+                component: () =>
+                    import("../components/admin/user/addInvoice.vue"),
                 props: true
             },
             {
@@ -81,7 +83,7 @@ const Admin = [
                 path: "pridat-objednavku",
                 component: () =>
                     import("../components/admin/order/addOrder.vue"),
-                props: true
+                props: { default: true, hide: true }
             },
             {
                 name: "editOrderUser",

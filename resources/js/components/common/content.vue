@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:w-130">
+  <div class="lg:min-w-130">
     <div class="header">
       <h3>{{title}}</h3>
     </div>
@@ -15,7 +15,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
-  name: "Content"
+  name: "Content",
 })
 export default class Content extends Vue {
   @Prop() readonly title!: String;

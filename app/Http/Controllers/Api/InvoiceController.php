@@ -9,36 +9,26 @@ use App\User;
 
 class InvoiceController extends Controller
 {
-    public function check()
-    {
-        $user = auth()->user()->load('invoice');
-        return $user;
-    }
-
     public function store()
     {
+        dump(request());
         $data = request()->validate($this->rules());
         auth()->user()->invoice()->create($data);
     }
 
-    public function add($id)
-    {
-        $user = User::find($id);
-        $data = request()->validate($this->rules());
-        $user->invoice()->create($data);
-    }
 
     public function update($id)
     {
         $user = User::find($id);
         $data = request()->validate($this->rules());
-        $user->invoice()->update($data);
+        $dataWithID = array_merge($data, ['user_id' => $user->id]);
+        if ($user->invoice) {
+            $user->invoice()->update($dataWithID);
+        } else {
+            $user->invoice()->create($dataWithID);
+        }
     }
 
-    public function destroy(Invoice $invoice)
-    {
-        //
-    }
 
     public function rules()
     {

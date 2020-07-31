@@ -92,7 +92,7 @@ return [
     ],
     'not_in' => ' selected :attribute is invalid.',
     'not_regex' => ' :attribute format is invalid.',
-    'numeric' => ' :attribute musí být číslo.',
+    'numeric' => ' :attribute musí obsahovat číslo.',
     'password' => ' Heslo je nesprávné.',
     'present' => ' :attribute field musí být present.',
     'regex' => ' :attribute format is invalid.',
@@ -175,6 +175,8 @@ return [
         'reason' => 'Předmět zprávy',
         'number' => 'Telefonní číslo',
         'message' => 'Zpráva',
+        'amounts' => 'Objednávku',
+        'amounts.*.value' => 'Množství'
     ],
 
 ];

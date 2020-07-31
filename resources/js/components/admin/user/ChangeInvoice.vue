@@ -1,288 +1,102 @@
 <template>
-    <div class="full">
-        <div class="header">
-            <h3>Změna fakturačních údaje</h3>
-        </div>
-        <div class="flex flex-wrap" v-if="!aresData">
-            <div class="w-full">
-                <div class="table">
-                    <form
-                        @submit.prevent="addInvoice"
-                        class="w-full max-w-lg p-5"
-                    >
-                        <div class="flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full px-3">
-                                <label class="ares-label" for="ic">IČ</label>
-                                <input
-                                    class="ares-input"
-                                    id="ic"
-                                    type="value"
-                                    v-bind:class="{
-                                        'border-red-500': errors.ic
-                                    }"
-                                    v-model="user.ic"
-                                />
-                                <p
-                                    v-if="errors.ic"
-                                    class="text-red-500 text-xs italic"
-                                >
-                                    {{ errors.ic[0] }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="md:flex md:items-center">
-                            <div class="w-full">
-                                <button class="success" type="submit">
-                                    Zadejte IČ
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="flex flex-wrap" v-else>
-            <div class="w-full">
-                <div class="table">
-                    <form
-                        @submit.prevent="createInvoice"
-                        class="w-full max-w-lg p-5"
-                    >
-                        <div class=" flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full px-3">
-                                <label class="ares-label" for="ic">IČ</label>
-                                <input
-                                    class="ares-input"
-                                    id="ic"
-                                    type="text"
-                                    v-bind:class="{
-                                        'border-red-500': errors.ic
-                                    }"
-                                    v-model="aresData.ic"
-                                />
-                                <p
-                                    v-if="errors.ic"
-                                    class="text-red-500 text-xs italic"
-                                >
-                                    {{ errors.ic[0] }}
-                                </p>
-                            </div>
-                        </div>
-                        <div
-                            v-if="aresData.dic"
-                            class="flex flex-wrap -mx-3 mb-6"
-                        >
-                            <div class="w-full px-3">
-                                <label class="ares-label" for="dic">DIČ</label>
-                                <input
-                                    class="ares-input"
-                                    id="dic"
-                                    type="text"
-                                    v-bind:class="{
-                                        'border-red-500': errors.dic
-                                    }"
-                                    v-model="aresData.dic"
-                                />
-                                <p
-                                    v-if="errors.dic"
-                                    class="text-red-500 text-xs italic"
-                                >
-                                    {{ errors.dic[0] }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full px-3">
-                                <label class="ares-label" for="nazev"
-                                >Název</label
-                                >
-                                <input
-                                    class="ares-input"
-                                    id="nazev"
-                                    type="text"
-                                    v-bind:class="{
-                                        'border-red-500': errors.nazev
-                                    }"
-                                    v-model="aresData.nazev"
-                                />
-                                <p
-                                    v-if="errors.nazev"
-                                    class="text-red-500 text-xs italic"
-                                >
-                                    {{ errors.nazev[0] }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full md:w-2/4 px-3 mb-6 md:mb-0">
-                                <label class="ares-label" for="Ulice"
-                                >Ulice</label
-                                >
-                                <input
-                                    class="ares-input"
-                                    id="Ulice"
-                                    type="text"
-                                    v-bind:class="{
-                                        'border-red-500': errors.ulice
-                                    }"
-                                    v-model="aresData.ulice"
-                                />
-                                <p
-                                    v-if="errors.ulice"
-                                    class="text-red-500 text-xs italic"
-                                >
-                                    {{ errors.ulice[0] }}
-                                </p>
-                            </div>
-
-                            <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                                <label class="ares-label" for="mesto"
-                                >Město</label
-                                >
-                                <input
-                                    class="ares-input"
-                                    id="mesto"
-                                    type="text"
-                                    v-bind:class="{
-                                        'border-red-500': errors.mesto
-                                    }"
-                                    v-model="aresData.mesto"
-                                />
-                                <p
-                                    v-if="errors.mesto"
-                                    class="text-red-500 text-xs italic"
-                                >
-                                    {{ errors.mesto[0] }}
-                                </p>
-                            </div>
-                            <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                                <label class="ares-label" for="psc">PSČ</label>
-                                <input
-                                    class="ares-input"
-                                    id="psc"
-                                    type="text"
-                                    v-bind:class="{
-                                        'border-red-500': errors.dic
-                                    }"
-                                    v-model="aresData.psc"
-                                />
-                                <p
-                                    v-if="errors.dic"
-                                    class="text-red-500 text-xs italic"
-                                >
-                                    {{ errors.psc[0] }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap -mx-3 mb-6">
-                            <div class="w-full md:w-2/4 px-3 mb-6 md:mb-0">
-                                <label class="ares-label" for="stat"
-                                >Stát</label
-                                >
-                                <input
-                                    class="ares-input"
-                                    id="stat"
-                                    type="text"
-                                    v-bind:class="{
-                                        'border-red-500': errors.stat
-                                    }"
-                                    v-model="aresData.zeme"
-                                />
-                                <p
-                                    v-if="errors.zeme"
-                                    class="text-red-500 text-xs italic"
-                                >
-                                    {{ errors.zeme[0] }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="md:flex md:items-center">
-                            <div class="">
-                                <button class="success" type="submit">
-                                    Potvrdit údaje
-                                </button>
-                                <button
-                                    class="ml-2 shadow bg-red-800 hover:bg-red-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-                                    type="menu"
-                                >
-                                    Zrušit
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+  <div class="table mt-3 w-full">
+    <Content title="Změnit fakturační údaje">
+      <Form :succesMessage="dataSuccessMessage" v-if="aresData.ic === ''">
+        <customInput v-model="user.ic" :error="errors.ic" label="IČ" name="ic" autofocus="true" />
+        <customFormButton :onClick="getDataFromAres" name="Zadejte Ič" :loading="loading" />
+      </Form>
+      <Form v-else :succesMessage="dataSuccessMessage">
+        <customInput v-model="aresData.ic" :error="errors.ic" label="IČ" name="ic" />
+        <customInput
+          v-show="aresData.dic"
+          v-model="aresData.dic"
+          :error="errors.dic"
+          label="DIČ"
+          name="ic"
+        />
+        <customInput v-model="aresData.nazev" :error="errors.nazev" label="Jmébo" name="nazev" />
+        <customInput v-model="aresData.ulice" :error="errors.ulice" label="Ulice" name="ulice" />
+        <customInput v-model="aresData.mesto" :error="errors.mesto" label="Město" name="mesto" />
+        <customInput v-model="aresData.psc" :error="errors.psc" label="PSČ" name="psc" />
+        <customFormButton :onClick="addInvoice" name="Potvrdte IČ" :loading="loading" />
+      </Form>
+    </Content>
+  </div>
 </template>
 
-<script>
-    export default {
-        name: "AddInvoice",
-        props: {
-            id: ""
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import Container from "../../common/container.vue";
+import Content from "../../common/content.vue";
+import Form from "../../common/form.vue";
+import customInput from "../../common/formInput.vue";
+import customFormButton from "../../common/formButton.vue";
+@Component({
+  name: "addInvoice",
+  components: {
+    Container,
+    Content,
+    Form,
+    customInput,
+    customFormButton,
+  },
+})
+export default class addInvoice extends Vue {
+  @Prop() readonly dataSuccessMessage!: any;
+  @Prop() id!: Number;
+  private user = {
+    ic: "",
+  };
+  private aresData?: any = {
+    zuser_id: this.id,
+    ic: "",
+    dic: "",
+    nazev: "",
+    ulice: "",
+    mesto: "",
+    psc: "",
+  };
+  public errors = {};
+  private edit?: Boolean = true;
+  loading?: Boolean = false;
+
+  addInvoice() {
+    const ares = { user_id: this.id, ...this.aresData };
+    this.axios
+      .put(`invoice/${this.id}`, ares, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
-        data() {
-            return {
-                user: {
-                    ic: ""
-                },
-                aresData: null,
-                edit: false,
-                errors: ""
-            };
-        },
-        created() {
-        },
-        methods: {
-            addInvoice() {
-                this.errors = [];
-                if (!this.edit) {
-                    this.sendData("/ares", this.user);
-                } else {
-                    //send
-                    this.axios
-                        .post(`invoice/${this.id}`, this.aresData, {
-                            headers: {
-                                Authorization:
-                                    "Bearer " + localStorage.getItem("access_token")
-                            }
-                        })
-                        .then(res => {
-                            this.$store.dispatch("fetchUserProfile", this.id);
-                            this.$router.push({
-                                name: "user",
-                                params: {id: this.id}
-                            });
-                        })
-                        .catch(error => {
-                            if (error.response.status == 422) {
-                                this.errors = error.response.data.errors;
-                            }
-                        });
-                }
-            },
-            createInvoice() {
-                this.edit = true;
-                this.addInvoice();
-            },
-            sendData(url, data) {
-                this.axios
-                    .post(url, data, {
-                        headers: {
-                            Authorization:
-                                "Bearer " + localStorage.getItem("access_token")
-                        }
-                    })
-                    .then(res => {
-                        this.aresData = res.data.data;
-                    })
-                    .catch(error => {
-                        if (error.response.status == 422) {
-                            this.errors = error.response.data.errors;
-                        }
-                    });
-            }
+      })
+      .then((res) => {
+        this.$store.dispatch("fetchUserProfile", this.id);
+        this.$router.push({
+          name: "user",
+          params: { id: `${this.id}` },
+        });
+      })
+      .catch((error) => {
+        if (error.response.status == 422) {
+          this.errors = error.response.data.errors;
         }
-    };
+      });
+  }
+  getDataFromAres() {
+    this.axios
+      .post("ares", this.user, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((res) => {
+        this.edit = false;
+        this.aresData = res.data;
+      })
+      .catch((error) => {
+        if (error.response.status == 422) {
+          this.errors = error.response.data.errors;
+        }
+      });
+  }
+}
 </script>

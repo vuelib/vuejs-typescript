@@ -8,6 +8,7 @@ use App\Events\ItemAdded;
 use App\Events\ItemDeleted;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use Mockery\Undefined;
 
 class CategoryController extends Controller
 {
@@ -44,27 +45,25 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        dump(request('image'));
-        // $data = request()->validate($this->rules());
-        // if (request('image')) {
-        //     $imagePath = request('image')->store('category', 'public');
-        //     $image = Image::make(public_path("storage/{$imagePath}"));
-        //     $image->save();
-        //     $imageArray = ['imagePath' => $imagePath];
-        // }
-
-        // $category->update(array_merge(
-        //     $data,
-        //     $imageArray ?? []
-        // ));
-        // // broadcast(new ItemAdded());
-        // return response('success');
+        $data = request()->validate($this->rules());
+        if (request('image') !== "undefined") {
+            $imagePath = request('image')->store('category', 'public');
+            $image = Image::make(public_path("storage/{$imagePath}"));
+            $image->save();
+            $imageArray = ['imagePath' => $imagePath];
+        }
+        $category->update(array_merge(
+            $data,
+            $imageArray ?? []
+        ));
+        // broadcast(new ItemAdded());
+        return response('success');
     }
 
     public function destroy(Category $category)
     {
         $category->products()->delete();
-        broadcast(new ItemDeleted($category));
+        // broadcast(new ItemDeleted($category));
         $category->delete();
     }
 

@@ -1,7 +1,7 @@
 <template>
   <table class="w-full">
     <tableHead :columns="columns" :sortColumn="sortColumn" :onSort="onSort" />
-    <tableBody :columns="columns" :data="data" />
+    <tableBody :columns="columns" :data="data" :actions="actions" />
   </table>
 </template>
 
@@ -13,10 +13,11 @@ import tableBody from "../common/tableBody.vue";
   name: "Table",
   components: {
     tableHead,
-    tableBody
-  }
+    tableBody,
+  },
 })
 export default class Table extends Vue {
+  @Prop({ required: true }) readonly actions!: any;
   @Prop({ required: true }) readonly columns!: any;
   @Prop({ required: true }) readonly sortColumn!: any;
   @Prop({ required: true }) readonly onSort!: Function;

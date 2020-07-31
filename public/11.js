@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[11],{
 
-/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/login.vue?vue&type=script&lang=ts&":
-/*!*************************************************************************************************************************************************************!*\
-  !*** ./node_modules/ts-loader??ref--11!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/auth/login.vue?vue&type=script&lang=ts& ***!
-  \*************************************************************************************************************************************************************/
+/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/forgotPassowrd.vue?vue&type=script&lang=ts&":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/ts-loader??ref--11!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/auth/forgotPassowrd.vue?vue&type=script&lang=ts& ***!
+  \**********************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -40,58 +40,56 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-var Login = /** @class */ (function (_super) {
-    __extends(Login, _super);
-    function Login() {
+var ForgotPassowrd = /** @class */ (function (_super) {
+    __extends(ForgotPassowrd, _super);
+    function ForgotPassowrd() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.user = {
-            username: "",
-            password: ""
+            email: "",
         };
         _this.errors = {};
         _this.loading = false;
         return _this;
     }
-    Login.prototype.login = function () {
+    ForgotPassowrd.prototype.forgotPassword = function () {
         var _this = this;
         this.errors = {};
         this.loading = true;
         this.$store
-            .dispatch("retrieveToken", this.user)
-            .then(function (response) {
+            .dispatch("forgotPassword", this.user)
+            .then(function (res) {
             _this.loading = false;
-            _this.$router.push({ name: "objednat" });
+            _this.dataSuccessMessage = res.data.status;
+            // this.$router.push({ name: "objednat" });
         })
             .catch(function (error) {
             if (error.response.status == 422) {
                 _this.errors = error.response.data.errors;
             }
-            else if (error.response.status === 400) {
-                _this.errors["username"] = [
-                    "Chybně zadané heslo nebo uživatelské jméno."
-                ];
+            else if (error.response.status == 400) {
+                _this.errors = { email: [error.response.data.email] };
             }
             _this.loading = false;
         });
     };
     __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])()
-    ], Login.prototype, "dataSuccessMessage", void 0);
-    Login = __decorate([
+    ], ForgotPassowrd.prototype, "dataSuccessMessage", void 0);
+    ForgotPassowrd = __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            name: "Login",
+            name: "ForgotPassowrd",
             components: {
                 Container: _common_container_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
                 Box: _common_box_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
                 Form: _common_form_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
                 customInput: _common_formInput_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-                customFormButton: _common_formButton_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
-            }
+                customFormButton: _common_formButton_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+            },
         })
-    ], Login);
-    return Login;
+    ], ForgotPassowrd);
+    return ForgotPassowrd;
 }(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));
-/* harmony default export */ __webpack_exports__["default"] = (Login);
+/* harmony default export */ __webpack_exports__["default"] = (ForgotPassowrd);
 
 
 /***/ }),
@@ -202,10 +200,10 @@ var Box = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/login.vue?vue&type=template&id=6aa0b866&":
-/*!*************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/auth/login.vue?vue&type=template&id=6aa0b866& ***!
-  \*************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/forgotPassowrd.vue?vue&type=template&id=42292cba&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/auth/forgotPassowrd.vue?vue&type=template&id=42292cba& ***!
+  \**********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -218,11 +216,11 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "Container",
+    "Content",
     [
       _c(
         "Box",
-        { staticClass: "w-128", attrs: { title: "Přihlásit se" } },
+        { staticClass: "w-128", attrs: { title: "Zapomenuté heslo" } },
         [
           _c(
             "Form",
@@ -230,41 +228,24 @@ var render = function() {
             [
               _c("customInput", {
                 attrs: {
-                  error: _vm.errors.username,
-                  label: "E-mail",
+                  error: _vm.errors.email,
+                  label: "Váš E-mail",
                   name: "email",
-                  autofocus: "true",
-                  type: "email"
+                  autofocus: "true"
                 },
                 model: {
-                  value: _vm.user.username,
+                  value: _vm.user.email,
                   callback: function($$v) {
-                    _vm.$set(_vm.user, "username", $$v)
+                    _vm.$set(_vm.user, "email", $$v)
                   },
-                  expression: "user.username"
-                }
-              }),
-              _vm._v(" "),
-              _c("customInput", {
-                attrs: {
-                  error: _vm.errors.password,
-                  label: "Heslo",
-                  name: "password",
-                  type: "password"
-                },
-                model: {
-                  value: _vm.user.password,
-                  callback: function($$v) {
-                    _vm.$set(_vm.user, "password", $$v)
-                  },
-                  expression: "user.password"
+                  expression: "user.email"
                 }
               }),
               _vm._v(" "),
               _c("customFormButton", {
                 attrs: {
-                  onClick: _vm.login,
-                  name: "Přihlásit se",
+                  onClick: _vm.forgotPassword,
+                  name: "Odeslat nové heslo",
                   loading: _vm.loading
                 }
               }),
@@ -273,18 +254,18 @@ var render = function() {
                 "router-link",
                 {
                   staticClass: "router-link",
-                  attrs: { to: { name: "register" } }
+                  attrs: { to: { name: "login" } }
                 },
-                [_vm._v("Registrovat se")]
+                [_vm._v("Přihlásit se")]
               ),
               _vm._v(" "),
               _c(
                 "router-link",
                 {
                   staticClass: "router-link",
-                  attrs: { to: { name: "forgotpassowrd" } }
+                  attrs: { to: { name: "register" } }
                 },
-                [_vm._v("Zapomněli jste heslo?")]
+                [_vm._v("Registrovat se")]
               )
             ],
             1
@@ -382,17 +363,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/auth/login.vue":
-/*!************************************************!*\
-  !*** ./resources/js/components/auth/login.vue ***!
-  \************************************************/
+/***/ "./resources/js/components/auth/forgotPassowrd.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/auth/forgotPassowrd.vue ***!
+  \*********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _login_vue_vue_type_template_id_6aa0b866___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./login.vue?vue&type=template&id=6aa0b866& */ "./resources/js/components/auth/login.vue?vue&type=template&id=6aa0b866&");
-/* harmony import */ var _login_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./login.vue?vue&type=script&lang=ts& */ "./resources/js/components/auth/login.vue?vue&type=script&lang=ts&");
+/* harmony import */ var _forgotPassowrd_vue_vue_type_template_id_42292cba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./forgotPassowrd.vue?vue&type=template&id=42292cba& */ "./resources/js/components/auth/forgotPassowrd.vue?vue&type=template&id=42292cba&");
+/* harmony import */ var _forgotPassowrd_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./forgotPassowrd.vue?vue&type=script&lang=ts& */ "./resources/js/components/auth/forgotPassowrd.vue?vue&type=script&lang=ts&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -402,9 +383,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _login_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _login_vue_vue_type_template_id_6aa0b866___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _login_vue_vue_type_template_id_6aa0b866___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _forgotPassowrd_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _forgotPassowrd_vue_vue_type_template_id_42292cba___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _forgotPassowrd_vue_vue_type_template_id_42292cba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -414,38 +395,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/auth/login.vue"
+component.options.__file = "resources/js/components/auth/forgotPassowrd.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/auth/login.vue?vue&type=script&lang=ts&":
-/*!*************************************************************************!*\
-  !*** ./resources/js/components/auth/login.vue?vue&type=script&lang=ts& ***!
-  \*************************************************************************/
+/***/ "./resources/js/components/auth/forgotPassowrd.vue?vue&type=script&lang=ts&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/auth/forgotPassowrd.vue?vue&type=script&lang=ts& ***!
+  \**********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_login_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/ts-loader??ref--11!../../../../node_modules/vue-loader/lib??vue-loader-options!./login.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/login.vue?vue&type=script&lang=ts&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_login_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_forgotPassowrd_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/ts-loader??ref--11!../../../../node_modules/vue-loader/lib??vue-loader-options!./forgotPassowrd.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/forgotPassowrd.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_forgotPassowrd_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/auth/login.vue?vue&type=template&id=6aa0b866&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/auth/login.vue?vue&type=template&id=6aa0b866& ***!
-  \*******************************************************************************/
+/***/ "./resources/js/components/auth/forgotPassowrd.vue?vue&type=template&id=42292cba&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/auth/forgotPassowrd.vue?vue&type=template&id=42292cba& ***!
+  \****************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_login_vue_vue_type_template_id_6aa0b866___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./login.vue?vue&type=template&id=6aa0b866& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/login.vue?vue&type=template&id=6aa0b866&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_login_vue_vue_type_template_id_6aa0b866___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_forgotPassowrd_vue_vue_type_template_id_42292cba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./forgotPassowrd.vue?vue&type=template&id=42292cba& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/forgotPassowrd.vue?vue&type=template&id=42292cba&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_forgotPassowrd_vue_vue_type_template_id_42292cba___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_login_vue_vue_type_template_id_6aa0b866___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_forgotPassowrd_vue_vue_type_template_id_42292cba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

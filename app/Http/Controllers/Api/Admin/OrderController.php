@@ -1,29 +1,45 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Amount;
-use App\Http\Resources\Order as OrderResource;
 use App\Mail\OrderFormMail;
 use App\Mail\AdminOrderFormMail;
 use App\Order;
 use App\User;
 use App\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 
-class OrderAdminController extends Controller
+class OrderController extends Controller
 {
 
-    public function index()
+
+
+    public function all()
     {
-        $this->isAdmin();
-        $orders = Order::orderBy('id', 'DESC')->with('user.invoice')->paginate(10);
-        return OrderResource::collection($orders);
+
+        $order = Order::where('status', 'LIKE',  request('filter'))
+            ->orderBy('created_at', 'desc')->paginate(10);
+        $order->setCollection(
+            $order->getCollection()->map->format()
+        );
+        return $order;
+    }
+
+    public function index(User $user)
+    {
+        $this->authorize('create', Order::class);
+        $order = Order::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')->paginate(10);
+        $order->setCollection(
+            $order->getCollection()->map->format()
+        );
+        return $order;
     }
 
     public function store($id)
     {
-        $this->isAdmin();
         $user = User::find($id);
         $data = request()->validate($this->rules());
         $order = $user->orders()->create();
@@ -32,20 +48,19 @@ class OrderAdminController extends Controller
             $order->amounts()->attach($mnozstvi->id);
         }
         $order->load('amounts.product');
-        return new OrderResource($order);
+        return $order;
     }
 
 
     public function show(Order $order)
     {
-        $this->isAdmin();
         $order->load('amounts.product');
-        return new OrderResource($order);
+        return $order;
     }
 
     public function confirm(Order $order)
     {
-        $user = User::find($userId);
+        $user = User::find(1);
         $data = request()->validate([
             'desc' => ''
         ]);
@@ -62,7 +77,6 @@ class OrderAdminController extends Controller
 
     public function destroy(Order $order)
     {
-        $this->isAdmin();
         $order->delete();
     }
 

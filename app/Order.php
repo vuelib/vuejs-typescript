@@ -37,6 +37,8 @@ class Order extends Model
             'description' => $this->description,
             'created_at' => $this->created_at->format('d.m'),
             'updated_at' => $this->updated_at->diffForHumans(),
+            'user' => $this->user->invoice->nazev,
+            'user_id' => $this->user->id,
         ];
     }
 

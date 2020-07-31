@@ -1,119 +1,141 @@
 <template>
-  <div class="md:flex">
-    <aside class="sidebar">
-      <div class="name">Objednávkový systém</div>
-      <div class="menu">
-        <input
-          class="pt-2 appearance-none text-black block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-          placeholder="Vyhledejte zboží"
-          type="text"
-          v-model="search"
-        />
-        <div class="link" v-on:click="allProduct">Všechny produkty</div>
-        <div v-bind:key="category.id" v-for="category in categories">
-          <div class="link" v-on:click="value(category.id, category.name)">{{ category.name }}</div>
-        </div>
-      </div>
-    </aside>
-    <AddOrderTable
-      :add-order="addOrder"
-      :all="all"
-      :category-name="categoryName"
-      :collapsed="collapsed"
-      :filtered-list="filteredList"
-      :orders="orders"
-      :products="products"
-      :val="val"
-    />
-  </div>
+  <container :loading="loadComponent">
+    <sidebar
+      name="Objednávkový systém"
+      :items="categories"
+      :routerLink="false"
+      :onSelect="handleSelectCategory"
+    >
+      <input
+        ref="search"
+        class="btn-search"
+        placeholder="Vyhledejte zboží"
+        type="text"
+        :value="search"
+        @input="updateSearch"
+      />
+    </sidebar>
+    <Content :title="category.name">
+      <order-table
+        :products="filteredProducts"
+        :orders="orders"
+        :onClick="addOrder"
+        :errors="errors"
+        buttonName="Vytvořit objednávku"
+      />
+    </Content>
+  </container>
 </template>
 
-<script>
-import AddOrderTable from "./AddOrderTable";
+<script lang="ts">
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { mapGetters, mapMutations } from "vuex";
+import container from "../../common/container.vue";
+import Content from "../../common/content.vue";
+import sidebar from "../../common/sidebar.vue";
+import orderTable from "../../common/orderTable.vue";
+@Component({
+  name: "addOrder",
+  components: {
+    container,
+    Content,
+    sidebar,
+    orderTable,
+  },
+  computed: mapGetters(["category"]),
+  methods: mapMutations(["fetchCategories", "fetchProducts"]),
+})
+export default class addOrder extends Vue {
+  public search: String = "";
+  public errors = {};
+  loadComponent?: Boolean = false;
+  loading?: Boolean = false;
 
-export default {
-  name: "addOrderToUser",
-  components: { AddOrderTable },
-  props: {
-    id: ""
-  },
-  data() {
-    return {
-      collapsed: false,
-      orders: {
-        order: null
-      },
-      search: "",
-      val: "",
-      all: true,
-      data: {},
-      categoryName: "",
-      loading: false
-    };
-  },
-  computed: {
-    grnItemsArr() {
-      return Object.keys(this.orders.order).reduce((acc, itemKey) => {
-        let row = [itemKey, this.order[itemKey]];
-        acc.push(row);
-        return acc;
-      }, []);
-    },
-    filteredList() {
-      return this.products.filter(product => {
-        return product.name.toLowerCase().includes(this.search.toLowerCase());
-      });
-    },
-    filterOrders() {
-      return this.products.filter(product => {
-        return product.name.toLowerCase().includes(this.search.toLowerCase());
-      });
-    },
-    categories() {
-      return this.$store.getters.categories;
-    },
-    products() {
-      return this.$store.getters.products;
-    }
-  },
-  created() {
-    this.$store.dispatch("fetchCategories");
-    this.$store.dispatch("fetchProducts");
-    const order = {};
-    this.products.forEach(item => {
-      order[item[1]] = null;
-    });
-    this.orders.order = order;
-  },
-  methods: {
-    allProduct() {
-      this.all = true;
-    },
-    value(id, name) {
-      this.val = id;
-      this.categoryName = name;
-      this.search = "";
-      this.all = false;
-    },
-    addOrder() {
-      delete this.orders.order[undefined];
-      this.axios
-        .post(`order/${this.id}`, this.orders, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          }
-        })
-        .then(res => {
-          this.$router.push({
-            name: "showOrder",
-            params: { idc: res.data.data.id }
-          });
-          this.$store.commit("addOrder", res.data.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+  get categories() {
+    return [
+      { name: "Všechny produkty", _key: "" },
+      ...this.$store.getters.categories,
+    ];
   }
-};
+
+  get filterProducts() {
+    return this.$store.getters.filteredProducts;
+  }
+
+  updateSearch({ target: input }) {
+    this.search = input.value;
+  }
+  get products() {
+    return this.$store.getters.products;
+  }
+  get filteredProducts() {
+    return this.filterProducts.filter((p) => {
+      return (
+        p.name.toLowerCase().includes(this.search.toLowerCase()) ||
+        p.baleni.toLowerCase().includes(this.search.toLowerCase()) ||
+        `${p.id}`.includes(this.search.toLowerCase())
+      );
+    });
+  }
+  get orders() {
+    return this.products.filter((p) => p.value !== "");
+  }
+
+  async beforeMount() {
+    this.loadComponent = true;
+    await this.$store.dispatch("fetchCategories");
+    await this.$store.dispatch("fetchProducts");
+    await this.$store.commit("setCategory", {
+      name: "Všechny produkty",
+      _key: "",
+    });
+    this.loadComponent = false;
+  }
+
+  handleSelectCategory = (category) => {
+    this.search = "";
+    this.$store.commit("setCategory", category);
+    this.$store.commit("filterProducts", category);
+  };
+  addOrder() {
+    this.errors = [];
+    this.loading = true;
+    if (this.orders.length === 0) {
+      this.errors["amounts"] = "Nemáte vybrané žádné produkty.";
+      return;
+    }
+
+    this.axios
+      .post(
+        `/order`,
+        { amounts: this.orders },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((res) => {
+        this.loading = false;
+        this.$router.push({
+          name: "ShowOrder",
+          params: { id: res.data.id },
+        });
+      })
+      .catch((error) => {
+        if (error.response.status == 422) {
+          const newErrors = [];
+          const errors = error.response.data.errors;
+          for (error in errors) {
+            let index = `${error}`.split(`amounts.`)[1].split(".value")[0];
+            let e: any = { ...this.orders[index], error: errors[error][0] };
+            newErrors[e.id] = e;
+          }
+          newErrors["amounts"] = "Množství musí obsahovat pouze číslice.";
+          this.errors = newErrors;
+        }
+        this.loading = false;
+      });
+  }
+}
 </script>

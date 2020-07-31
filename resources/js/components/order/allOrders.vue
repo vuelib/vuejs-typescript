@@ -1,6 +1,15 @@
 <template>
   <Container :loading="loadComponent">
-    <Sidebar name="Objednávky" :items="orders.data" type="name" :param="setParam">
+    <Sidebar
+      name="Objednávky"
+      :items="orders.data"
+      :renderHTML="renderHTML"
+      type="name"
+      :param="setParam"
+    >
+      <router-link :to="{ name: 'objednat' }" class="link text-center">
+        <i class="fas fa-plus"></i> Přidat
+      </router-link>
       <div v-show="orders.data.length === 0">Nemáte žádné objednávky</div>
       <template v-slot:bottom>
         <pagination :items="orders" />
@@ -34,13 +43,15 @@ export default class allOrders extends Vue {
 
   get orders() {
     const order = this.$store.getters.orders;
-    const { data } = order;
-    order.data = data.map((p) => {
-      let status = `${p.id} ${p.status} ${p.created_at}`;
-      return { name: status, ...p };
-    });
     return order;
   }
+
+  renderHTML = (order) => {
+    const className = order.status == "rozpracovaná" ? "fa-pen" : "fa-check";
+    const html = `č. ${order.id} 
+             <i  class="fas ${className}"></i> ${order.created_at}`;
+    return html;
+  };
 
   setParam = (order) => {
     return {

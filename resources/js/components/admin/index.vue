@@ -1,6 +1,6 @@
 <template>
   <Container :loading="loadComponent">
-    <Sidebar name="Úpravy" :items="links" type="name" :param="setParam"></Sidebar>
+    <Sidebar name="Úpravy" :items="links" type="name" :renderHTML="renderHTML" :param="setParam"></Sidebar>
     <transition mode="out-in" name="component-fade">
       <router-view />
     </transition>
@@ -31,6 +31,8 @@ export default class allOrders extends Vue {
   setParam = (route) => {
     return { name: route.link };
   };
+
+  renderHTML = (link) => link.name;
 
   beforeMount() {
     this.loadComponent = true;

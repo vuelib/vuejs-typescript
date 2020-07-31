@@ -1,10 +1,17 @@
 <template>
   <Container :loading="loading">
-    <Sidebar name="Objednávky" :items="user.orders" type="name" :param="setParam">
-      <router-link :to="{ name: 'addOrder' }" class="link text-center">
+    <Sidebar
+      v-show="!hide"
+      name="Objednávky"
+      :items="orders.data"
+      :renderHTML="renderHTML"
+      type="name"
+      :param="setParam"
+    >
+      <router-link :to="{ name: 'addOrder'}" class="link text-center">
         <i class="fas fa-plus"></i> Přidat
       </router-link>
-      <div v-show="user.orders.length === 0">Nemáte žádné objednávky</div>
+      <div v-show="orders == ''">Nemáte žádné objednávky</div>
     </Sidebar>
     <Content :title="`Uživatel ${user.email}`">
       <div class="pb-3 pl-3">
@@ -45,42 +52,51 @@ import Pagination from "../../common/Pagination.vue";
     Sidebar,
     Pagination,
   },
-  computed: mapGetters(["orders", "order", "ordersFilter"]),
-  methods: mapMutations(["fetchUserProfile"]),
 })
 export default class userProfile extends Vue {
   @Prop() successMessage?: String;
-  @Prop() id?: Number;
+  @Prop() hide?: Boolean;
+  @Prop() id!: String;
   errors!: [];
   loading?: Boolean = false;
 
   get user() {
-    return this.$store.getters.userProfile;
+    return this.$store.getters.currUser;
+  }
+  get orders() {
+    return this.$store.getters.uOrders;
   }
 
-  setParam = (order) => {
+  renderHTML = (order) => {
+    const className = order.status == "rozpracovaná" ? "fa-pen" : "fa-check";
+    const html = `č. ${order.id} 
+             <i class="fas ${className}"></i> ${order.created_at}`;
+    return html;
+  };
+
+  setParam = ({ id, user_id }) => {
     return {
       name: "showOrder",
-      params: { id: order.id },
+      params: { id: user_id, idc: id },
     };
   };
 
   addInvoice() {
     this.$router.push({
       name: "addInvoice",
-      params: { id: this.id },
+      params: { id: `${this.id}` },
     });
   }
   changeInvoice() {
     this.$router.push({
       name: "changeInvoice",
-      params: { id: this.id },
+      params: { id: `${this.id}` },
     });
   }
   deleteUser() {
     if (confirm("Jste si jistý?")) {
       this.axios
-        .delete(`deleteuser/${this.id}`, {
+        .delete(`user/${this.id}`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("access_token"),
           },
@@ -99,7 +115,7 @@ export default class userProfile extends Vue {
   beforeMount() {
     this.loading = true;
     this.$store
-      .dispatch("fetchUserProfile", this.id)
+      .dispatch("fetchCurrUser", this.id)
       .then((res) => (this.loading = false))
       .catch((error) => {
         console.log(error);

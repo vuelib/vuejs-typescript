@@ -20,6 +20,8 @@
           </button>
           <div
             v-show="visible"
+            @mouseover="showMenu"
+            @mouseleave="hideMenu"
             class="absolute shadow-xs dropdown-menu text-secondary w-56 bg-lightblue right-0 mt-8 p-3 overflow-auto z-30"
           >
             <div
@@ -43,7 +45,7 @@
               class="p-2 hover:text-button text-sm no-underline hover:no-underline block"
             >Odhlásit se</router-link>
           </div>
-          <notifications v-show="visibleNotification" />
+          <notifications :visible="visibleNotification" />
         </div>
       </li>
     </ul>
@@ -73,6 +75,12 @@ export default class MenuItems extends Vue {
   @Prop({ default: false, type: Boolean }) readonly loggedIn!: Boolean;
   private visible?: Boolean = false;
   private visibleNotification?: Boolean = false;
+  showMenu() {
+    this.visible = true;
+  }
+  hideMenu() {
+    this.visible = false;
+  }
   THEME_DARK = "theme-dark";
   THEME_LIGHT = "theme-light";
   get theme(): string {

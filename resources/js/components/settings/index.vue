@@ -1,6 +1,6 @@
 <template>
   <Container :loading="loadComponent">
-    <Sidebar name="Nastavení" :items="links" type="name" :param="setParam"></Sidebar>
+    <Sidebar name="Nastavení" :items="links" type="name" :renderHTML="renderHTML" :param="setParam"></Sidebar>
     <transition mode="out-in" name="component-fade">
       <router-view />
     </transition>
@@ -15,8 +15,8 @@ import Sidebar from "../common/sidebar.vue";
   name: "allOrders",
   components: {
     Container,
-    Sidebar
-  }
+    Sidebar,
+  },
 })
 export default class allOrders extends Vue {
   @Prop() successMessage?: String;
@@ -26,11 +26,13 @@ export default class allOrders extends Vue {
   links?: any = [
     { name: "Změnit kontaktní údaje", link: "ChangeContact" },
     { name: "Změnit heslo", link: "ChangePassword" },
-    { name: "Odhlásit se", link: "logout" }
+    { name: "Odhlásit se", link: "logout" },
   ];
-  setParam = route => {
+  setParam = (route) => {
     return { name: route.link };
   };
+
+  renderHTML = (link) => link.name;
 
   beforeMount() {
     this.loadComponent = true;

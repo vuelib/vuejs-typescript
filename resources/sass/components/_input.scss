@@ -18,9 +18,13 @@
 }
 
 .input-table {
-    @apply .w-20 .p-1 .text-center .appearance-none .block .bg-white .text-gray-700 .border .border-blue-700 .rounded .border-blue-900 .leading-tight;
+    @apply .w-20 .p-1 .text-center .appearance-none .block .bg-white .text-gray-700 .border  .rounded .leading-tight;
 
     &:focus {
         @apply .outline-none .bg-white .border-gray-500;
     }
+}
+
+.red-border {
+    border-color: red;
 }

@@ -1,5 +1,5 @@
 <template>
-  <Content title="Vytvořit kategorii">
+  <Content title="Upravit kategorii">
     <div class="table">
       <Form :succesMessage="successMessage" enctype="multipart/form-data">
         <customInput
@@ -58,20 +58,20 @@ export default class editCategory extends Vue {
     this.errors = [];
     this.loading = true;
     let fd = new FormData();
-    console.log(this.category.name);
-    console.log(this.category.image);
-    fd.append("name", this.category.name);
+    fd.append("_method", "PATCH");
+    fd.set("name", this.category.name);
     fd.append("image", this.category.image);
     this.axios
-      .put(`category/${this.category.id}`, fd, {
+      .post(`category/${this.category.id}`, fd, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type":
+            "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
       .then((response) => {
         this.loading = false;
-        // this.$router.push({ name: "zbozi" });
+        this.$router.push({ name: "zbozi" });
       })
       .catch((error) => {
         if (error.response.status == 422) {

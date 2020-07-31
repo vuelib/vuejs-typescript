@@ -1,10 +1,10 @@
 <template>
   <Container>
-    <div class="table mt-3 w-1/3">
+    <div class="table mt-3">
       <Content title="Přidat fakturační údaje">
         <Form :succesMessage="dataSuccessMessage" v-if="aresData.ic === ''">
           <customInput v-model="user.ic" :error="errors.ic" label="IČ" name="ic" autofocus="true" />
-          <customFormButton :onClick="addInvoice" name="Zadejte Ič" :loading="loading" />
+          <customFormButton :onClick="getDataFromAres" name="Zadejte Ič" :loading="loading" />
         </Form>
         <Form v-else :succesMessage="dataSuccessMessage">
           <customInput v-model="aresData.ic" :error="errors.ic" label="IČ" name="ic" />
@@ -28,12 +28,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Container from "../common/container.vue";
-import Content from "../common/content.vue";
-import Form from "../common/form.vue";
-import customInput from "../common/formInput.vue";
-import customFormButton from "../common/formButton.vue";
-import { isNullableType } from "graphql";
+import Container from "../../common/container.vue";
+import Content from "../../common/content.vue";
+import Form from "../../common/form.vue";
+import customInput from "../../common/formInput.vue";
+import customFormButton from "../../common/formButton.vue";
 @Component({
   name: "addInvoice",
   components: {
@@ -63,31 +62,35 @@ export default class addInvoice extends Vue {
   loading?: Boolean = false;
 
   addInvoice() {
-    this.errors = [];
-    if (this.edit) {
-      this.sendData("/ares", this.user, true);
-    } else {
-      this.sendData(`invoice/${this.id}`, this.aresData, false);
-    }
-  }
-  sendData(url, data, then) {
     this.axios
-      .post(url, data, {
+      .put(`invoice/${this.id}`, this.aresData, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
       .then((res) => {
-        if (then) {
-          this.edit = false;
-          this.aresData = res.data;
-        } else {
-          this.$store.dispatch("fetchUserProfile", this.id);
-          this.$router.push({
-            name: "user",
-            params: { id: this.id },
-          });
+        this.$store.dispatch("fetchUserProfile", this.id);
+        this.$router.push({
+          name: "user",
+          params: { id: `${this.id}` },
+        });
+      })
+      .catch((error) => {
+        if (error.response.status == 422) {
+          this.errors = error.response.data.errors;
         }
+      });
+  }
+  getDataFromAres() {
+    this.axios
+      .post("ares", this.user, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((res) => {
+        this.edit = false;
+        this.aresData = res.data;
       })
       .catch((error) => {
         if (error.response.status == 422) {

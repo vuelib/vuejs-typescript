@@ -92,6 +92,9 @@ var Button = /** @class */ (function (_super) {
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: "Potvrdit" })
     ], Button.prototype, "name", void 0);
     __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: "btn-custom" })
+    ], Button.prototype, "classType", void 0);
+    __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ required: true, default: false })
     ], Button.prototype, "loading", void 0);
     __decorate([
@@ -99,7 +102,7 @@ var Button = /** @class */ (function (_super) {
     ], Button.prototype, "onClick", void 0);
     Button = __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            name: "Button"
+            name: "Button",
         })
     ], Button);
     return Button;
@@ -242,7 +245,7 @@ var render = function() {
   return _c(
     "button",
     {
-      staticClass: "btn-custom",
+      class: _vm.classType,
       attrs: { disabled: _vm.loading, type: "submit" },
       on: {
         click: function($event) {

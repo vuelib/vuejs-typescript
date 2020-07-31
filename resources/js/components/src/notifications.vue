@@ -1,5 +1,8 @@
 <template>
   <div
+    v-show="visible"
+    @mouseover="showNotification"
+    @mouseleave="hideNotification"
     class="absolute shadow-xs text-sm h-130 dropdown-menu text-secondary w-86 bg-lightblue right-0 mr-8 mt-8 p-3 overflow-auto z-30"
   >
     <div
@@ -29,11 +32,18 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   name: "notifications",
 })
 export default class notifications extends Vue {
+  @Prop({ type: Boolean }) visible!: Boolean;
+  showNotification() {
+    this.visible = true;
+  }
+  hideNotification() {
+    this.visible = false;
+  }
   created() {
     // Echo.channel("orders").listen("OrderAdded", (e) => {
     //   console.log(e.order);

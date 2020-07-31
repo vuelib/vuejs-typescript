@@ -42,14 +42,14 @@ export default {
             commit("setCategory", res.data);
         },
 
-        deleteCategory(context, id) {
+        deleteCategory({ rootState, commit }, id) {
             axios.defaults.headers.common["Authorization"] =
-                "Bearer " + context.state.token;
+                "Bearer " + rootState.auth.token;
 
             axios
-                .delete(`api/category/${id}`)
+                .delete(`category/${id}`)
                 .then(response => {
-                    context.commit("deleteCategory", id);
+                    commit("deleteCategory", id);
                 })
                 .catch(error => {
                     console.log(error);

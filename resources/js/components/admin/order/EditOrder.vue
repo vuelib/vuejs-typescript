@@ -1,247 +1,166 @@
 <template>
-    <div class="flex ml-3">
-        <aside class="sidebar">
-            <div class="name">Objednávkový systém</div>
-            <div class="menu">
-                <input
-                    class="pt-2 appearance-none text-black block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                    placeholder="Vyhledejte zboží"
-                    type="text"
-                    v-model="search"
-                />
-                <div
-                    class="link"
-                    v-on:click="allProduct"
-                >
-                    Všechny produkty
-                </div>
-                <div v-bind:key="category.id" v-for="category in categories">
-                    <div
-                        class="link"
-                        v-on:click="value(category.id, category.name)"
-                    >
-                        {{ category.name }}
-                    </div>
-                </div>
-            </div>
-        </aside>
-        <AddOrderTable :add-order="editOrder" :all="all" :category-name="categoryName" :collapsed="collapsed"
-                       :filtered-list="filteredList" :orders="orders" :products="products" :val="val"/>
-<!--        <div>-->
-<!--            <div-->
-<!--                class="mt-3 p-3"-->
-<!--            >-->
-<!--                <h3>-->
-<!--                    {{ all ? "Všechny produkty" : categoryName }}-->
-<!--                </h3>-->
-<!--            </div>-->
-<!--            <div-->
-<!--                class="bg-ivory border-t-2 border-b-4 border-ivory rounded-lg shadow-lg  ml-3"-->
-<!--                v-if="orders"-->
-<!--            >-->
-<!--                <div class="flex flex-col p-2">-->
-<!--                    <h4 class="text-xl font-semibold cursor-pointer text-junglegreen"-->
-<!--                        v-on:click="collapsed = !collapsed">Zvolené produkty</h4>-->
-<!--                    <div class="flex  font-bold text-center" v-show="!collapsed">-->
-<!--                        <div class="w-3/6 h-6 text-left pl-2">Název produktu</div>-->
-<!--                        <div class="w-2/6 h-6 ">Balení</div>-->
-<!--                        <div class="w-2/6 h-6 ">Množství</div>-->
-<!--                    </div>-->
-<!--                    <div v-bind:key="product.id" v-for="product in products" v-show="!collapsed">-->
-<!--                        <div v-bind:key=(index) v-for="(value, index) in orders.order">-->
-<!--                            <div-->
-<!--                                class="flex text-center"-->
-<!--                                v-if="index == product.id"-->
-<!--                            >-->
-<!--                                <div class="w-3/6  text-left pl-2">{{ product.name }}</div>-->
-<!--                                <div class="w-2/6 h-6">{{ product.hmotnost }}</div>-->
-<!--                                <div class="w-2/6 h-6 ">{{ value }}</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <form @submit.prevent="editOrder">-->
-<!--                <button-->
-<!--                    class="success mb-3"-->
-<!--                    type="submit"-->
-<!--                >-->
-<!--                    Upravit objednávku-->
-<!--                </button>-->
-<!--                <div-->
-<!--                    class="table"-->
-<!--                >-->
-<!--                    <div class="flex flex-wrap">-->
-<!--                        <table class="table-fixed">-->
-<!--                            <thead>-->
-<!--                            <tr>-->
-<!--                                <th class="w-1/2 px-4 py-2">-->
-<!--                                    Název produktu-->
-<!--                                </th>-->
-<!--                                <th class="w-1/4 px-4 py-2">Balení</th>-->
-<!--                                <th class="w-1/4 px-4 py-2">Množství</th>-->
-<!--                            </tr>-->
-<!--                            </thead>-->
-<!--                            <tbody>-->
-<!--                            <tr-->
-<!--                                v-bind:key="product.id"-->
-<!--                                v-for="product in filteredList"-->
-<!--                                v-if="product.category_id == val && !all"-->
-<!--                            >-->
-<!--                                <td class="border px-4 py-2">-->
-<!--                                    {{ product.name }}-->
-<!--                                </td>-->
-<!--                                <td class="border px-4 py-2">-->
-<!--                                    {{ product.hmotnost }}-->
-<!--                                </td>-->
-<!--                                <td class="border px-4 py-2">-->
-<!--                                    <input-->
-<!--                                        class="w-20 bg-gray-200 text-gray-700 border border-gray-200 rounded px-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"-->
-<!--                                        placeholder="Množství"-->
-<!--                                        type="text"-->
-<!--                                        v-model="orders.order[product.id]"-->
-<!--                                    />-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr v-else-if="all">-->
-<!--                                <td class="border px-4 py-2">-->
-<!--                                    {{ product.name }}-->
-<!--                                </td>-->
-<!--                                <td class="border px-4 py-2">-->
-<!--                                    {{ product.hmotnost }}-->
-<!--                                </td>-->
-<!--                                <td class="border px-4 py-2">-->
-<!--                                    <input-->
-<!--                                        class="w-20 bg-gray-200 text-gray-700 border border-gray-200 rounded px-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"-->
-<!--                                        placeholder="Množství"-->
-<!--                                        type="text"-->
-<!--                                        v-model="orders.order[product.id]"-->
-<!--                                    />-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </form>-->
-<!--        </div>-->
-    </div>
+  <container :loading="loadComponent">
+    <sidebar
+      name="Objednávkový systém"
+      :items="categories"
+      :routerLink="false"
+      :onSelect="handleSelectCategory"
+    >
+      <input class="btn-search" placeholder="Vyhledejte zboží" type="text" v-model="search" />
+    </sidebar>
+    <Content :title="category.name">
+      <order-table
+        :products="filteredProducts"
+        :orders="amounts"
+        :onClick="editOrder"
+        :errors="errors"
+        buttonName="Upravit objednávku"
+      />
+    </Content>
+  </container>
 </template>
 
-<script>
-    import AddOrderTable from "./AddOrderTable";
-    export default {
-        name: "EditOrder",
-        components: {AddOrderTable},
-        props: {
-            idc: "",
-            id: ""
-        },
-        data() {
-            return {
-                collapsed: false,
-                orders: {
-                    order: null
-                },
-                search: "",
-                val: 1,
-                all: true,
-                data: {},
-                categoryName: "",
-                ordeDetail: {}
-            };
-        },
-        computed: {
-            grnItemsArr() {
-                return Object.keys(this.orders.order).reduce((acc, itemKey) => {
-                    let row = [itemKey, this.order[itemKey]];
-                    acc.push(row);
-                    return acc;
-                }, []);
-            },
+<script lang="ts">
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { mapGetters, mapMutations } from "vuex";
+import container from "../common/container.vue";
+import Content from "../common/content.vue";
+import sidebar from "../common/sidebar.vue";
+import orderTable from "../common/orderTable.vue";
+@Component({
+  name: "editOrder",
+  components: {
+    container,
+    Content,
+    sidebar,
+    orderTable,
+  },
+  computed: mapGetters(["category"]),
+  methods: mapMutations(["fetchCategories", "fetchProducts"]),
+})
+export default class editOrder extends Vue {
+  @Prop() id!: String;
+  private getSearch: String = "";
+  private loadComponent?: Boolean = false;
+  private loading?: Boolean = false;
+  public errors = [];
 
-            filteredList() {
-                return this.products.filter(product => {
-                    return product.name
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            },
-            filterOrders() {
-                return this.products.filter(product => {
-                    return product.name
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            },
-            user() {
-                return this.$store.getters.user;
-            },
-            categories() {
-                return this.$store.getters.categories;
-            },
-            products() {
-                return this.$store.getters.products;
-            }
-        },
-        created() {
-            this.$store.dispatch("fetchCategories");
-            this.$store.dispatch("fetchProducts");
-            const order = {};
-            this.products.forEach(item => {
-                order[item[1]] = null;
-            });
-            this.orders.order = order;
-            this.fetchOrderDetails();
-        },
-        methods: {
-            allProduct() {
-                this.all = true;
-            },
-            value(id, name) {
-                this.val = id;
-                this.categoryName = name;
-                this.search = "";
-                this.all = false;
-            },
-            fetchOrderDetails() {
-                this.axios
-                    .get(`/order/${this.idc}`, {
-                        headers: {
-                            Authorization:
-                                "Bearer " + localStorage.getItem("access_token")
-                        }
-                    })
-                    .then(res => {
-                        this.ordeDetail = res.data.data;
-                        this.addDetailOrder(this.ordeDetail.amounts);
-                    });
-            },
-            addDetailOrder(order) {
-                for (let ord in order) {
-                    let prodId = order[ord].product_id;
-                    let amount = order[ord].mnozstvi;
-                    this.$set(this.orders.order, prodId, amount); // This is the vuejs-way of setting array values
-                }
-            },
-            editOrder() {
-                delete this.orders.order[undefined];
-                this.axios
-                    .put(`/order/${this.idc}`, this.orders,
-                        {
-                            headers: {
-                                Authorization:
-                                    "Bearer " + localStorage.getItem("access_token")
-                            }
-                        })
-                    .then(res => {
-                        this.$router.push({
-                            name: "showOrder",
-                            params: {id: this.idc}
-                        });
-                    })
-                    .catch(error => console.log(error));
-            },
+  get categories() {
+    return [
+      { name: "Všechny produkty", _key: "" },
+      ...this.$store.getters.categories,
+    ];
+  }
+
+  get products() {
+    const products = [...this.$store.getters.products];
+    const order = this.$store.getters.order;
+    products.map((p) => {
+      {
+        order.amounts.map((a) => {
+          if (p.id === a.product.id) {
+            p.value = a.value;
+            p.amount_id = a.id;
+          }
+        });
+      }
+    });
+    return products;
+  }
+  get filterProducts() {
+    return this.$store.getters.filteredProducts;
+  }
+  get filteredProducts() {
+    return this.filterProducts.filter((p) => {
+      return (
+        p.name.toLowerCase().includes(this.search.toLowerCase()) ||
+        p.baleni.toLowerCase().includes(this.search.toLowerCase()) ||
+        `${p.id}`.includes(this.search.toLowerCase())
+      );
+    });
+  }
+  get amounts() {
+    return this.products.filter((p) => p.value !== "");
+  }
+
+  get order() {
+    return this.$store.getters.order;
+  }
+
+  get filteredOrder() {
+    const obj = this.order.amounts;
+    const result: string[] = [];
+    obj.some((object, indx) => {
+      this.products.some((p, index) => {
+        if (p.id === object.product.id) if (p.value === "") result.push(p);
+      });
+    });
+    return result;
+  }
+
+  get search() {
+    return this.getSearch;
+  }
+  set search(search) {
+    this.getSearch = search;
+    console.log(this.search);
+  }
+
+  async beforeMount() {
+    this.loadComponent = true;
+    await this.$store.dispatch("fetchOrder", this.id);
+    await this.$store.dispatch("fetchCategories");
+    await this.$store.dispatch("fetchProducts");
+    await this.$store.commit("setCategory", {
+      name: "Všechny produkty",
+      _key: "",
+    });
+    this.loadComponent = false;
+  }
+
+  handleSelectCategory = (category) => {
+    this.$store.commit("setCategory", category);
+    this.$store.commit("filterProducts", category);
+  };
+
+  editOrder() {
+    this.loading = true;
+    this.errors = [];
+    if (this.amounts.length === 0) {
+      this.errors["amounts"] = "Nemáte vybrané žádné produkty.";
+      return;
+    }
+    this.axios
+      .put(
+        `/order/${this.id}`,
+        { amounts: this.amounts, delete: this.filteredOrder },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
         }
-    };
+      )
+      .then((res) => {
+        this.loading = false;
+        this.$router.push({
+          name: "ShowOrder",
+          params: { id: res.data.id },
+        });
+      })
+      .catch((error) => {
+        if (error.response.status == 422) {
+          const newErrors = [];
+          const errors = error.response.data.errors;
+          for (error in errors) {
+            let index = `${error}`.split(`amounts.`)[1].split(".value")[0];
+            let e: any = { ...this.amounts[index], error: errors[error][0] };
+            newErrors[e.id] = e;
+          }
+          newErrors["amounts"] = "Množství musí obsahovat pouze číslice.";
+          this.errors = newErrors;
+        }
+        this.loading = false;
+      });
+  }
+}
 </script>

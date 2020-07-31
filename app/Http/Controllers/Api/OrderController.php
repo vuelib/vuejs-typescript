@@ -37,8 +37,8 @@ class OrderController extends Controller
             ]);
             Amount::create($product);
         }
-        $order->load('amounts.product');
-        return $order;
+        $orderFormat = Order::find($order->id);
+        return $orderFormat->formatedRelatinship();
     }
 
 
@@ -76,10 +76,10 @@ class OrderController extends Controller
         ]);
         $order->update(['status' => 1, 'description' => request()->description]);
         $url = env('APP_URL') . 'objednavky/' . $order->id;
-        Mail::to($user->email)->send(new OrderFormMail($user, $order, $url));
-        Mail::to(env('ADMIN_EMAIL'))->send(new AdminOrderFormMail($user, $order, $url));
+        // Mail::to($user->email)->send(new OrderFormMail($user, $order, $url));
+        // Mail::to(env('ADMIN_EMAIL'))->send(new AdminOrderFormMail($user, $order, $url));
         //        broadcast(new OrderAdded($order));
-        return response()->json('true');
+        return $order->formatedRelatinship();
     }
 
     public function destroy(Order $order)

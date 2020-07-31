@@ -11,7 +11,9 @@
           v-bind:key="item[_key]"
           class="link block"
           :to="param(item)"
-        >{{ item[type] }}</router-link>
+        >
+          <span v-html="renderHTML(item)">{{ item[type] }}</span>
+        </router-link>
       </div>
       <div v-else>
         <div v-bind:key="item[_key]" v-for="item in items">
@@ -26,7 +28,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
-  name: "Sidebar"
+  name: "Sidebar",
 })
 export default class Sidebar extends Vue {
   @Prop({ required: true, type: String }) readonly name!: String;
@@ -35,6 +37,7 @@ export default class Sidebar extends Vue {
   @Prop({ default: "name" }) readonly type!: String;
   @Prop({ default: "id" }) readonly _key!: String;
   @Prop() readonly onSelect?: Function;
+  @Prop() readonly renderHTML?: Function;
   @Prop() param?: Function;
 }
 </script>

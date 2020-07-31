@@ -4,6 +4,7 @@
       name="Kategorie"
       :items="categories"
       :param="setParam"
+      :renderHTML="renderHTML"
       v-if="!['zbozi'].includes($route.name)"
     />
     <div v-else class="container justify-center flex flex-wrap mt-5">
@@ -30,15 +31,18 @@
             <img :src="`/storage/${category.imagePath}`" />
           </router-link>
         </div>
-        <div>
+        <div v-show="loggedIn">
           <router-link
             :to="{
                             name: 'editCategory',
                             params: { id: category.id }
                         }"
-            class="btn-edit"
+            class="btn-edit w-full inline-block text-center"
           >Upravit</router-link>
-          <a @click="deleteCategory(category.id)" class="btn-delete">Odstranit</a>
+          <a
+            @click="deleteCategory(category.id)"
+            class="btn-delete w-full inline-block text-center"
+          >Odstranit</a>
         </div>
       </div>
     </div>
@@ -59,7 +63,7 @@ import { urlSlug } from "../../utils/urlSlug";
     Container,
     Sidebar,
   },
-  computed: mapGetters(["categories"]),
+  computed: mapGetters(["categories", "loggedIn"]),
   methods: mapMutations(["fetchCategories"]),
 })
 export default class AllCategories extends Vue {
@@ -78,6 +82,10 @@ export default class AllCategories extends Vue {
         slug: this.setSlug(category.name),
       },
     };
+  };
+
+  renderHTML = (category) => {
+    return category.name;
   };
 
   setSlug(name) {

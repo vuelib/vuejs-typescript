@@ -3,12 +3,12 @@
     <Content title="Přehled všech uživatelů">
       <div class="mb-3">
         <button
-          class="bg-transparent hover:bg-green-700 text-black font-semibold hover:text-white py-2 px-4 border border-green-700 hover:border-transparent rounded"
+          class="btn-edit-trans"
           :class="{ active: filter == 'all' }"
           @click="changeFilter('all')"
         >Všichni zakazníci</button>
         <button
-          class="bg-transparent hover:bg-green-700 text-black font-semibold hover:text-white py-2 px-4 border border-green-700 hover:border-transparent rounded"
+          class="btn-edit-trans"
           :class="{ active: filter == 'active' }"
           @click="changeFilter('withinvoice')"
         >S fakturačními údajy</button>
@@ -22,42 +22,33 @@
         </button>
       </div>
       <div class="table">
-        <table class="table-fixed">
+        <Table
+          :columns="columns"
+          :data="allUsers.data"
+          :sortColumn="sortColumn"
+          :actions="actions"
+          :onSort="handleSort"
+        />
+        <!-- <table class="w-full">
           <thead>
             <tr>
-              <th>Název firmy</th>
               <th>IC</th>
-              <th>DIC</th>
+              <th>Název firmy</th>
               <th>Email</th>
               <th>Telefon</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-bind:key="user.id" v-for="user in allUsersFiltered">
-              <td class="border text-center py-2">
-                <router-link
-                  :to="{ name: 'user', params: {id:user.id } }"
-                >{{user.invoice ? user.invoice.nazev : 'NaN'}}</router-link>
-              </td>
-              <td class="border text-center p-2">
-                <router-link
-                  :to="{ name: 'user', params: {id:user.id } }"
-                >{{user.invoice ? user.invoice.ic : 'NaN'}}</router-link>
-              </td>
-              <td class="border px-4 py-2">
-                <router-link
-                  :to="{ name: 'user', params: {id:user.id } }"
-                >{{user.invoice ? user.invoice.dic : 'NaN'}}</router-link>
-              </td>
-              <td class="border text-center">
-                <router-link :to="{ name: 'user', params: {id:user.id } }">{{user.email}}</router-link>
-              </td>
-              <td class="border text-center">
-                <router-link :to="{ name: 'user', params: {id:user.id } }">{{user.phone}}</router-link>
-              </td>
+            <tr v-bind:key="user.id" v-for="user in allUsers.data" class="cursor-pointer">
+              <td class="border text-left py-2 px-2">{{user.invoice ? user.invoice.ic : 'NaN'}}</td>
+              <td class="border text-left py-2 px-2">{{user.invoice ? user.invoice.nazev : 'NaN'}}</td>
+              <td class="border text-left py-2 px-2">{{user.email}}</td>
+              <td class="border text-left py-2 px-2">{{user.phone}}</td>
+              <td class="border text-center py-2 px-2" @click="goToUserProfile(user)">Přejít</td>
             </tr>
           </tbody>
-        </table>
+        </table>-->
+        <Pagination :rangeRequired="true" :items="allUsers" />
       </div>
     </Content>
   </Container>
@@ -68,28 +59,65 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 import Container from "../../common/container.vue";
 import Content from "../../common/content.vue";
+import Pagination from "../../common/Pagination.vue";
+import Table from "../../common/table.vue";
 @Component({
   name: "allUsers",
   components: {
     Container,
     Content,
+    Pagination,
+    Table,
   },
-  computed: mapGetters(["allUsersFiltered"]),
-  methods: mapMutations(["allUsers"]),
+  computed: mapGetters(["allUsers"]),
+  methods: mapMutations(["fetchUsers"]),
 })
 export default class allUsers extends Vue {
   get filter() {
-    return this.$store.state.filterUsers;
+    return this.$store.getters.filterUsers;
   }
   loading?: Boolean = false;
+  get columns() {
+    const columns = [
+      { path: "email", label: "Email" },
+      { path: "phone", label: "Telefon" },
+    ];
+    if (this.filter !== "withoutinvoice") {
+      return [
+        { path: "invoice.ic", label: "IČ" },
+        { path: "invoice.nazev", label: "Název firmy" },
+        ...columns,
+      ];
+    }
+    return columns;
+  }
+  actions = [
+    {
+      renderHTML: (user) => {
+        return `<i class="fa fa-eye" aria-hidden="true"></i>`;
+      },
+      param: (user) => {
+        return { name: "user", params: { id: user.id } };
+      },
+    },
+  ];
+  sortColumn?: any = { path: "id", order: "asc" };
+  handleSort = (sortColumn) => {
+    console.log(sortColumn);
+    this.sortColumn = sortColumn;
+  };
   created() {
+    this.fetchUsers();
+  }
+  fetchUsers() {
     this.loading = true;
-    this.$store.dispatch("allUsers").then((response) => {
+    this.$store.dispatch("fetchUsers", 1).then((response) => {
       this.loading = false;
     });
   }
   changeFilter(filter) {
-    this.$store.commit("updateFilter", filter);
+    this.$store.commit("setFilterUsers", filter);
+    this.fetchUsers();
   }
 }
 </script>

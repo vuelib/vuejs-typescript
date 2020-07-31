@@ -17,14 +17,14 @@
 import { Component, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 import logo from "./Logo.vue";
-import menuItems from "./MenuItems.vue";
+import menuItems from "./menuItems.vue";
 @Component({
   components: {
     menuItems,
-    logo
+    logo,
   },
   computed: mapGetters(["navbarlinks", "loggedInlinks", "loggedIn", "user"]),
-  methods: mapMutations(["setTheme"])
+  methods: mapMutations(["setTheme"]),
 })
 export default class Nav extends Vue {
   navbarlinks!: Array<String>;

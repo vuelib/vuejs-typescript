@@ -1,6 +1,6 @@
 <template>
   <Content :title="`Objednávka č. ${order.id}`">
-    <userDetails />
+    <userDetails :user="currentUser" />
     <tableOrderList :loading="loadComponenct" />
     <div v-if="order.status === 'rozpracovaná'" class="table w-full mt-5">
       <customTextarea
@@ -12,8 +12,20 @@
       />
       <div class="flex">
         <customFormButton name="Potvrdit" :loading="loading" :onClick="confirmOrder" />
-        <customFormButton name="Upravit" class="ml-2" :loading="loading" :onClick="editOrder" />
-        <customFormButton name="Odstranit" class="ml-2" :loading="loading" :onClick="deleteOrder" />
+        <customFormButton
+          classType="btn-edit"
+          name="Upravit"
+          class="ml-2"
+          :loading="loading"
+          :onClick="editOrder"
+        />
+        <customFormButton
+          classType="btn-delete pl-1 pr-1 "
+          name="Odstranit"
+          class="ml-2"
+          :loading="loading"
+          :onClick="deleteOrder"
+        />
       </div>
     </div>
     <div v-else class="table w-full mt-5">
@@ -53,6 +65,11 @@ export default class shoOrder extends Vue {
   get order() {
     return this.$store.getters.order;
   }
+
+  get currentUser() {
+    return this.$store.getters.user;
+  }
+
   confirmOrder() {
     this.$store.dispatch("confirmOrder", this.order);
   }
@@ -72,9 +89,16 @@ export default class shoOrder extends Vue {
   }
 
   createSame() {
-    this.$store.dispatch("deleteOrder", this.order);
-    this.$router.push({
-      name: "Orders",
+    let amounts = this.order.amounts.map((a) => {
+      return { value: a.value, id: a.product.id };
+    });
+    this.loading = true;
+    this.$store.dispatch("addOrder", { amounts }).then((order) => {
+      this.loading = false;
+      this.$router.push({
+        name: "ShowOrder",
+        params: { id: order.id },
+      });
     });
   }
 

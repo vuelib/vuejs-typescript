@@ -13,6 +13,10 @@ module.exports = {
             "4": "4px"
         },
         extend: {
+            fontSize: {
+                "7xl": "7rem"
+            },
+
             colors: {
                 davygrayn: "#B9BDBD",
                 primary: "var(--bg-primary)",

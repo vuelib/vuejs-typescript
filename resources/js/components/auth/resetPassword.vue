@@ -58,8 +58,8 @@ export default class ResetPassowrd extends Vue {
   };
 
   created() {
-    this.user.token = this.$route.query.token;
-    this.user.email = this.$route.query.email;
+    this.user.token = <string>this.$route.query.token;
+    this.user.email = <string>this.$route.query.email;
   }
 
   async resetPassword() {

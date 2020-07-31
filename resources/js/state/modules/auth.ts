@@ -3,8 +3,7 @@ export default {
     state: () => ({
         token: localStorage.getItem("access_token") || null,
         user: {},
-        invoice: localStorage.getItem("invoice") || null,
-        userProfile: []
+        invoice: localStorage.getItem("invoice") || null
     }),
     getters: {
         loggedIn(state) {
@@ -12,9 +11,6 @@ export default {
         },
         invoice(state) {
             return state.invoice !== null;
-        },
-        userProfile(state) {
-            return state.userProfile;
         },
         user(state) {
             return state.user;
@@ -27,9 +23,7 @@ export default {
         destroyToken(state) {
             state.token = null;
         },
-        getUserProfile(state, userProfile) {
-            state.userProfile = userProfile;
-        },
+
         getUser(state, user) {
             state.user = user;
             if (user.invoice) {
@@ -137,23 +131,7 @@ export default {
                     });
             });
         },
-        fetchUserProfile({ state, commit }, id) {
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common["Authorization"] =
-                    "Bearer " + state.token;
 
-                axios
-                    .get(`user/${id}`)
-                    .then(response => {
-                        resolve(response);
-                        commit("getUserProfile", response.data);
-                        commit("fetchOrders", response.data.orders);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            });
-        },
         getUser({ state, commit }) {
             axios.defaults.headers.common["Authorization"] =
                 "Bearer " + state.token;

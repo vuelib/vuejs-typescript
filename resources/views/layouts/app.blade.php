@@ -10,7 +10,7 @@
     <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet" async/>
     <script src="https://kit.fontawesome.com/5bc5abf087.js" crossorigin="anonymous"></script>
 </head>
-<body class="font-sans leading-normal tracking-normal">
+<body>
 <div id="app">
 </div>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.4/gsap.min.js"></script> --}}

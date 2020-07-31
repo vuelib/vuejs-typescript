@@ -1,7 +1,7 @@
 <template>
   <div class="table w-full">
     <div v-if="loading" class="loading"></div>
-    <table class="table-fixed" v-else>
+    <table class="w-full" v-else>
       <table-head :columns="columns" :sortColumn="sortColumn" :onSort="handleSort" />
       <tbody>
         <transition v-bind:key="amount.id" v-for="amount in order.amounts" name="fade">
@@ -17,11 +17,7 @@
                 type="number"
                 v-on:keyup.enter="editAmount(amount)"
               />
-              <div
-                class="w-full h-full"
-                v-else
-                @click.prevent="editAmount(amount) "
-              >{{amount.value }}</div>
+              <div class="w-full h-full" v-else>{{amount.value }}</div>
             </td>
             <td class="border px-4 py-2" v-show="order.status !== 'potvrzena'">
               <button class="btn-edit-trans" @click.prevent="editAmount(amount)">
@@ -50,16 +46,24 @@ import formButton from "../common/formButton.vue";
     tableHead,
     formButton,
   },
-  computed: mapGetters(["order"]),
 })
 export default class tableOrderList extends Vue {
   @Prop({ default: false, type: Boolean }) readonly loading?;
-  columns: any = [
-    { path: "name", label: "Název produktu" },
-    { path: "product.baleni", label: "Balení" },
-    { path: "value", label: "Množství" },
-    { key: "value", label: "Možnosti" },
-  ];
+
+  get order() {
+    return this.$store.getters.order;
+  }
+  get columns() {
+    const columns = [
+      { path: "name", label: "Název produktu" },
+      { path: "product.baleni", label: "Balení" },
+      { path: "value", label: "Množství" },
+    ];
+    if (this.order.status !== "potvrzena") {
+      return [...columns, { key: "", label: "Možnosti" }];
+    }
+    return columns;
+  }
   sortColumn?: any = { path: "id", order: "asc" };
 
   handleSort = (sortColumn) => {

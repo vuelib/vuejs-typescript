@@ -7,6 +7,7 @@
         :key="createKey(item, column)"
       >
         <span v-if="column.path">{{renderCell(item, column)}}</span>
+        <span v-if="column.content" v-html="column.content(item)"></span>
         <span v-else-if="column.comp">
           <component
             :is="column.comp.component"
@@ -14,6 +15,11 @@
             v-model="item[model]"
           ></component>
         </span>
+      </td>
+      <td v-for="(action, idx) in actions" class="border py-2 px-2" :key="idx">
+        <router-link :to="action.param(item)">
+          <span v-html="action.renderHTML(item)"></span>
+        </router-link>
       </td>
     </tr>
   </tbody>
@@ -23,17 +29,18 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import _ from "lodash";
 @Component({
-  name: "TableBody"
+  name: "TableBody",
 })
 export default class TableBody extends Vue {
   @Prop() readonly data!: any;
   @Prop() readonly columns!: any;
+  @Prop() readonly actions!: any;
   @Prop({ default: "value" }) readonly model!: String;
   @Prop({ default: "id" }) readonly _key: any;
 
   renderCell = (item, column) => {
     if (column.comp) return;
-
+    if (column.content) return;
     return _.get(item, column.path);
   };
 

@@ -23,20 +23,16 @@ export default {
             state.order = order;
         },
         addOrder(state, order) {
+            const orders = [order, ...state.orders.data];
+            state.orders.data = orders;
             state.order = order;
-            state.orders.unshift({
-                id: order.id,
-                created_at: order.created_at,
-                amounts: order.amounts,
-                user_id: order.user_id,
-                status: "rozpracovaná"
-            });
         },
-        confirmOrder(state, data) {
-            state.order.status = "potvrzena";
-            state.order.description = data.description;
-            const index = state.orders.findIndex(item => item.id == data.id);
-            state.orders.splice(index, 1, state.order);
+        confirmOrder(state, order) {
+            const orders = [...state.orders.data];
+            const index = orders.findIndex(o => o.id == order.id);
+            orders[index] = order;
+            state.orders.data = orders;
+            // state.orders.data.splice(index, 1, state.order);
         },
         deleteOrder(state, order) {
             const orders = [...state.orders.data];
@@ -91,12 +87,28 @@ export default {
                     });
             });
         },
+        addOrder({ rootState, commit }, order) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common["Authorization"] =
+                    "Bearer " + rootState.auth.token;
+                axios
+                    .post(`order/`, order)
+                    .then(res => {
+                        commit("addOrder", res.data);
+                        resolve(res.data);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        },
         confirmOrder({ rootState, commit }, order) {
             axios.defaults.headers.common["Authorization"] =
                 "Bearer " + rootState.auth.token;
             axios
                 .put(`order/${order.id}/confirm`, order)
                 .then(res => {
+                    commit("setOrder", res.data);
                     commit("confirmOrder", res.data);
                 })
                 .catch(error => {
@@ -109,7 +121,7 @@ export default {
                     "Bearer " + rootState.auth.token;
 
                 axios
-                    .delete(`order/${order.id}/confirm`)
+                    .delete(`order/${order.id}`)
                     .then(res => {
                         commit("deleteOrder", order);
                         resolve(res);

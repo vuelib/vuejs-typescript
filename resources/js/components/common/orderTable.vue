@@ -1,5 +1,9 @@
 <template>
   <div class="m-4">
+    <div
+      class="text-primary ml-4 p-2 font-bold rounded w-full bg-button"
+      v-if="errors.amounts"
+    >{{errors.amounts}}</div>
     <div class="table w-full">
       <h4
         class="text-xl font-semibold cursor-pointer text-junglegreen"
@@ -23,15 +27,16 @@
       <formButton :name="buttonName" :loading="loading" :onClick="onClick" />
     </div>
     <div class="table w-full">
-      <table class="table w-full">
+      <table class="w-full">
         <table-head :columns="columns" :sortColumn="sortColumn" :onSort="handleSortProducts" />
         <tbody>
           <tr v-for="product in products" :key="product.id">
             <td class="border py-2 px-2 text-center">{{product.id}}</td>
             <td class="border py-2 px-2 text-center">{{product.name}}</td>
-            <td class="border py-2 px-2 flex justify-around">
+            <td class="border py-2 px-2 flex justify-around products-inputs">
               <input
                 class="text-center input-table"
+                :class="[errors[product.id] ? 'border-red-800 border-2' : '']"
                 v-model="product.value"
                 :name="product.id"
                 @keydown.up.exact.prevent="focusPrevious(true)"
@@ -39,6 +44,9 @@
                 @keydown.enter.exact.prevent="focusNext(true)"
               />
             </td>
+          </tr>
+          <tr v-if="products.length === 0">
+            <td class="text-center font-bold" colspan="4">Nenalezeny žádné produkty.</td>
           </tr>
         </tbody>
       </table>
@@ -67,15 +75,16 @@ import formButton from "../common/formButton.vue";
 export default class orderTable extends Vue {
   @Prop({ required: true }) readonly products!: any;
   @Prop() orders!: any;
+  @Prop() errors?: any;
   @Prop({ default: "Potvrdit" }) buttonName!: String;
   @Prop() loading!: Boolean;
   @Prop() onClick!: Function;
   public collapsed?: Boolean = false;
 
-  get menuItems() {
+  get menuItems(): HTMLElement {
     return document.querySelectorAll(".products-inputs input");
   }
-  focusedIndex: any = 0;
+  focusedIndex = 0;
   columns: any = [
     { path: "id", label: "Číslo produktu" },
     { path: "name", label: "Název" },
@@ -121,6 +130,8 @@ export default class orderTable extends Vue {
     }
   }
   focusItem() {
+    if (this.focusedIndex < 0 || this.focusedIndex > this.menuItems.length - 1)
+      return;
     this.menuItems[this.focusedIndex].focus();
   }
 }

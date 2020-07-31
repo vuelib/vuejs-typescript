@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'api'], function () {
     // Route::get('allorders', 'OrderAdminController@index');
     Route::post('ares', 'AresController@check');
     Route::post('product', 'ProductController@store');
+    Route::get('orders', 'Admin\OrderController@all');
+    Route::get('orders/{user}', 'Admin\OrderController@index');
     Route::put('order/{order}/confirm', 'OrderController@confirm');
     Route::apiResource('user', 'UserController');
     Route::apiResource('invoice', 'InvoiceController')->only('store', 'update');

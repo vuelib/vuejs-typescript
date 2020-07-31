@@ -1,8 +1,20 @@
 <template>
-  <div class="flex justify-center items-center">
+  <div v-show="items.total > items.per_page" class="flex justify-center items-center">
     <ul
-      v-show="items.total > items.per_page"
       class="flex w-full justify-center mx-4 my-4 mt-4 list-reset text-secondary font-bold"
+      v-if="rangeRequired"
+    >
+      <li v-for="page in pages" :key="page">
+        <span
+          class="button bg-transparent border border-black py-1 px-2 rounded opacity-50 cursor-pointer"
+          :class="page === items.current_page ? 'font-bold' : ''"
+          @click.prevent="fetchPage(page)"
+        >{{page}}</span>
+      </li>
+    </ul>
+    <ul
+      class="flex w-full justify-center mx-4 my-4 mt-4 list-reset text-secondary font-bold"
+      v-else
     >
       <li>
         <span
@@ -22,6 +34,7 @@
           <i class="fa fa-angle-left" aria-hidden="true"></i>
         </span>
       </li>
+
       <li class>
         <span
           class="button bg-transparent border border-black py-1 px-2 rounded opacity-50"
@@ -51,19 +64,29 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import _ from "lodash";
 @Component({
-  name: "Pagination"
+  name: "Pagination",
 })
 export default class Pagination extends Vue {
   @Prop() readonly items!: any;
+  @Prop({ default: false }) readonly rangeRequired?: Boolean;
   @Prop({ default: "id" }) readonly _key?: String;
 
+  get pages() {
+    const pages = _.range(1, this.items.last_page);
+    return pages;
+  }
   fetchPrevius = () => {
     if (this.items.current_page === 1) return;
     this.$store.dispatch(
       `fetch${this.setPath()}s`,
       this.items.current_page - 1
     );
+  };
+
+  fetchPage = (page) => {
+    this.$store.dispatch(`fetch${this.setPath()}s`, page);
   };
 
   fetchNext = () => {
@@ -88,20 +111,6 @@ export default class Pagination extends Vue {
     path = `${this.items.path}`.split("api/").pop();
     return path.charAt(0).toUpperCase() + path.slice(1);
   };
-  // {
-  //   currentPage: 1,
-  //   data: [],
-  //   first_page_url: "",
-  //   from: "",
-  //   last_page: "",
-  //   last_page_url: "",
-  //   next_page_url: "",
-  //   prev_page_url: "",
-  //   path: "",
-  //   per_page: "",
-  //   to: "",
-  //   total: ""
-  // };
 }
 </script>
 

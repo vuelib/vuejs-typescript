@@ -6,13 +6,21 @@
       :routerLink="false"
       :onSelect="handleSelectCategory"
     >
-      <input class="btn-search" placeholder="Vyhledejte zboží" type="text" v-model="search" />
+      <input
+        ref="search"
+        class="btn-search"
+        placeholder="Vyhledejte zboží"
+        type="text"
+        :value="search"
+        @input="updateSearch"
+      />
     </sidebar>
     <Content :title="category.name">
       <order-table
         :products="filteredProducts"
         :orders="orders"
         :onClick="addOrder"
+        :errors="errors"
         buttonName="Vytvořit objednávku"
       />
     </Content>
@@ -32,39 +40,46 @@ import orderTable from "../common/orderTable.vue";
     container,
     Content,
     sidebar,
-    orderTable
+    orderTable,
   },
-  computed: mapGetters(["category", "filteredProducts"]),
-  methods: mapMutations(["fetchCategories", "fetchProducts"])
+  computed: mapGetters(["category"]),
+  methods: mapMutations(["fetchCategories", "fetchProducts"]),
 })
 export default class addOrder extends Vue {
-  private _search: any;
+  public search: String = "";
+  public errors = {};
+  loadComponent?: Boolean = false;
+  loading?: Boolean = false;
 
   get categories() {
     return [
       { name: "Všechny produkty", _key: "" },
-      ...this.$store.getters.categories
+      ...this.$store.getters.categories,
     ];
   }
 
+  get filterProducts() {
+    return this.$store.getters.filteredProducts;
+  }
+
+  updateSearch({ target: input }) {
+    this.search = input.value;
+  }
   get products() {
     return this.$store.getters.products;
   }
+  get filteredProducts() {
+    return this.filterProducts.filter((p) => {
+      return (
+        p.name.toLowerCase().includes(this.search.toLowerCase()) ||
+        p.baleni.toLowerCase().includes(this.search.toLowerCase()) ||
+        `${p.id}`.includes(this.search.toLowerCase())
+      );
+    });
+  }
   get orders() {
-    return this.products.filter(p => p.value !== "");
+    return this.products.filter((p) => p.value !== "");
   }
-
-  get search() {
-    return this._search;
-  }
-  set search(search) {
-    this._search = search;
-    // let products = this.products.filter(product => {
-    //   product.name.toLowerCase().includes(search.toLowerCase());
-    // });
-  }
-  loadComponent?: Boolean = false;
-  loading?: Boolean = false;
 
   async beforeMount() {
     this.loadComponent = true;
@@ -72,44 +87,55 @@ export default class addOrder extends Vue {
     await this.$store.dispatch("fetchProducts");
     await this.$store.commit("setCategory", {
       name: "Všechny produkty",
-      _key: ""
+      _key: "",
     });
     this.loadComponent = false;
   }
 
-  handleSelectCategory = category => {
+  handleSelectCategory = (category) => {
+    this.search = "";
     this.$store.commit("setCategory", category);
     this.$store.commit("filterProducts", category);
   };
-
   addOrder() {
-    if (this.orderIsEmpty()) return;
+    this.errors = [];
     this.loading = true;
+    if (this.orders.length === 0) {
+      this.errors["amounts"] = "Nemáte vybrané žádné produkty.";
+      return;
+    }
+
     this.axios
       .post(
         `/order`,
         { amounts: this.orders },
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          }
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         this.loading = false;
         this.$router.push({
           name: "ShowOrder",
-          params: { id: res.data.id }
+          params: { id: res.data.id },
         });
       })
-      .catch(error => {
-        console.log(error);
+      .catch((error) => {
+        if (error.response.status == 422) {
+          const newErrors = [];
+          const errors = error.response.data.errors;
+          for (error in errors) {
+            let index = `${error}`.split(`amounts.`)[1].split(".value")[0];
+            let e: any = { ...this.orders[index], error: errors[error][0] };
+            newErrors[e.id] = e;
+          }
+          newErrors["amounts"] = "Množství musí obsahovat pouze číslice.";
+          this.errors = newErrors;
+        }
         this.loading = false;
       });
   }
-
-  orderIsEmpty = () => {
-    return this.orders.length === 0;
-  };
 }
 </script>
