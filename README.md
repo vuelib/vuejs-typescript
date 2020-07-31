@@ -11,7 +11,6 @@ cp .env.example
 npm i npm run dev 
 php artisan migrate 
 php artisan passport:install 
-a do env zadat klíč a č.user_id 
 PASSPORT_CLIENT_ID a grant pro password 
 PASSPORT_CLIENT_SECRET 
 php artisan db:seed 
