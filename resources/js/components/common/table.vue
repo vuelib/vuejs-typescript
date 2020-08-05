@@ -17,7 +17,7 @@ import tableBody from "../common/tableBody.vue";
   },
 })
 export default class Table extends Vue {
-  @Prop({ required: true }) readonly actions!: any;
+  @Prop({ required: false }) readonly actions!: any;
   @Prop({ required: true }) readonly columns!: any;
   @Prop({ required: true }) readonly sortColumn!: any;
   @Prop({ required: true }) readonly onSort!: Function;

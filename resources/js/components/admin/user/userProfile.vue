@@ -1,7 +1,8 @@
 <template>
   <Container :loading="loading">
     <Sidebar
-      v-show="!hide"
+      v-show="user.invoice"
+      v-if="['editOrder', 'addOrder'].indexOf($route.name) == -1"
       name="Objednávky"
       :items="orders.data"
       :renderHTML="renderHTML"
@@ -13,7 +14,7 @@
       </router-link>
       <div v-show="orders == ''">Nemáte žádné objednávky</div>
     </Sidebar>
-    <Content :title="`Uživatel ${user.email}`">
+    <Content :title="`Uživatel ${user.invoice ? user.invoice.nazev : user.email}`">
       <div class="pb-3 pl-3">
         <button
           v-if="!user.invoice"

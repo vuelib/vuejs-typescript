@@ -23,10 +23,10 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
-import container from "../common/container.vue";
-import Content from "../common/content.vue";
-import sidebar from "../common/sidebar.vue";
-import orderTable from "../common/orderTable.vue";
+import container from "../../common/container.vue";
+import Content from "../../common/content.vue";
+import sidebar from "../../common/sidebar.vue";
+import orderTable from "../../common/orderTable.vue";
 @Component({
   name: "editOrder",
   components: {
@@ -39,7 +39,6 @@ import orderTable from "../common/orderTable.vue";
   methods: mapMutations(["fetchCategories", "fetchProducts"]),
 })
 export default class editOrder extends Vue {
-  @Prop() id!: String;
   private getSearch: String = "";
   private loadComponent?: Boolean = false;
   private loading?: Boolean = false;
@@ -108,7 +107,7 @@ export default class editOrder extends Vue {
 
   async beforeMount() {
     this.loadComponent = true;
-    await this.$store.dispatch("fetchOrder", this.id);
+    await this.$store.dispatch("fetchOrder", this.$route.params.idc);
     await this.$store.dispatch("fetchCategories");
     await this.$store.dispatch("fetchProducts");
     await this.$store.commit("setCategory", {
@@ -132,7 +131,7 @@ export default class editOrder extends Vue {
     }
     this.axios
       .put(
-        `/order/${this.id}`,
+        `/order/${this.$route.params.idc}`,
         { amounts: this.amounts, delete: this.filteredOrder },
         {
           headers: {
@@ -143,8 +142,8 @@ export default class editOrder extends Vue {
       .then((res) => {
         this.loading = false;
         this.$router.push({
-          name: "ShowOrder",
-          params: { id: res.data.id },
+          name: "showOrder",
+          params: { idc: res.data.id },
         });
       })
       .catch((error) => {

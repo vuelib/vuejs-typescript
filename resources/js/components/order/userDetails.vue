@@ -57,6 +57,6 @@ import { mapGetters } from "vuex";
 })
 export default class userDetail extends Vue {
   @Prop({ required: true }) user;
-  visible?: Boolean = true;
+  visible?: Boolean = false;
 }
 </script>

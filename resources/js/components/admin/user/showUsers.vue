@@ -9,12 +9,12 @@
         >Všichni zakazníci</button>
         <button
           class="btn-edit-trans"
-          :class="{ active: filter == 'active' }"
+          :class="{ active: filter == 'withinvoice' }"
           @click="changeFilter('withinvoice')"
         >S fakturačními údajy</button>
         <button
           class="bg-transparent hover:bg-green-700 text-black font-semibold hover:text-white py-2 px-4 border border-green-700 hover:border-transparent rounded"
-          :class="{ active: filter == 'completed' }"
+          :class="{ active: filter == 'withoutinvoice' }"
           @click="changeFilter('withoutinvoice')"
         >
           Bez fakturačních
@@ -29,25 +29,6 @@
           :actions="actions"
           :onSort="handleSort"
         />
-        <!-- <table class="w-full">
-          <thead>
-            <tr>
-              <th>IC</th>
-              <th>Název firmy</th>
-              <th>Email</th>
-              <th>Telefon</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-bind:key="user.id" v-for="user in allUsers.data" class="cursor-pointer">
-              <td class="border text-left py-2 px-2">{{user.invoice ? user.invoice.ic : 'NaN'}}</td>
-              <td class="border text-left py-2 px-2">{{user.invoice ? user.invoice.nazev : 'NaN'}}</td>
-              <td class="border text-left py-2 px-2">{{user.email}}</td>
-              <td class="border text-left py-2 px-2">{{user.phone}}</td>
-              <td class="border text-center py-2 px-2" @click="goToUserProfile(user)">Přejít</td>
-            </tr>
-          </tbody>
-        </table>-->
         <Pagination :rangeRequired="true" :items="allUsers" />
       </div>
     </Content>

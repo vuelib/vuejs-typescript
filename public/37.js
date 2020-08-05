@@ -164,7 +164,7 @@ var userDetail = /** @class */ (function (_super) {
     __extends(userDetail, _super);
     function userDetail() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.visible = true;
+        _this.visible = false;
         return _this;
     }
     __decorate([
@@ -267,7 +267,27 @@ var render = function() {
             "div",
             { staticClass: "table w-full mt-5" },
             [
-              _vm._v("\n    " + _vm._s(_vm.order.description) + "\n    "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.order.description,
+                      expression: "order.description"
+                    }
+                  ],
+                  staticClass: "p-3"
+                },
+                [
+                  _c("span", { staticClass: "font-bold" }, [
+                    _vm._v("Poznámka:")
+                  ]),
+                  _vm._v("\n      " + _vm._s(_vm.order.description) + "\n    ")
+                ]
+              ),
+              _vm._v(" "),
               _c("customFormButton", {
                 attrs: {
                   name: "Vytvořit znovu",

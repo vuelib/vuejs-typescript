@@ -14,13 +14,13 @@ class UserController extends Controller
         if (request('filter')) {
             switch (request('filter')) {
                 case 'withinvoice':
-                    $user->has('invoice')->with('invoice');
+                    $user->has('invoice')->whereDoesntHave('role')->with('invoice');
                     break;
                 case 'withoutinvoice':
-                    $user->whereDoesntHave('invoice');
+                    $user->whereDoesntHave('invoice')->whereDoesntHave('role');
                     break;
                 default:
-                    $user->with('invoice');
+                    $user->whereDoesntHave('role')->with('invoice');
                     break;
             }
         }
@@ -37,7 +37,7 @@ class UserController extends Controller
 
     public function store()
     {
-        return auth()->user()->load('orders', 'invoice');
+        return auth()->user()->load('orders', 'invoice', 'role');
     }
 
     public function destroy($id)

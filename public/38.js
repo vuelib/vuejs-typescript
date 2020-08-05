@@ -63,14 +63,14 @@ var shoOrder = /** @class */ (function (_super) {
     };
     shoOrder.prototype.editOrder = function () {
         this.$router.push({
-            name: "EditOrder",
-            params: { id: this.order.id },
+            name: "editOrder",
+            params: { idc: this.order.id },
         });
     };
     shoOrder.prototype.deleteOrder = function () {
         this.$store.dispatch("deleteOrder", this.order);
         this.$router.push({
-            name: "Orders",
+            name: "user",
         });
     };
     shoOrder.prototype.createSame = function () {
@@ -79,11 +79,13 @@ var shoOrder = /** @class */ (function (_super) {
             return { value: a.value, id: a.product.id };
         });
         this.loading = true;
-        this.$store.dispatch("addOrder", { amounts: amounts }).then(function (order) {
+        this.$store
+            .dispatch("addOrder", { amounts: amounts, user_id: this.$route.params.id })
+            .then(function (order) {
             _this.loading = false;
             _this.$router.push({
-                name: "ShowOrder",
-                params: { id: order.id },
+                name: "showOrder",
+                params: { idc: order.id },
             });
         });
     };
@@ -141,12 +143,12 @@ var render = function() {
     [
       _c("tableOrderList", { attrs: { loading: _vm.loadComponenct } }),
       _vm._v(" "),
-      _vm.order.status === "rozpracovaná"
-        ? _c(
-            "div",
-            { staticClass: "table w-full mt-5" },
-            [
-              _c("customTextarea", {
+      _c(
+        "div",
+        { staticClass: "table w-full mt-5" },
+        [
+          _vm.order.status === "rozpracovaná"
+            ? _c("customTextarea", {
                 attrs: {
                   error: _vm.errors.description,
                   rows: 1,
@@ -160,60 +162,73 @@ var render = function() {
                   },
                   expression: "order.description"
                 }
-              }),
-              _vm._v(" "),
-              _c(
+              })
+            : _c(
                 "div",
-                { staticClass: "flex" },
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.order.description,
+                      expression: "order.description"
+                    }
+                  ],
+                  staticClass: "p-3"
+                },
                 [
-                  _c("customFormButton", {
+                  _c("span", { staticClass: "font-bold" }, [
+                    _vm._v("Poznámka:")
+                  ]),
+                  _vm._v("\n      " + _vm._s(_vm.order.description) + "\n    ")
+                ]
+              ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "flex" },
+            [
+              _vm.order.status === "rozpracovaná"
+                ? _c("customFormButton", {
                     attrs: {
                       name: "Potvrdit",
                       loading: _vm.loading,
                       onClick: _vm.confirmOrder
                     }
-                  }),
-                  _vm._v(" "),
-                  _c("customFormButton", {
-                    staticClass: "ml-2",
-                    attrs: {
-                      classType: "btn-edit",
-                      name: "Upravit",
-                      loading: _vm.loading,
-                      onClick: _vm.editOrder
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("customFormButton", {
-                    staticClass: "ml-2",
-                    attrs: {
-                      classType: "btn-delete pl-1 pr-1 ",
-                      name: "Odstranit",
-                      loading: _vm.loading,
-                      onClick: _vm.deleteOrder
-                    }
                   })
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _c(
-            "div",
-            { staticClass: "table w-full mt-5" },
-            [
-              _vm._v("\n    " + _vm._s(_vm.order.description) + "\n    "),
+                : _c("customFormButton", {
+                    attrs: {
+                      name: "Vytvořit znovu",
+                      loading: _vm.loading,
+                      onClick: _vm.createSame
+                    }
+                  }),
+              _vm._v(" "),
               _c("customFormButton", {
+                staticClass: "ml-2",
                 attrs: {
-                  name: "Vytvořit znovu",
+                  classType: "btn-edit",
+                  name: "Upravit",
                   loading: _vm.loading,
-                  onClick: _vm.createSame
+                  onClick: _vm.editOrder
+                }
+              }),
+              _vm._v(" "),
+              _c("customFormButton", {
+                staticClass: "ml-2",
+                attrs: {
+                  classType: "btn-delete pl-1 pr-1 ",
+                  name: "Odstranit",
+                  loading: _vm.loading,
+                  onClick: _vm.deleteOrder
                 }
               })
             ],
             1
           )
+        ],
+        1
+      )
     ],
     1
   )

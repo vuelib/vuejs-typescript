@@ -29,7 +29,10 @@
       </div>
     </div>
     <div v-else class="table w-full mt-5">
-      {{order.description}}
+      <div v-show="order.description" class="p-3">
+        <span class="font-bold">Poznámka:</span>
+        {{order.description}}
+      </div>
       <customFormButton name="Vytvořit znovu" :loading="loading" :onClick="createSame" />
     </div>
   </Content>

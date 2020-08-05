@@ -1,6 +1,6 @@
 <template>
   <Container :loading="loading">
-    <Content title="Přehled všech uživatelů">
+    <Content title="Přehled všech objednávek">
       <div class="mb-3">
         <button
           class="btn-edit-trans"

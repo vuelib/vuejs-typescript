@@ -50,10 +50,10 @@ var Content = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/settings/ChangeContact.vue?vue&type=script&lang=ts&":
-/*!*************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/ts-loader??ref--11!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/settings/ChangeContact.vue?vue&type=script&lang=ts& ***!
-  \*************************************************************************************************************************************************************************/
+/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/settings/ChangePassword.vue?vue&type=script&lang=ts&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/ts-loader??ref--11!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/settings/ChangePassword.vue?vue&type=script&lang=ts& ***!
+  \**************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -93,34 +93,31 @@ var Login = /** @class */ (function (_super) {
     function Login() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.user = {
-            phone: "",
             password: "",
+            confirm_password: "",
+            old_password: "",
         };
         _this.errors = {};
         _this.edit = true;
         _this.loading = false;
         return _this;
     }
-    Login.prototype.changePhone = function () {
+    Login.prototype.chanePassword = function () {
         var _this = this;
         this.errors = [];
         this.loading = true;
         this.axios
-            .post("/change-contact", this.user, {
+            .post("/change-password", this.user, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
         })
             .then(function (response) {
             _this.loading = false;
-            _this.successMessage = "Úspěšně jste změnili heslo";
+            _this.successMessage = "Úspěšně jste změnili kontaktní údaje";
         })
             .catch(function (error) {
             if (error.response.status == 422) {
-                _this.errors = error.response.data.errors;
-            }
-            else if (error.response.status == 404) {
-                console.log(error.response.data);
                 _this.errors = error.response.data.errors;
             }
             _this.loading = false;
@@ -179,10 +176,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/settings/ChangeContact.vue?vue&type=template&id=7ee63962&":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/settings/ChangeContact.vue?vue&type=template&id=7ee63962& ***!
-  \*************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/settings/ChangePassword.vue?vue&type=template&id=29511dfc&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/settings/ChangePassword.vue?vue&type=template&id=29511dfc& ***!
+  \**************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -194,7 +191,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("Content", { attrs: { title: "Změna kontaktních údajů" } }, [
+  return _c("Content", { attrs: { title: "Změna hesla" } }, [
     _c(
       "div",
       { staticClass: "table" },
@@ -205,22 +202,28 @@ var render = function() {
           [
             _c("customInput", {
               attrs: {
-                error: _vm.errors.phone,
-                label: "Telefonní číslo",
-                name: "phone",
-                autofocus: "true"
+                error: _vm.errors.old_password,
+                label: "Staré heslo",
+                type: "password",
+                name: "old_password",
+                autofotuc: "true"
               },
               model: {
-                value: _vm.user.phone,
+                value: _vm.user.old_password,
                 callback: function($$v) {
-                  _vm.$set(_vm.user, "phone", $$v)
+                  _vm.$set(_vm.user, "old_password", $$v)
                 },
-                expression: "user.phone"
+                expression: "user.old_password"
               }
             }),
             _vm._v(" "),
             _c("customInput", {
-              attrs: { error: _vm.errors.password, label: "Heslo", name: "ic" },
+              attrs: {
+                error: _vm.errors.password,
+                label: "Heslo",
+                type: "password",
+                name: "password"
+              },
               model: {
                 value: _vm.user.password,
                 callback: function($$v) {
@@ -230,10 +233,26 @@ var render = function() {
               }
             }),
             _vm._v(" "),
+            _c("customInput", {
+              attrs: {
+                error: _vm.errors.confirm_password,
+                label: "Potvrďte heslo",
+                type: "password",
+                name: "confirm_password"
+              },
+              model: {
+                value: _vm.user.confirm_password,
+                callback: function($$v) {
+                  _vm.$set(_vm.user, "confirm_password", $$v)
+                },
+                expression: "user.confirm_password"
+              }
+            }),
+            _vm._v(" "),
             _c("customFormButton", {
               attrs: {
-                onClick: _vm.changePhone,
-                name: "Změnit údaje",
+                onClick: _vm.chanePassword,
+                name: "Změnit heslo",
                 loading: _vm.loading
               }
             })
@@ -321,17 +340,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/settings/ChangeContact.vue":
-/*!************************************************************!*\
-  !*** ./resources/js/components/settings/ChangeContact.vue ***!
-  \************************************************************/
+/***/ "./resources/js/components/settings/ChangePassword.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/settings/ChangePassword.vue ***!
+  \*************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ChangeContact_vue_vue_type_template_id_7ee63962___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChangeContact.vue?vue&type=template&id=7ee63962& */ "./resources/js/components/settings/ChangeContact.vue?vue&type=template&id=7ee63962&");
-/* harmony import */ var _ChangeContact_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChangeContact.vue?vue&type=script&lang=ts& */ "./resources/js/components/settings/ChangeContact.vue?vue&type=script&lang=ts&");
+/* harmony import */ var _ChangePassword_vue_vue_type_template_id_29511dfc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChangePassword.vue?vue&type=template&id=29511dfc& */ "./resources/js/components/settings/ChangePassword.vue?vue&type=template&id=29511dfc&");
+/* harmony import */ var _ChangePassword_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChangePassword.vue?vue&type=script&lang=ts& */ "./resources/js/components/settings/ChangePassword.vue?vue&type=script&lang=ts&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -341,9 +360,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ChangeContact_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ChangeContact_vue_vue_type_template_id_7ee63962___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ChangeContact_vue_vue_type_template_id_7ee63962___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _ChangePassword_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ChangePassword_vue_vue_type_template_id_29511dfc___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ChangePassword_vue_vue_type_template_id_29511dfc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -353,38 +372,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/settings/ChangeContact.vue"
+component.options.__file = "resources/js/components/settings/ChangePassword.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/settings/ChangeContact.vue?vue&type=script&lang=ts&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/settings/ChangeContact.vue?vue&type=script&lang=ts& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/components/settings/ChangePassword.vue?vue&type=script&lang=ts&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/settings/ChangePassword.vue?vue&type=script&lang=ts& ***!
+  \**************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangeContact_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/ts-loader??ref--11!../../../../node_modules/vue-loader/lib??vue-loader-options!./ChangeContact.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/settings/ChangeContact.vue?vue&type=script&lang=ts&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangeContact_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePassword_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/ts-loader??ref--11!../../../../node_modules/vue-loader/lib??vue-loader-options!./ChangePassword.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/settings/ChangePassword.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePassword_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/settings/ChangeContact.vue?vue&type=template&id=7ee63962&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/components/settings/ChangeContact.vue?vue&type=template&id=7ee63962& ***!
-  \*******************************************************************************************/
+/***/ "./resources/js/components/settings/ChangePassword.vue?vue&type=template&id=29511dfc&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/settings/ChangePassword.vue?vue&type=template&id=29511dfc& ***!
+  \********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangeContact_vue_vue_type_template_id_7ee63962___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ChangeContact.vue?vue&type=template&id=7ee63962& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/settings/ChangeContact.vue?vue&type=template&id=7ee63962&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangeContact_vue_vue_type_template_id_7ee63962___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePassword_vue_vue_type_template_id_29511dfc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ChangePassword.vue?vue&type=template&id=29511dfc& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/settings/ChangePassword.vue?vue&type=template&id=29511dfc&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePassword_vue_vue_type_template_id_29511dfc___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangeContact_vue_vue_type_template_id_7ee63962___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePassword_vue_vue_type_template_id_29511dfc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

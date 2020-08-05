@@ -226,7 +226,7 @@ var userDetail = /** @class */ (function (_super) {
     __extends(userDetail, _super);
     function userDetail() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.visible = true;
+        _this.visible = false;
         return _this;
     }
     __decorate([
@@ -263,56 +263,67 @@ var render = function() {
     "Container",
     { attrs: { loading: _vm.loading } },
     [
-      _c(
-        "Sidebar",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: !_vm.hide,
-              expression: "!hide"
-            }
-          ],
-          attrs: {
-            name: "Objednávky",
-            items: _vm.orders.data,
-            renderHTML: _vm.renderHTML,
-            type: "name",
-            param: _vm.setParam
-          }
-        },
-        [
-          _c(
-            "router-link",
-            {
-              staticClass: "link text-center",
-              attrs: { to: { name: "addOrder" } }
-            },
-            [_c("i", { staticClass: "fas fa-plus" }), _vm._v(" Přidat\n    ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
+      ["editOrder", "addOrder"].indexOf(_vm.$route.name) == -1
+        ? _c(
+            "Sidebar",
             {
               directives: [
                 {
                   name: "show",
                   rawName: "v-show",
-                  value: _vm.orders == "",
-                  expression: "orders == ''"
+                  value: _vm.user.invoice,
+                  expression: "user.invoice"
                 }
-              ]
+              ],
+              attrs: {
+                name: "Objednávky",
+                items: _vm.orders.data,
+                renderHTML: _vm.renderHTML,
+                type: "name",
+                param: _vm.setParam
+              }
             },
-            [_vm._v("Nemáte žádné objednávky")]
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "link text-center",
+                  attrs: { to: { name: "addOrder" } }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-plus" }),
+                  _vm._v(" Přidat\n    ")
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.orders == "",
+                      expression: "orders == ''"
+                    }
+                  ]
+                },
+                [_vm._v("Nemáte žádné objednávky")]
+              )
+            ],
+            1
           )
-        ],
-        1
-      ),
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "Content",
-        { attrs: { title: "Uživatel " + _vm.user.email } },
+        {
+          attrs: {
+            title:
+              "Uživatel " +
+              (_vm.user.invoice ? _vm.user.invoice.nazev : _vm.user.email)
+          }
+        },
         [
           _c("div", { staticClass: "pb-3 pl-3" }, [
             !_vm.user.invoice

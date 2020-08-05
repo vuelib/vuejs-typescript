@@ -1,16 +1,27 @@
 <template>
   <Content :title="`Objednávka č. ${order.id}`">
     <tableOrderList :loading="loadComponenct" />
-    <div v-if="order.status === 'rozpracovaná'" class="table w-full mt-5">
+    <div class="table w-full mt-5">
       <customTextarea
+        v-if="order.status === 'rozpracovaná'"
         v-model="order.description"
         :error="errors.description"
         :rows="1"
         label="Vaše poznámka"
         name="description"
       />
+      <div v-else v-show="order.description" class="p-3">
+        <span class="font-bold">Poznámka:</span>
+        {{order.description}}
+      </div>
       <div class="flex">
-        <customFormButton name="Potvrdit" :loading="loading" :onClick="confirmOrder" />
+        <customFormButton
+          name="Potvrdit"
+          :loading="loading"
+          :onClick="confirmOrder"
+          v-if="order.status === 'rozpracovaná'"
+        />
+        <customFormButton name="Vytvořit znovu" :loading="loading" :onClick="createSame" v-else />
         <customFormButton
           classType="btn-edit"
           name="Upravit"
@@ -26,10 +37,6 @@
           :onClick="deleteOrder"
         />
       </div>
-    </div>
-    <div v-else class="table w-full mt-5">
-      {{order.description}}
-      <customFormButton name="Vytvořit znovu" :loading="loading" :onClick="createSame" />
     </div>
   </Content>
 </template>
@@ -69,16 +76,14 @@ export default class shoOrder extends Vue {
 
   editOrder() {
     this.$router.push({
-      name: "EditOrder",
-      params: { id: this.order.id },
+      name: "editOrder",
+      params: { idc: this.order.id },
     });
   }
 
   deleteOrder() {
     this.$store.dispatch("deleteOrder", this.order);
-    this.$router.push({
-      name: "Orders",
-    });
+    this.$router.push({ name: "user", params: { id: this.$route.params.id } });
   }
 
   createSame() {
@@ -86,13 +91,15 @@ export default class shoOrder extends Vue {
       return { value: a.value, id: a.product.id };
     });
     this.loading = true;
-    this.$store.dispatch("addOrder", { amounts }).then((order) => {
-      this.loading = false;
-      this.$router.push({
-        name: "ShowOrder",
-        params: { id: order.id },
+    this.$store
+      .dispatch("addOrder", { amounts, user_id: this.$route.params.id })
+      .then((order) => {
+        this.loading = false;
+        this.$router.push({
+          name: "showOrder",
+          params: { idc: order.id },
+        });
       });
-    });
   }
 
   @Watch("$route", { immediate: true, deep: true })

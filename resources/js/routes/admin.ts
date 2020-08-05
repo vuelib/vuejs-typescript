@@ -75,7 +75,7 @@ const Admin = [
                 name: "changeInvoice",
                 path: "zmena-fakturacni-udaje",
                 component: () =>
-                    import("../components/admin/user/ChangeInvoice.vue"),
+                    import("../components/admin/user/changeInvoice.vue"),
                 props: true
             },
             {
@@ -86,10 +86,10 @@ const Admin = [
                 props: { default: true, hide: true }
             },
             {
-                name: "editOrderUser",
-                path: "upravit-objednavku",
+                name: "editOrder",
+                path: "objednavka/:idc/upravit",
                 component: () =>
-                    import("../components/admin/order/EditOrder.vue"),
+                    import("../components/admin/order/editOrder.vue"),
                 props: true
             }
         ]

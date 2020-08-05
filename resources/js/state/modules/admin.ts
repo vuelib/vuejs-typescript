@@ -39,7 +39,6 @@ export default {
             state.filterUsers = filter;
         },
         setFilterOrders(state, filter) {
-            console.log(filter);
             state.filterOrders = filter;
         },
         setcurrUser(state, user) {
@@ -47,6 +46,10 @@ export default {
         },
         setOrders(state, orders) {
             state.uOrders = orders;
+        },
+        adduOrders(state, order) {
+            const orders = state.uOrders;
+            state.uOrders = { order, ...orders };
         }
     },
     actions: {
@@ -69,7 +72,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios
                     .get(
-                        `user?filter=${rootState.admin.filterOrders}&page=${page}`
+                        `user?filter=${rootState.admin.filterUsers}&page=${page}`
                     )
                     .then(res => {
                         commit("allUsers", res.data);

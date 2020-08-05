@@ -8,6 +8,7 @@ use App\Events\OrderAdded;
 use App\Mail\AdminOrderFormMail;
 use App\Mail\OrderFormMail;
 use App\Order;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -29,7 +30,12 @@ class OrderController extends Controller
     {
         $this->authorize('create', Order::class);
         $data = request()->validate($this->rules());
-        $order = auth()->user()->orders()->create();
+        if (isset($data['user_id'])) {
+            $user = User::find($data['user_id']);
+            $order = $user->orders()->create();
+        } else {
+            $order =  auth()->user()->orders()->create();
+        }
         foreach ($data['amounts'] as $product) {
             $product = array_merge($product, [
                 'product_id' => $product['id'],
@@ -92,7 +98,8 @@ class OrderController extends Controller
         return [
             'amounts' => 'required',
             'amounts.*.value' => 'numeric',
-            'delete' => ''
+            'delete' => '',
+            'user_id' => ''
         ];
     }
 }

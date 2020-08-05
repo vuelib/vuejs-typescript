@@ -68,8 +68,8 @@ export default class addInvoice extends Vue {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
-      .then((res) => {
-        this.$store.dispatch("fetchUserProfile", this.id);
+      .then(({ data: user }) => {
+        this.$store.commit("setcurrUser", user);
         this.$router.push({
           name: "user",
           params: { id: `${this.id}` },

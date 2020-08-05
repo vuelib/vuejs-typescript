@@ -11,9 +11,9 @@ class InvoiceController extends Controller
 {
     public function store()
     {
-        dump(request());
         $data = request()->validate($this->rules());
         auth()->user()->invoice()->create($data);
+        return auth()->user()->load('invoice');
     }
 
 
@@ -27,6 +27,7 @@ class InvoiceController extends Controller
         } else {
             $user->invoice()->create($dataWithID);
         }
+        return $user->load('invoice');
     }
 
 

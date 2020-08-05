@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[9],{
 
-/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/user/addInvoice.vue?vue&type=script&lang=ts&":
-/*!************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/ts-loader??ref--11!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/user/addInvoice.vue?vue&type=script&lang=ts& ***!
-  \************************************************************************************************************************************************************************/
+/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/user/changeInvoice.vue?vue&type=script&lang=ts&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/ts-loader??ref--11!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/user/changeInvoice.vue?vue&type=script&lang=ts& ***!
+  \***************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -28,6 +28,17 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -48,6 +59,7 @@ var addInvoice = /** @class */ (function (_super) {
             ic: "",
         };
         _this.aresData = {
+            zuser_id: _this.id,
             ic: "",
             dic: "",
             nazev: "",
@@ -62,8 +74,9 @@ var addInvoice = /** @class */ (function (_super) {
     }
     addInvoice.prototype.addInvoice = function () {
         var _this = this;
+        var ares = __assign({ user_id: this.id }, this.aresData);
         this.axios
-            .put("invoice/" + this.id, this.aresData, {
+            .put("invoice/" + this.id, ares, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
@@ -230,10 +243,10 @@ var Content = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/user/addInvoice.vue?vue&type=template&id=63533c15&":
-/*!************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/user/addInvoice.vue?vue&type=template&id=63533c15& ***!
-  \************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/user/changeInvoice.vue?vue&type=template&id=14da4fa4&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/user/changeInvoice.vue?vue&type=template&id=14da4fa4& ***!
+  \***************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -245,161 +258,151 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("Container", [
-    _c(
-      "div",
-      { staticClass: "table mt-3" },
-      [
-        _c(
-          "Content",
-          { attrs: { title: "Přidat fakturační údaje" } },
-          [
-            _vm.aresData.ic === ""
-              ? _c(
-                  "Form",
-                  { attrs: { succesMessage: _vm.dataSuccessMessage } },
-                  [
-                    _c("customInput", {
-                      attrs: {
-                        error: _vm.errors.ic,
-                        label: "IČ",
-                        name: "ic",
-                        autofocus: "true"
+  return _c(
+    "div",
+    { staticClass: "table mt-3 w-full" },
+    [
+      _c(
+        "Content",
+        { attrs: { title: "Změnit fakturační údaje" } },
+        [
+          _vm.aresData.ic === ""
+            ? _c(
+                "Form",
+                { attrs: { succesMessage: _vm.dataSuccessMessage } },
+                [
+                  _c("customInput", {
+                    attrs: {
+                      error: _vm.errors.ic,
+                      label: "IČ",
+                      name: "ic",
+                      autofocus: "true"
+                    },
+                    model: {
+                      value: _vm.user.ic,
+                      callback: function($$v) {
+                        _vm.$set(_vm.user, "ic", $$v)
                       },
-                      model: {
-                        value: _vm.user.ic,
-                        callback: function($$v) {
-                          _vm.$set(_vm.user, "ic", $$v)
-                        },
-                        expression: "user.ic"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("customFormButton", {
-                      attrs: {
-                        onClick: _vm.getDataFromAres,
-                        name: "Zadejte Ič",
-                        loading: _vm.loading
-                      }
-                    })
-                  ],
-                  1
-                )
-              : _c(
-                  "Form",
-                  { attrs: { succesMessage: _vm.dataSuccessMessage } },
-                  [
-                    _c("customInput", {
-                      attrs: { error: _vm.errors.ic, label: "IČ", name: "ic" },
-                      model: {
-                        value: _vm.aresData.ic,
-                        callback: function($$v) {
-                          _vm.$set(_vm.aresData, "ic", $$v)
-                        },
-                        expression: "aresData.ic"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("customInput", {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.aresData.dic,
-                          expression: "aresData.dic"
-                        }
-                      ],
-                      attrs: {
-                        error: _vm.errors.dic,
-                        label: "DIČ",
-                        name: "ic"
+                      expression: "user.ic"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("customFormButton", {
+                    attrs: {
+                      onClick: _vm.getDataFromAres,
+                      name: "Zadejte Ič",
+                      loading: _vm.loading
+                    }
+                  })
+                ],
+                1
+              )
+            : _c(
+                "Form",
+                { attrs: { succesMessage: _vm.dataSuccessMessage } },
+                [
+                  _c("customInput", {
+                    attrs: { error: _vm.errors.ic, label: "IČ", name: "ic" },
+                    model: {
+                      value: _vm.aresData.ic,
+                      callback: function($$v) {
+                        _vm.$set(_vm.aresData, "ic", $$v)
                       },
-                      model: {
+                      expression: "aresData.ic"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("customInput", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
                         value: _vm.aresData.dic,
-                        callback: function($$v) {
-                          _vm.$set(_vm.aresData, "dic", $$v)
-                        },
                         expression: "aresData.dic"
                       }
-                    }),
-                    _vm._v(" "),
-                    _c("customInput", {
-                      attrs: {
-                        error: _vm.errors.nazev,
-                        label: "Jmébo",
-                        name: "nazev"
+                    ],
+                    attrs: { error: _vm.errors.dic, label: "DIČ", name: "ic" },
+                    model: {
+                      value: _vm.aresData.dic,
+                      callback: function($$v) {
+                        _vm.$set(_vm.aresData, "dic", $$v)
                       },
-                      model: {
-                        value: _vm.aresData.nazev,
-                        callback: function($$v) {
-                          _vm.$set(_vm.aresData, "nazev", $$v)
-                        },
-                        expression: "aresData.nazev"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("customInput", {
-                      attrs: {
-                        error: _vm.errors.ulice,
-                        label: "Ulice",
-                        name: "ulice"
+                      expression: "aresData.dic"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("customInput", {
+                    attrs: {
+                      error: _vm.errors.nazev,
+                      label: "Jmébo",
+                      name: "nazev"
+                    },
+                    model: {
+                      value: _vm.aresData.nazev,
+                      callback: function($$v) {
+                        _vm.$set(_vm.aresData, "nazev", $$v)
                       },
-                      model: {
-                        value: _vm.aresData.ulice,
-                        callback: function($$v) {
-                          _vm.$set(_vm.aresData, "ulice", $$v)
-                        },
-                        expression: "aresData.ulice"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("customInput", {
-                      attrs: {
-                        error: _vm.errors.mesto,
-                        label: "Město",
-                        name: "mesto"
+                      expression: "aresData.nazev"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("customInput", {
+                    attrs: {
+                      error: _vm.errors.ulice,
+                      label: "Ulice",
+                      name: "ulice"
+                    },
+                    model: {
+                      value: _vm.aresData.ulice,
+                      callback: function($$v) {
+                        _vm.$set(_vm.aresData, "ulice", $$v)
                       },
-                      model: {
-                        value: _vm.aresData.mesto,
-                        callback: function($$v) {
-                          _vm.$set(_vm.aresData, "mesto", $$v)
-                        },
-                        expression: "aresData.mesto"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("customInput", {
-                      attrs: {
-                        error: _vm.errors.psc,
-                        label: "PSČ",
-                        name: "psc"
+                      expression: "aresData.ulice"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("customInput", {
+                    attrs: {
+                      error: _vm.errors.mesto,
+                      label: "Město",
+                      name: "mesto"
+                    },
+                    model: {
+                      value: _vm.aresData.mesto,
+                      callback: function($$v) {
+                        _vm.$set(_vm.aresData, "mesto", $$v)
                       },
-                      model: {
-                        value: _vm.aresData.psc,
-                        callback: function($$v) {
-                          _vm.$set(_vm.aresData, "psc", $$v)
-                        },
-                        expression: "aresData.psc"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("customFormButton", {
-                      attrs: {
-                        onClick: _vm.addInvoice,
-                        name: "Potvrdte IČ",
-                        loading: _vm.loading
-                      }
-                    })
-                  ],
-                  1
-                )
-          ],
-          1
-        )
-      ],
-      1
-    )
-  ])
+                      expression: "aresData.mesto"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("customInput", {
+                    attrs: { error: _vm.errors.psc, label: "PSČ", name: "psc" },
+                    model: {
+                      value: _vm.aresData.psc,
+                      callback: function($$v) {
+                        _vm.$set(_vm.aresData, "psc", $$v)
+                      },
+                      expression: "aresData.psc"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("customFormButton", {
+                    attrs: {
+                      onClick: _vm.addInvoice,
+                      name: "Potvrdte IČ",
+                      loading: _vm.loading
+                    }
+                  })
+                ],
+                1
+              )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -475,17 +478,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/admin/user/addInvoice.vue":
-/*!***********************************************************!*\
-  !*** ./resources/js/components/admin/user/addInvoice.vue ***!
-  \***********************************************************/
+/***/ "./resources/js/components/admin/user/changeInvoice.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/admin/user/changeInvoice.vue ***!
+  \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _addInvoice_vue_vue_type_template_id_63533c15___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./addInvoice.vue?vue&type=template&id=63533c15& */ "./resources/js/components/admin/user/addInvoice.vue?vue&type=template&id=63533c15&");
-/* harmony import */ var _addInvoice_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./addInvoice.vue?vue&type=script&lang=ts& */ "./resources/js/components/admin/user/addInvoice.vue?vue&type=script&lang=ts&");
+/* harmony import */ var _changeInvoice_vue_vue_type_template_id_14da4fa4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./changeInvoice.vue?vue&type=template&id=14da4fa4& */ "./resources/js/components/admin/user/changeInvoice.vue?vue&type=template&id=14da4fa4&");
+/* harmony import */ var _changeInvoice_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./changeInvoice.vue?vue&type=script&lang=ts& */ "./resources/js/components/admin/user/changeInvoice.vue?vue&type=script&lang=ts&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -495,9 +498,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _addInvoice_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _addInvoice_vue_vue_type_template_id_63533c15___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _addInvoice_vue_vue_type_template_id_63533c15___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _changeInvoice_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _changeInvoice_vue_vue_type_template_id_14da4fa4___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _changeInvoice_vue_vue_type_template_id_14da4fa4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -507,38 +510,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/admin/user/addInvoice.vue"
+component.options.__file = "resources/js/components/admin/user/changeInvoice.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/admin/user/addInvoice.vue?vue&type=script&lang=ts&":
-/*!************************************************************************************!*\
-  !*** ./resources/js/components/admin/user/addInvoice.vue?vue&type=script&lang=ts& ***!
-  \************************************************************************************/
+/***/ "./resources/js/components/admin/user/changeInvoice.vue?vue&type=script&lang=ts&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/admin/user/changeInvoice.vue?vue&type=script&lang=ts& ***!
+  \***************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_addInvoice_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/ts-loader??ref--11!../../../../../node_modules/vue-loader/lib??vue-loader-options!./addInvoice.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/user/addInvoice.vue?vue&type=script&lang=ts&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_addInvoice_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_changeInvoice_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/ts-loader??ref--11!../../../../../node_modules/vue-loader/lib??vue-loader-options!./changeInvoice.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/user/changeInvoice.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_11_node_modules_vue_loader_lib_index_js_vue_loader_options_changeInvoice_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/admin/user/addInvoice.vue?vue&type=template&id=63533c15&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/components/admin/user/addInvoice.vue?vue&type=template&id=63533c15& ***!
-  \******************************************************************************************/
+/***/ "./resources/js/components/admin/user/changeInvoice.vue?vue&type=template&id=14da4fa4&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/admin/user/changeInvoice.vue?vue&type=template&id=14da4fa4& ***!
+  \*********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_addInvoice_vue_vue_type_template_id_63533c15___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./addInvoice.vue?vue&type=template&id=63533c15& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/user/addInvoice.vue?vue&type=template&id=63533c15&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_addInvoice_vue_vue_type_template_id_63533c15___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_changeInvoice_vue_vue_type_template_id_14da4fa4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./changeInvoice.vue?vue&type=template&id=14da4fa4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/user/changeInvoice.vue?vue&type=template&id=14da4fa4&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_changeInvoice_vue_vue_type_template_id_14da4fa4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_addInvoice_vue_vue_type_template_id_63533c15___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_changeInvoice_vue_vue_type_template_id_14da4fa4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

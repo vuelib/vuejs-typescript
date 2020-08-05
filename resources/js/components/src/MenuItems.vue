@@ -12,9 +12,9 @@
       </li>
       <li class="flex-1 md:flex-none md:mr-3 bg-junglegreen">
         <div class="relative flex w-20 text-2xl justify-end align-content-right">
-          <button @click="visibleNotification = !visibleNotification" v-if="user">
+          <!-- <button @click="visibleNotification = !visibleNotification" v-if="user">
             <i class="far focus:outline-none fa-envelope current text-darkergreen"></i>
-          </button>
+          </button>-->
           <button class="ml-4 focus:outline-none" @click="visible = !visible" v-if="user">
             <i class="fas fa-bars"></i>
           </button>
@@ -24,9 +24,7 @@
             @mouseleave="hideMenu"
             class="absolute shadow-xs dropdown-menu text-secondary w-56 bg-lightblue right-0 mt-8 p-3 overflow-auto z-30"
           >
-            <div
-              class="p-2 hover:text-button text-sm no-underline hover:no-underline block cursor-pointer"
-            >
+            <div class="p-2 hover:text-button text-sm no-underline hover:no-underline block">
               {{user.invoice ?
               user.invoice.nazev : user.email}}
             </div>
@@ -45,7 +43,7 @@
               class="p-2 hover:text-button text-sm no-underline hover:no-underline block"
             >Odhlásit se</router-link>
           </div>
-          <notifications :visible="visibleNotification" />
+          <!-- <notifications :visible="visibleNotification" /> -->
         </div>
       </li>
     </ul>
