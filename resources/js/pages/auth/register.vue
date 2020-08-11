@@ -2,7 +2,7 @@
   <Container>
     <Box title="Zaregistrovat se" class="w-128">
       <Form>
-        <CustomInput
+        <FormInput
           v-model="user.email"
           :error="errors.email"
           label="E-mail"
@@ -10,21 +10,21 @@
           autofocus="true"
           type="email"
         />
-        <CustomInput
+        <FormInput
           v-model="user.phone"
           :error="errors.phone"
           label="Telefonní číslo"
           type="phone"
           name="phone"
         />
-        <CustomInput
+        <FormInput
           v-model="user.password"
           :error="errors.password"
           label="Heslo"
           name="password"
           type="password"
         />
-        <CustomInput
+        <FormInput
           v-model="user.confirm_password"
           :error="errors.confirm_password"
           label="Potvrďte heslo"

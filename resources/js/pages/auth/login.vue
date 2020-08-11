@@ -2,7 +2,7 @@
   <Container>
     <Box title="Přihlásit se" class="w-128">
       <Form :succesMessage="dataSuccessMessage">
-        <CustomInput
+        <FormInput
           v-model="user.username"
           :error="errors.username"
           label="E-mail"
@@ -10,7 +10,7 @@
           autofocus="true"
           type="email"
         />
-        <CustomInput
+        <FormInput
           v-model="user.password"
           :error="errors.password"
           label="Heslo"

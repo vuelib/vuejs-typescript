@@ -58,7 +58,6 @@ export default {
       }
 
       this.layout = layouts[layout];
-      console.log(layout);
     },
   },
 };

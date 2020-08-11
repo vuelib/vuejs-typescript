@@ -15,7 +15,7 @@ export default [
     {
         name: "forgotpassowrd",
         path: "/zapomenute-heslo",
-        component: page("auth/forgotPassowrd.vue"),
+        component: page("auth/password/forgotPassowrd.vue"),
         props: true
     },
     {

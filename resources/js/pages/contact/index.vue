@@ -17,7 +17,7 @@
         class="pt-8 text-2xl text-base font-bold flex items-center justify-center lg:justify-start"
       >Kontaktujte nás</p>
       <Form :onClick="sendEmail" :succesMessage="dataSuccessMessage">
-        <customInput
+        <FormInput
           v-model="contact.email"
           :error="errors.email"
           label="Vaš Email"
@@ -25,20 +25,20 @@
           autofocus="true"
           type="email"
         />
-        <customInput
+        <FormInput
           v-model="contact.reason"
           :error="errors.reason"
           label="Předmět zprávy"
           name="reason"
         />
-        <customTextarea
+        <FormTextarea
           v-model="contact.message"
           :error="errors.message"
           label="Vaše zpráva"
           name="reason"
           :rows="3"
         />
-        <customFormButton name="Kontaktujte nás!!" :loading="loading" :onClick="sendEmail" />
+        <FormButton name="Kontaktujte nás!!" :loading="loading" :onClick="sendEmail" />
       </Form>
     </Box>
   </Container>

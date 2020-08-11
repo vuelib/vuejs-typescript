@@ -2,26 +2,26 @@
   <Container>
     <Box title="Zapomenuté heslo" class="w-128">
       <Form :succesMessage="dataSuccessMessage">
-        <customInput
+        <FormInput
           v-model="user.email"
           :error="errors.email"
           label="Váš E-mail"
           name="email"
           autofocus="true"
         />
-        <customInput
+        <FormInput
           v-model="user.password"
           :error="errors.password"
           label="Nové heslo"
           type="password"
         />
-        <customInput
+        <FormInput
           v-model="user.password_confirmation"
           :error="errors.password_confirmation"
           label="Potvrďte heslo"
           type="password"
         />
-        <customFormButton :onClick="resetPassword" name="Potvrdit heslo" :loading="loading" />
+        <FormButton :onClick="resetPassword" name="Potvrdit heslo" :loading="loading" />
         <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
         <router-link :to="{ name: 'register' }" class="router-link">Registrovat se</router-link>
       </Form>

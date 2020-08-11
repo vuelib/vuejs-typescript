@@ -8,6 +8,7 @@ const requireComponent = require.context(".", false, /\.vue$/)$;
 
 requireComponent.keys().forEach(fileName => {
     if (fileName === "./App.vue") return;
+    if (fileName === "./Footer.vue") return;
     //Get component config
     const componentConfig = requireComponent(fileName);
 

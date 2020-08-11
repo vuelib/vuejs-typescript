@@ -1,20 +1,20 @@
 <template>
-  <Content>
+  <Container>
     <Box title="Zapomenuté heslo" class="w-128">
       <Form :succesMessage="dataSuccessMessage">
-        <customInput
+        <FormInput
           v-model="user.email"
           :error="errors.email"
           label="Váš E-mail"
           name="email"
           autofocus="true"
         />
-        <customFormButton :onClick="forgotPassword" name="Odeslat nové heslo" :loading="loading" />
+        <FormButton :onClick="forgotPassword" name="Odeslat nové heslo" :loading="loading" />
         <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
         <router-link :to="{ name: 'register' }" class="router-link">Registrovat se</router-link>
       </Form>
     </Box>
-  </Content>
+  </Container>
 </template>
 
 <script lang="ts">
