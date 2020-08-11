@@ -13,13 +13,13 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::post('email/resend', 'Auth\VerificationController@resend');
 });
 
-Route::group(['namespace' => 'api'], function () {
+Route::group(['namespace' => 'Api'], function () {
     Route::post('/login', 'AuthController@login');
     Route::post('/register', 'AuthController@register');
     Route::post('contact', 'ContactController@store');
 });
 
-Route::group(['middleware' => 'auth:api', 'namespace' => 'api'], function () {
+Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
     //Users route
     Route::post('change-contact', 'UserController@changeContact');
     Route::post('change-password', 'UserController@changePassword');

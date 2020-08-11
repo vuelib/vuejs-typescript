@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Validator;
 
 
 class AuthController extends Controller

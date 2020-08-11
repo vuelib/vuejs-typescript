@@ -2,14 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "components/defaults.scss";
-@import "components/ares-input";
-@import "components/dropdown_menu.scss";
-@import "components/box";
-@import "components/btn-custom";
-@import "components/input";
-@import "components/loading";
-@import "components/others";
-@import "components/router-link";
-@import "components/sidebar";
-@import "components/theme";
+@import "elements/defaults.scss";
+@import "elements/ares-input";
+@import "elements/dropdown_menu.scss";
+@import "elements/box";
+@import "elements/btn-custom";
+@import "elements/input";
+@import "elements/loading";
+@import "elements/others";
+@import "elements/router-link";
+@import "elements/sidebar";
+@import "elements/theme";

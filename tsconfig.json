@@ -13,14 +13,15 @@
         "sourceMap": true,
         "types": ["node", "webpack-env"]
     },
+    "baseUrl": ".",
     "paths": {
-        "@/*": ["resources/js*"]
+        "@/*": ["resources/js/*"]
     },
     "include": [
         "resources/js/**/*.ts",
         "resources/js/**/*.vue",
         "resources/js/utils/urlSlug.ts"
     ],
-    "files": ["resources/js/typings.d.ts"],
+    "files": ["resources/js/types/typings.d.ts"],
     "exclude": ["node_modules"]
 }
