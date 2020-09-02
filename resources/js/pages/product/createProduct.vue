@@ -2,7 +2,7 @@
   <Content title="Vytvořit produkt">
     <div class="table">
       <Form :succesMessage="successMessage">
-        <customInput
+        <FormInput
           v-model="product.name"
           :error="errors.name"
           label="Název produktu"
@@ -19,7 +19,7 @@
                 v-bind:key="category.id"
                 v-bind:value="category.id"
                 v-for="category in categories"
-              >{{category.name}}</option>
+              >{{ category.name }}</option>
             </select>
             <div
               class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
@@ -37,16 +37,16 @@
             <p
               class="text-red-500 text-xs italname"
               v-if="errors.category_id"
-            >{{errors.category_id[0]}}</p>
+            >{{ errors.category_id[0] }}</p>
           </div>
         </div>
-        <customInput
+        <FormInput
           v-model="product.hmotnost"
           :error="errors.hmotnost"
           label="Gramáž"
           name="hnotnost"
         />
-        <customFormButton :onClick="createProduct" name="Vytvořit produkt" :loading="loading" />
+        <FormButton :onClick="createProduct" name="Vytvořit produkt" :loading="loading" />
       </Form>
     </div>
   </Content>
@@ -57,6 +57,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 @Component({
   name: "createProduct",
+  middleware: ["auth", "admin"],
   computed: mapGetters(["categories"]),
   methods: mapMutations(["fetchCategories"]),
 })
@@ -78,11 +79,7 @@ export default class createProduct extends Vue {
     this.errors = [];
     this.loading = true;
     this.axios
-      .post("/product", this.product, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
+      .post("/product", this.product, {})
       .then((res) => {
         this.loading = false;
         this.successMessage = res.data[0];
@@ -98,5 +95,3 @@ export default class createProduct extends Vue {
   }
 }
 </script>
-
-

@@ -9,7 +9,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   name: "Table",
-  },
 })
 export default class Table extends Vue {
   @Prop({ required: false }) readonly actions!: any;

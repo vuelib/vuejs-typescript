@@ -1,5 +1,5 @@
 <template>
-  <main class="flex justify-center">
+  <main class="flex flex-wrap justify-center">
     <div class="h-full w-full mt-5" v-if="loading">
       <div class="loading"></div>
     </div>
@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
-  name: "box"
+  name: "box",
 })
 export default class Box extends Vue {
   @Prop() readonly title!: String;

@@ -1,10 +1,11 @@
 import Vue from "vue";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
+import { HasError, AlertError, AlertSuccess } from "vform";
 
 // Require in a base component context
 
-const requireComponent = require.context(".", false, /\.vue$/)$;
+const requireComponent = require.context(".", false, /\.vue$/);
 
 requireComponent.keys().forEach(fileName => {
     if (fileName === "./App.vue") return;
@@ -19,4 +20,7 @@ requireComponent.keys().forEach(fileName => {
 
     //Register component globally
     Vue.component(componentName, componentConfig.default || componentConfig);
+    [HasError, AlertError, AlertSuccess].forEach(Component => {
+        Vue.component(Component.name, Component);
+    });
 });

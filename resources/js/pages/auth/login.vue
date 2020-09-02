@@ -1,7 +1,7 @@
 <template>
   <Container>
-    <Box title="Přihlásit se" class="w-128">
-      <Form :succesMessage="dataSuccessMessage">
+    <Box title="Přihlásit se" class="w-full lg:w-1/4">
+      <Form class="text-left mx-auto" :succesMessage="dataSuccessMessage">
         <FormInput
           v-model="user.username"
           :error="errors.username"
@@ -29,6 +29,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   name: "Login",
+  middleware: "guest",
 })
 export default class Login extends Vue {
   @Prop() readonly dataSuccessMessage!: any;
@@ -44,7 +45,7 @@ export default class Login extends Vue {
     this.loading = true;
     this.$store
       .dispatch("retrieveToken", this.user)
-      .then((response) => {
+      .then((res) => {
         this.loading = false;
         this.$router.push({ name: "objednat" });
       })

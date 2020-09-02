@@ -1,5 +1,5 @@
 const requireRoute = require.context(".", false, /.*\.ts$/);
-const routes = [];
+let routes = [];
 requireRoute.keys().forEach(fileName => {
     if (fileName == "./index.ts") return;
     const data = requireRoute(fileName).default;

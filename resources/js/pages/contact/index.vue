@@ -1,6 +1,6 @@
 <template>
   <Container>
-    <Box title="Šotola Miroslav">
+    <Box class="w-full m-0 p-0 lg:w-1/3 mx-auto" title="Šotola Miroslav">
       <p class="pt-4 text-base font-bold flex items-center justify-center lg:justify-start">
         <svg
           class="h-4 fill-current text-darkergreen pr-4"
@@ -16,7 +16,7 @@
       <p
         class="pt-8 text-2xl text-base font-bold flex items-center justify-center lg:justify-start"
       >Kontaktujte nás</p>
-      <Form :onClick="sendEmail" :succesMessage="dataSuccessMessage">
+      <Form class="mx-auto" :succesMessage="dataSuccessMessage">
         <FormInput
           v-model="contact.email"
           :error="errors.email"
@@ -38,7 +38,7 @@
           name="reason"
           :rows="3"
         />
-        <FormButton name="Kontaktujte nás!!" :loading="loading" :onClick="sendEmail" />
+        <FormButton name="Odeslat" :loading="loading" :onClick="sendEmail" />
       </Form>
     </Box>
   </Container>
@@ -48,6 +48,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   name: "sendEmail",
+  middleware: "guest",
 })
 export default class sendEmail extends Vue {
   @Prop() dataSuccessMessage!: any;

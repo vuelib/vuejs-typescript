@@ -1,7 +1,11 @@
 import axios from "axios";
+import * as types from "../mutations-types";
+
 export default {
     state: () => ({
-        orders: [],
+        orders: {
+            data: []
+        },
         order: []
     }),
     getters: {
@@ -16,38 +20,39 @@ export default {
         }
     },
     mutations: {
-        setOrders(state, orders) {
+        [types.FETCH_ORDERS](state, orders) {
             state.orders = orders;
         },
-        setOrder(state, order) {
+        [types.FETCH_ORDER](state, { order }) {
             state.order = order;
         },
-        addOrder(state, order) {
+        [types.ADD_ORDER](state, order) {
             const orders = [order, ...state.orders.data];
+            if (state.orders.data.length === 10) orders.splice(-1);
             state.orders.data = orders;
             state.order = order;
         },
-        confirmOrder(state, order) {
+        [types.CONFIRM_ORDER](state, order) {
             const orders = [...state.orders.data];
             const index = orders.findIndex(o => o.id == order.id);
             orders[index] = order;
             state.orders.data = orders;
-            // state.orders.data.splice(index, 1, state.order);
+            state.order = order;
         },
-        deleteOrder(state, order) {
+        [types.DELETE_ORDER](state, order) {
             const orders = [...state.orders.data];
             const index = orders.findIndex(o => o.id == order.id);
             orders.splice(index, 1);
             state.orders.data = orders;
             state.order = orders;
         },
-        setAmount(state, amount) {
+        [types.SAVE_AMOUNT](state, amount) {
             const amounts = [...state.order.amounts];
             const index = amounts.findIndex(i => i == amount);
             amounts[index] = amount;
             state.order.amounts = amounts;
         },
-        unsetAmount(state, amount) {
+        [types.DELETE_AMOUNT](state, amount) {
             const amounts = [...state.order.amounts];
             const index = amounts.findIndex(i => i == amount);
             amounts.splice(index, 1);
@@ -55,112 +60,64 @@ export default {
         }
     },
     actions: {
-        fetchOrders({ rootState, commit }, page) {
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common["Authorization"] =
-                    "Bearer " + rootState.auth.token;
-
-                axios
-                    .get("/order?page=" + page)
-                    .then(res => {
-                        commit("setOrders", res.data);
-                        resolve(res);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
+        async fetchOrders({ commit }, page) {
+            try {
+                const { data } = await axios.get(`order?page=${page}`);
+                commit(types.FETCH_ORDERS, data);
+            } catch (e) {
+                console.log(e);
+            }
         },
-        fetchOrder({ rootState, commit }, id) {
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common["Authorization"] =
-                    "Bearer " + rootState.auth.token;
-
-                axios
-                    .get(`order/${id}`)
-                    .then(res => {
-                        commit("setOrder", res.data);
-                        resolve(res);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
+        async fetchOrder({ commit }, id) {
+            try {
+                const { data } = await axios.get(`order/${id}`);
+                commit(types.FETCH_ORDER, { order: data });
+            } catch (e) {
+                console.log(e);
+            }
         },
-        addOrder({ rootState, commit }, order) {
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common["Authorization"] =
-                    "Bearer " + rootState.auth.token;
-                axios
-                    .post(`order/`, order)
-                    .then(res => {
-                        commit("addOrder", res.data);
-                        resolve(res.data);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
+        async addOrder({ commit }, order) {
+            try {
+                const { data } = await axios.post("order", order);
+                commit(types.ADD_ORDER, { order: data });
+            } catch (e) {
+                console.log(e);
+            }
         },
-        confirmOrder({ rootState, commit }, order) {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + rootState.auth.token;
-            axios
-                .put(`order/${order.id}/confirm`, order)
-                .then(res => {
-                    commit("setOrder", res.data);
-                    commit("confirmOrder", res.data);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+        async confirmOrder({ commit }, order) {
+            try {
+                const { data: resOrder } = await axios.put(
+                    `order/${order.id}/confirm`,
+                    order
+                );
+                commit(types.CONFIRM_ORDER, resOrder);
+            } catch (e) {
+                console.log(e);
+            }
         },
-        deleteOrder({ rootState, commit }, order) {
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common["Authorization"] =
-                    "Bearer " + rootState.auth.token;
-
-                axios
-                    .delete(`order/${order.id}`)
-                    .then(res => {
-                        commit("deleteOrder", order);
-                        resolve(res);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
+        async deleteOrder({ commit }, order) {
+            try {
+                await axios.delete(`amount/${order.id}`);
+                commit(types.DELETE_ORDER, order);
+            } catch (e) {
+                console.log(e);
+            }
         },
-        updateAmount({ rootState, commit }, amount) {
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common["Authorization"] =
-                    "Bearer " + rootState.auth.token;
-                axios
-                    .put(`amount/${amount.id}`, amount)
-                    .then(res => {
-                        commit("setAmount", amount);
-                        resolve(res);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
+        async updateAmount({ commit }, amount) {
+            try {
+                const { data } = await axios.put(`amount/${amount.id}`, amount);
+                commit(types.SAVE_AMOUNT, data);
+            } catch (e) {
+                console.log(e);
+            }
         },
-        deleteAmount({ rootState, commit }, amount) {
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common["Authorization"] =
-                    "Bearer " + rootState.auth.token;
-
-                axios
-                    .delete(`amount/${amount.id}`)
-                    .then(res => {
-                        commit("unsetAmount", amount);
-                        resolve(res);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
+        async deleteAmount({ commit }, amount) {
+            try {
+                await axios.delete(`amount/${amount.id}`);
+                commit(types.DELETE_AMOUNT, amount);
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 };

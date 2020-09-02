@@ -5,10 +5,7 @@
       v-if="errors.amounts"
     >{{ errors.amounts }}</div>
     <div class="table w-full">
-      <h4
-        class="text-xl font-semibold cursor-pointer text-junglegreen"
-        v-on:click="collapsed = !collapsed"
-      >Zvolené produkty</h4>
+      <h4 v-on:click="collapsed = !collapsed">Zvolené produkty</h4>
       <Table
         v-show="!collapsed"
         :columns="columns"
@@ -73,31 +70,16 @@ export default class orderTable extends Vue {
   public collapsed?: Boolean = false;
 
   get menuItems(): HTMLElement {
+    //@ts-ignore
     return document.querySelectorAll(".products-inputs input");
   }
-  focusedIndex = 0;
-  columns: any = [
+  focusedIndex: Number = 0;
+  columns: Object = [
     { path: "id", label: "Číslo produktu" },
     { path: "name", label: "Název" },
     { path: "value", label: "Množství" },
   ];
 
-  columnsProduct: any = [
-    { path: "id", label: "Číslo produktu" },
-    { path: "name", label: "Název" },
-    {
-      key: "value",
-      comp: {
-        component: customInput,
-        props: (product) => {
-          return {
-            ":value": product.value,
-            name: product.name,
-          };
-        },
-      },
-    },
-  ];
   sortColumn?: any = { path: "id", order: "asc" };
 
   handleSortOrders = (sortColumn) => {
@@ -105,24 +87,31 @@ export default class orderTable extends Vue {
   };
   handleSortProducts = (sortColumn) => {
     console.log(sortColumn);
-    // this.sortColumn = sortColumn;
+    this.sortColumn = sortColumn;
   };
 
   focusPrevious(isArrowKey) {
+    //@ts-ignore
     this.focusedIndex = this.focusedIndex - 1;
     if (isArrowKey) {
       this.focusItem();
     }
   }
   focusNext(isArrowKey) {
+    //@ts-ignore
     this.focusedIndex = this.focusedIndex + 1;
     if (isArrowKey) {
       this.focusItem();
     }
   }
   focusItem() {
-    if (this.focusedIndex < 0 || this.focusedIndex > this.menuItems.length - 1)
+    if (
+      this.focusedIndex < 0 ||
+      //@ts-ignore
+      this.focusedIndex > this.menuItems.length - 1
+    )
       return;
+    //@ts-ignore
     this.menuItems[this.focusedIndex].focus();
   }
 }

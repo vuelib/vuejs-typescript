@@ -35,6 +35,6 @@ export default [
     {
         name: "logout",
         path: "/logout",
-        component: page("auth/Logout.vue")
+        component: page("auth/logout.vue")
     }
 ];

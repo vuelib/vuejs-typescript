@@ -1,5 +1,6 @@
 import _ from "lodash";
 import axios from "axios";
+import * as types from "../mutations-types";
 export default {
     state: () => ({
         categories: [],
@@ -14,20 +15,20 @@ export default {
         }
     },
     mutations: {
-        setCategories(state, categories) {
+        [types.FETCH_CATEGORIES](state, categories) {
             state.categories = categories;
         },
-        setCategory(state, category) {
+        [types.FETCH_CATEGORY](state, category) {
             state.category = category;
         },
-        filterCategory(state, sortColumn) {
+        [types.FILTER_CATEGORY](state, sortColumn) {
             state.category = _.orderBy(
                 state.category,
                 [sortColumn.path],
                 [sortColumn.order]
             );
         },
-        deleteCategory(state, id) {
+        [types.DELETE_CATEGORY](state, id) {
             const index = state.categories.findIndex(item => item.id == id);
             state.categories.splice(index, 1);
         }
@@ -35,25 +36,15 @@ export default {
     actions: {
         async fetchCategories({ commit }) {
             let res = await axios.get(`category`);
-            commit("setCategories", res.data);
+            commit(types.FETCH_CATEGORIES, res.data);
         },
         async fetchCategory({ commit }, id) {
             let res = await axios.get(`category/${id}`);
-            commit("setCategory", res.data);
+            commit(types.FETCH_CATEGORY, res.data);
         },
-
-        deleteCategory({ rootState, commit }, id) {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + rootState.auth.token;
-
-            axios
-                .delete(`category/${id}`)
-                .then(response => {
-                    commit("deleteCategory", id);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+        async deleteCategory({ rootState, commit }, id) {
+            let res = await axios.delete(`category/${id}`);
+            commit(types.DELETE_CATEGORY, id);
         }
     }
 };

@@ -3,23 +3,23 @@
     <div class="table mt-3 w-1/3">
       <Content title="Přidat fakturační údaje">
         <Form :succesMessage="dataSuccessMessage" v-if="aresData.ic === ''">
-          <customInput v-model="user.ic" :error="errors.ic" label="IČ" name="ic" autofocus="true" />
-          <customFormButton :onClick="addInvoice" name="Zadejte Ič" :loading="loading" />
+          <FormInput v-model="user.ic" :error="errors.ic" label="IČ" name="ic" autofocus="true" />
+          <FormButton :onClick="addInvoice" name="Zadejte Ič" :loading="loading" />
         </Form>
         <Form v-else :succesMessage="dataSuccessMessage">
-          <customInput v-model="aresData.ic" :error="errors.ic" label="IČ" name="ic" />
-          <customInput
+          <FormInput v-model="aresData.ic" :error="errors.ic" label="IČ" name="ic" />
+          <FormInput
             v-show="aresData.dic"
             v-model="aresData.dic"
             :error="errors.dic"
             label="DIČ"
             name="ic"
           />
-          <customInput v-model="aresData.nazev" :error="errors.nazev" label="Jmébo" name="nazev" />
-          <customInput v-model="aresData.ulice" :error="errors.ulice" label="Ulice" name="ulice" />
-          <customInput v-model="aresData.mesto" :error="errors.mesto" label="Město" name="mesto" />
-          <customInput v-model="aresData.psc" :error="errors.psc" label="PSČ" name="psc" />
-          <customFormButton :onClick="addInvoice" name="Potvrdte IČ" :loading="loading" />
+          <FormInput v-model="aresData.nazev" :error="errors.nazev" label="Jmébo" name="nazev" />
+          <FormInput v-model="aresData.ulice" :error="errors.ulice" label="Ulice" name="ulice" />
+          <FormInput v-model="aresData.mesto" :error="errors.mesto" label="Město" name="mesto" />
+          <FormInput v-model="aresData.psc" :error="errors.psc" label="PSČ" name="psc" />
+          <FormButton :onClick="addInvoice" name="Potvrdte IČ" :loading="loading" />
         </Form>
       </Content>
     </div>
@@ -30,6 +30,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   name: "addInvoice",
+  middleware: "auth",
 })
 export default class addInvoice extends Vue {
   @Prop() readonly dataSuccessMessage!: any;
@@ -58,11 +59,7 @@ export default class addInvoice extends Vue {
   }
   sendData(url, data, then) {
     this.axios
-      .post(url, data, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
+      .post(url, data)
       .then((res) => {
         if (then) {
           this.edit = false;

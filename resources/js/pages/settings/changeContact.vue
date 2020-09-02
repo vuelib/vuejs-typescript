@@ -2,15 +2,15 @@
   <Content title="Změna kontaktních údajů">
     <div class="table">
       <Form :succesMessage="successMessage">
-        <customInput
+        <FormInput
           v-model="user.phone"
           :error="errors.phone"
           label="Telefonní číslo"
           name="phone"
           autofocus="true"
         />
-        <customInput v-model="user.password" :error="errors.password" label="Heslo" name="ic" />
-        <customFormButton :onClick="changePhone" name="Změnit údaje" :loading="loading" />
+        <FormInput v-model="user.password" :error="errors.password" label="Heslo" name="ic" />
+        <FormButton :onClick="changePhone" name="Změnit údaje" :loading="loading" />
       </Form>
     </div>
   </Content>
@@ -20,6 +20,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   name: "Login",
+  middleware: "auth",
 })
 export default class Login extends Vue {
   @Prop() successMessage!: any;
@@ -35,11 +36,7 @@ export default class Login extends Vue {
     this.errors = [];
     this.loading = true;
     this.axios
-      .post("/change-contact", this.user, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
+      .post("/change-contact", this.user, {})
       .then((response) => {
         this.loading = false;
         this.successMessage = "Úspěšně jste změnili heslo";

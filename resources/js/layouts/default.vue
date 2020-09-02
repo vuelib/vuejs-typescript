@@ -1,9 +1,7 @@
 <template>
   <div :class="theme">
     <Navbar />
-    <div class="container mx-auto">
-      <child />
-    </div>
+    <Child />
     <Footer />
   </div>
 </template>
@@ -21,12 +19,6 @@ export default {
     theme() {
       return this.$store.getters.theme;
     },
-    loggedIn() {
-      return this.$store.getters.loggedIn;
-    },
   },
-  created() {
-    if(this.loggedIn) this.$store.dispatch('getUser')
-  }
 };
 </script>

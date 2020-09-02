@@ -1,8 +1,8 @@
 import store from "../state";
 
 export default (to, from, next) => {
-    if (store.getters["auth/user"].role !== "admin") {
-        next({ name: "home" });
+    if (store.getters["user"].role.name !== "admin") {
+        next({ name: "Home" });
     } else {
         next();
     }

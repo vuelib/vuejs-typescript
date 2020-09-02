@@ -2,7 +2,7 @@
   <Content title="Upravit kategorii">
     <div class="table">
       <Form :succesMessage="successMessage" enctype="multipart/form-data">
-        <customInput
+        <FormInput
           v-model="category.name"
           :error="errors.name"
           label="Název kategorie"
@@ -13,10 +13,10 @@
           <div class="w-full px-3">
             <label class="ares-label" for="name">Obrázek kategorie</label>
             <input @change="processFile($event)" type="file" />
-            <p class="text-red-500 text-xs italname" v-if="errors.image">{{errors.image[0]}}</p>
+            <p class="text-red-500 text-xs italname" v-if="errors.image">{{ errors.image[0] }}</p>
           </div>
         </div>
-        <customFormButton :onClick="editCategory" name="Upravit kategorii" :loading="loading" />
+        <FormButton :onClick="editCategory" name="Upravit kategorii" :loading="loading" />
       </Form>
     </div>
   </Content>
@@ -27,6 +27,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 @Component({
   name: "editCategory",
+  middleware: ["auth", "admin"],
   computed: mapGetters(["category"]),
   methods: mapMutations(["fetchCategory"]),
 })
@@ -56,7 +57,6 @@ export default class editCategory extends Vue {
         headers: {
           "Content-Type":
             "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
       .then((response) => {
@@ -74,5 +74,3 @@ export default class editCategory extends Vue {
   }
 }
 </script>
-
-

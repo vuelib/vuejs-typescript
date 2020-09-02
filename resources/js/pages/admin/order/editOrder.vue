@@ -23,8 +23,13 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
+import {
+  FETCH_CATEGORY,
+  FILTER_PRODUCTS,
+} from "../../../state/mutations-types";
 @Component({
   name: "editOrder",
+  middleware: ["auth", "admin"],
   computed: mapGetters(["category"]),
   methods: mapMutations(["fetchCategories", "fetchProducts"]),
 })
@@ -100,7 +105,7 @@ export default class editOrder extends Vue {
     await this.$store.dispatch("fetchOrder", this.$route.params.idc);
     await this.$store.dispatch("fetchCategories");
     await this.$store.dispatch("fetchProducts");
-    await this.$store.commit("setCategory", {
+    await this.$store.commit(FETCH_CATEGORY, {
       name: "Všechny produkty",
       _key: "",
     });
@@ -108,8 +113,8 @@ export default class editOrder extends Vue {
   }
 
   handleSelectCategory = (category) => {
-    this.$store.commit("setCategory", category);
-    this.$store.commit("filterProducts", category);
+    this.$store.commit(FETCH_CATEGORY, category);
+    this.$store.commit(FILTER_PRODUCTS, category);
   };
 
   editOrder() {
@@ -120,15 +125,10 @@ export default class editOrder extends Vue {
       return;
     }
     this.axios
-      .put(
-        `/order/${this.$route.params.idc}`,
-        { amounts: this.amounts, delete: this.filteredOrder },
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
+      .put(`/order/${this.$route.params.idc}`, {
+        amounts: this.amounts,
+        delete: this.filteredOrder,
+      })
       .then((res) => {
         this.loading = false;
         this.$router.push({
@@ -142,7 +142,11 @@ export default class editOrder extends Vue {
           const errors = error.response.data.errors;
           for (error in errors) {
             let index = `${error}`.split(`amounts.`)[1].split(".value")[0];
-            let e: any = { ...this.amounts[index], error: errors[error][0] };
+            let e: any = {
+              ...this.amounts[index],
+              error: errors[error][0],
+            };
+            //@ts-ignore
             newErrors[e.id] = e;
           }
           newErrors["amounts"] = "Množství musí obsahovat pouze číslice.";

@@ -25,33 +25,31 @@ axios.interceptors.response.use(
     error => {
         const { status } = error.response;
 
-        if (status >= 500) {
-            Swal.fire({
-                type: "error",
-                title: "alert_title",
-                text: "error_alert_text",
-                reverseButtons: true,
-                confirmButtonText: "ok",
-                cancelButtonText: "zrusit"
-            });
-        }
+        // if (status >= 500) {
+        //     Swal.fire({
+        //         type: "error",
+        //         title: "alert_title",
+        //         text: "error_alert_text",
+        //         reverseButtons: true,
+        //         confirmButtonText: "ok",
+        //         cancelButtonText: "zrusit"
+        //     });
+        // }
 
-        if (status === 401 && store.getters["auth/check"]) {
-            Swal.fire({
-                type: "warning",
-                title: "test",
-                text: "test",
-                reverseButtons: true,
-                confirmButtonText: "ok",
-                cancelButtonText: "zrusit"
-            }).then(() => {
-                store.commit("auth/LOGOUT");
+        // if (status === 401 && store.getters["auth/check"]) {
+        //     Swal.fire({
+        //         type: "warning",
+        //         title: "test",
+        //         text: "test",
+        //         reverseButtons: true,
+        //         confirmButtonText: "ok",
+        //         cancelButtonText: "zrusit"
+        //     }).then(() => {
+        //         store.commit("logout");
 
-                router.push({ name: "login" });
-            });
-        }
-
-        console.log("error", error);
+        //         router.push({ name: "login" });
+        //     });
+        // }
 
         return Promise.reject(error);
     }

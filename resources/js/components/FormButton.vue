@@ -1,7 +1,7 @@
 <template>
   <button @click.prevent="onClick" :disabled="loading" :class="classType" type="submit">
-    <span class="pl-2">
-      <i v-show="loading" class="fa fa-spinner fa-spin"></i>
+    <span>
+      <i v-show="loading" class="fa fa-spinner fa-spin pr-2"></i>
       {{name}}
     </span>
   </button>

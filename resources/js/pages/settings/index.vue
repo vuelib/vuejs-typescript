@@ -1,9 +1,7 @@
 <template>
   <Container :loading="loadComponent">
     <Sidebar name="Nastavení" :items="links" type="name" :renderHTML="renderHTML" :param="setParam"></Sidebar>
-    <transition mode="out-in" name="component-fade">
-      <router-view />
-    </transition>
+    <Child />
   </Container>
 </template>
 <script lang="ts">
@@ -11,6 +9,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 @Component({
   name: "allOrders",
+  middleware: "auth",
 })
 export default class allOrders extends Vue {
   @Prop() successMessage?: String;
@@ -18,7 +17,7 @@ export default class allOrders extends Vue {
   loadComponent?: Boolean = false;
 
   links?: any = [
-    { name: "Změnit kontaktní údaje", link: "ChangeContact" },
+    // { name: "Změnit kontaktní údaje", link: "ChangeContact" },
     { name: "Změnit heslo", link: "ChangePassword" },
     { name: "Odhlásit se", link: "logout" },
   ];

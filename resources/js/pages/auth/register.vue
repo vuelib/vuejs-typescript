@@ -1,37 +1,37 @@
 <template>
   <Container>
-    <Box title="Zaregistrovat se" class="w-128">
-      <Form>
+    <Box title="Zaregistrovat se" class="w-full lg:w-1/4">
+      <Form class="text-left mx-auto">
         <FormInput
-          v-model="user.email"
-          :error="errors.email"
+          :form="form"
+          v-model="form.email"
           label="E-mail"
           name="email"
           autofocus="true"
           type="email"
         />
         <FormInput
-          v-model="user.phone"
-          :error="errors.phone"
+          :form="form"
+          v-model="form.phone"
           label="Telefonní číslo"
           type="phone"
           name="phone"
         />
         <FormInput
-          v-model="user.password"
-          :error="errors.password"
+          :form="form"
+          v-model="form.password"
           label="Heslo"
           name="password"
           type="password"
         />
         <FormInput
-          v-model="user.confirm_password"
-          :error="errors.confirm_password"
+          :form="form"
+          v-model="form.confirm_password"
           label="Potvrďte heslo"
           name="confirm_password"
           type="password"
         />
-        <FormButton :onClick="register" name="Registrovat se" :loading="loading" />
+        <FormButton :onClick="register" name="Registrovat se" :loading="form.busy" />
         <router-link :to="{ name: 'login' }" class="router-link">Přihlásit se</router-link>
         <router-link :to="{ name: 'forgotpassowrd' }" class="router-link">Zapomněli jste heslo?</router-link>
       </Form>
@@ -41,37 +41,27 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import Form from "vform";
 
 @Component({
   name: "Register",
+  middleware: "guest",
 })
 export default class Register extends Vue {
-  private user = {
+  private form = new Form({
     phone: "",
     email: "",
     password: "",
     confirm_password: "",
-  };
-  private errors = {};
-  private loading?: Boolean = false;
+  });
 
-  register() {
-    this.$store
-      .dispatch("register", this.user)
-      .then((response) => {
-        this.loading = false;
-        let successMessage = "Úspěšně jste byly zaregistrováni";
-        this.$router.push({
-          name: "login",
-          params: { dataSuccessMessage: successMessage },
-        });
-      })
-      .catch((error) => {
-        if (error.response.status == 422) {
-          this.errors = error.response.data.errors;
-        }
-        this.user.password = "";
-      });
+  async register() {
+    const { data } = await this.form.post("register");
+    let successMessage = "Úspěšně jste byly zaregistrováni";
+    this.$router.push({
+      name: "login",
+      params: { dataSuccessMessage: successMessage },
+    });
   }
 }
 </script>

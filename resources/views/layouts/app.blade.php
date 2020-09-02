@@ -15,6 +15,7 @@ $config = [
     <meta name="author" content="Kudlicka Tomas">
     <title>{{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 </head>
 <body>
 <div id="app">

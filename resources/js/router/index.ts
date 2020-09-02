@@ -4,12 +4,13 @@ import Meta from "vue-meta";
 import routes from "./routes";
 import Router from "vue-router";
 import { sync } from "vuex-router-sync";
+import { fromPairs } from "lodash";
 
 Vue.use(Meta);
 Vue.use(Router);
 
 // The middleware for every page of the application.
-const globalMiddleware = [];
+const globalMiddleware = ["check-auth"];
 
 // Load middleware modules dynamically.
 const routeMiddleware = resolveMiddleware(
@@ -35,6 +36,7 @@ function createRouter() {
     });
 
     router.beforeEach(beforeEach);
+    //@ts-ignore
     router.afterEach(afterEach);
 
     return router;
@@ -69,6 +71,7 @@ async function beforeEach(to, from, next) {
 
     // Start the loading bar.
     if (components[components.length - 1].loading !== false) {
+        //@ts-ignore
         router.app.$nextTick(() => router.app.$loading.start());
     }
 
@@ -79,6 +82,7 @@ async function beforeEach(to, from, next) {
     callMiddleware(middleware, to, from, (...args) => {
         // Set the application layout only if "next()" was called with no args.
         if (args.length === 0) {
+            //@ts-ignore
             router.app.setLayout(components[0].layout || "");
         }
 
@@ -95,7 +99,7 @@ async function beforeEach(to, from, next) {
  */
 async function afterEach(to, from, next) {
     await router.app.$nextTick();
-
+    //@ts-ignore
     router.app.$loading.finish();
 }
 
@@ -114,6 +118,7 @@ function callMiddleware(middleware, to, from, next) {
         // Stop if "_next" was called with an argument or the stack is empty.
         if (args.length > 0 || stack.length === 0) {
             if (args.length > 0) {
+                //@ts-ignore
                 router.app.$loading.finish();
             }
 
@@ -158,15 +163,17 @@ function getMiddleware(components) {
     const middleware = [...globalMiddleware];
 
     components
-        .filter(c => c.middleware)
+        .filter(c => c.options)
+        .filter(c => c.options.middleware)
         .forEach(component => {
-            if (Array.isArray(component.middleware)) {
-                middleware.push(...component.middleware);
+            if (Array.isArray(component.options.middleware)) {
+                middleware.push(...component.options.middleware);
             } else {
-                middleware.push(component.middleware);
+                middleware.push(component.options.middleware);
             }
         });
 
+    console.log("all", middleware);
     return middleware;
 }
 
@@ -191,6 +198,7 @@ function scrollBehavior(to, from, savedPosition) {
 
     const [component] = router.getMatchedComponents({ ...to }).slice(-1);
 
+    //@ts-ignore
     if (component && component.scrollToTop === false) {
         return {};
     }

@@ -9,12 +9,16 @@
       type="name"
       :param="setParam"
     >
-      <router-link :to="{ name: 'addOrder'}" class="link text-center">
+      <router-link :to="{ name: 'addOrder' }" class="link text-center">
         <i class="fas fa-plus"></i> Přidat
       </router-link>
       <div v-show="orders == ''">Nemáte žádné objednávky</div>
     </Sidebar>
-    <Content :title="`Uživatel ${user.invoice ? user.invoice.nazev : user.email}`">
+    <Content
+      :title="
+                `Uživatel  <span class='text-junglegreen'>${user.invoice ? user.invoice.nazev : user.email} </span>`
+            "
+    >
       <div class="pb-3 pl-3">
         <button
           v-if="!user.invoice"
@@ -39,8 +43,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
+import userDetails from "../../order/userDetails.vue";
 @Component({
   name: "userProfile",
+  middleware: ["auth", "admin"],
+  components: {
+    userDetails,
+  },
 })
 export default class userProfile extends Vue {
   @Prop() successMessage?: String;

@@ -30,8 +30,14 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
+import {
+  FETCH_CATEGORY,
+  FILTER_PRODUCTS,
+  ADD_ORDER,
+} from "../../../state/mutations-types";
 @Component({
   name: "addOrder",
+  middleware: ["auth", "admin"],
   computed: mapGetters(["category"]),
   methods: mapMutations(["fetchCategories", "fetchProducts"]),
 })
@@ -76,7 +82,7 @@ export default class addOrder extends Vue {
     this.loadComponent = true;
     await this.$store.dispatch("fetchCategories");
     await this.$store.dispatch("fetchProducts");
-    await this.$store.commit("setCategory", {
+    await this.$store.commit(FETCH_CATEGORY, {
       name: "Všechny produkty",
       _key: "",
     });
@@ -85,48 +91,75 @@ export default class addOrder extends Vue {
 
   handleSelectCategory = (category) => {
     this.search = "";
-    this.$store.commit("setCategory", category);
-    this.$store.commit("filterProducts", category);
+    this.$store.commit(FETCH_CATEGORY, category);
+    this.$store.commit(FILTER_PRODUCTS, category);
   };
-  addOrder() {
+  async addOrder() {
     this.errors = [];
     this.loading = true;
     if (this.orders.length === 0) {
       this.errors["amounts"] = "Nemáte vybrané žádné produkty.";
       return;
     }
-    this.loading = true;
-    this.$store
-      .dispatch("addOrder", {
+    try {
+      const { data: order } = await this.axios.post("order", {
         amounts: this.orders,
         user_id: this.$route.params.id,
-      })
-      .then((order) => {
-        this.loading = false;
-        this.$router
-          .push({
-            name: "showOrder",
-            params: { idc: order.id },
-          })
-          .catch((error) => {
-            console.log(error);
-            if (error.response.status == 422) {
-              const newErrors = [];
-              const errors = error.response.data.errors;
-              for (error in errors) {
-                let index = `${error}`.split(`amounts.`)[1].split(".value")[0];
-                let e: any = {
-                  ...this.orders[index],
-                  error: errors[error][0],
-                };
-                newErrors[e.id] = e;
-              }
-              newErrors["amounts"] = "Množství musí obsahovat pouze číslice.";
-              this.errors = newErrors;
-            }
-            this.loading = false;
-          });
       });
+      this.$store.commit(ADD_ORDER, { order });
+      this.$router.push({
+        name: "showOrder",
+        params: { idc: order.id },
+      });
+    } catch (error) {
+      if (error.response.status == 422) {
+        const newErrors = [];
+        const errors = error.response.data.errors;
+        for (error in errors) {
+          let index = `${error}`.split(`amounts.`)[1].split(".value")[0];
+          let e: any = {
+            ...this.orders[index],
+            error: errors[error][0],
+          };
+          //@ts-ignore
+          newErrors[e.id] = e;
+        }
+        newErrors["amounts"] = "Množství musí obsahovat pouze číslice.";
+        this.errors = newErrors;
+      }
+      this.loading = false;
+    }
   }
+  // this.$store
+  //   .dispatch("addOrder", {
+  //     amounts: this.orders,
+  //     user_id: this.$route.params.id,
+  //   })
+  //   .then((order) => {
+  //     this.loading = false;
+  //   this.$router
+  //     .push({
+  //       name: "showOrder",
+  //       params: { idc: order.id },
+  //     })
+  //       .catch((error) => {
+  //         if (error.response.status == 422) {
+  //           const newErrors = [];
+  //           const errors = error.response.data.errors;
+  //           for (error in errors) {
+  //             let index = `${error}`.split(`amounts.`)[1].split(".value")[0];
+  //             let e: any = {
+  //               ...this.orders[index],
+  //               error: errors[error][0],
+  //             };
+  //             //@ts-ignore
+  //             newErrors[e.id] = e;
+  //           }
+  //           newErrors["amounts"] = "Množství musí obsahovat pouze číslice.";
+  //           this.errors = newErrors;
+  //         }
+  //         this.loading = false;
+  //       });
+  //   });
 }
 </script>

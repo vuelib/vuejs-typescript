@@ -1,23 +1,48 @@
 <template>
   <aside class="sidebar">
-    <div class="flex">
-      <div class="name w-4/6 md:w-full pt-2 md:pt-0">{{ name }}</div>
-    </div>
-    <div class="menu block">
-      <slot />
-      <div v-if="routerLink === true">
-        <router-link
-          v-for="item in items"
-          v-bind:key="item[_key]"
-          class="link block"
-          :to="param(item)"
-        >
-          <span v-html="renderHTML(item)">{{ item[type] }}</span>
-        </router-link>
+    <div class="name flex justify-center">
+      {{ name }}
+      <div class="block ml-2 md:hidden" @click="visible = !visible">
+        <i class="text-black cursor-pointer fa fa-bars"></i>
       </div>
-      <div v-else>
-        <div v-bind:key="item[_key]" v-for="item in items">
-          <div class="link" v-on:click="onSelect(item)">{{ item[type] }}</div>
+    </div>
+    <div class="block md:hidden">
+      <div v-show="visible" class="absolute h-screen bg-black top-0 right-0 opacity-75">
+        <slot />
+        <div v-if="routerLink === true" @click="visible = !visible">
+          <router-link
+            v-for="item in items"
+            v-bind:key="item[_key]"
+            class="link block"
+            :to="param(item)"
+          >
+            <span class v-html="renderHTML(item)">{{ item[type] }}</span>
+          </router-link>
+        </div>
+        <div v-else>
+          <div v-bind:key="item[_key]" v-for="item in items">
+            <div class="link" v-on:click="onSelect(item)">{{ item[type] }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hidden md:block">
+      <div class="menu">
+        <slot />
+        <div v-if="routerLink === true">
+          <router-link
+            v-for="item in items"
+            v-bind:key="item[_key]"
+            class="link block"
+            :to="param(item)"
+          >
+            <span class v-html="renderHTML(item)">{{ item[type] }}</span>
+          </router-link>
+        </div>
+        <div v-else>
+          <div v-bind:key="item[_key]" v-for="item in items">
+            <div class="link" v-on:click="onSelect(item)">{{ item[type] }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -39,5 +64,6 @@ export default class Sidebar extends Vue {
   @Prop() readonly onSelect?: Function;
   @Prop() readonly renderHTML?: Function;
   @Prop() param?: Function;
+  public visible = false;
 }
 </script>

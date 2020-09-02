@@ -3,11 +3,11 @@
 </template>
 
 <script>
-    export default {
-        created() {
-            this.$store.dispatch("destroyToken").then(response => {
-                this.$router.push({name: "home"});
-            });
-        }
-    };
+export default {
+    created() {
+        this.$store.dispatch("logout").then(response => {
+            this.$router.push({ name: "Home" });
+        });
+    }
+};
 </script>

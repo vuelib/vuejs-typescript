@@ -7,42 +7,47 @@
       :renderHTML="renderHTML"
       v-if="!['zbozi'].includes($route.name)"
     />
-    <div v-else class="container justify-center flex flex-wrap mt-5">
+    <div v-else class="container mt-5">
       <div
         class="bg-primary w-full border-t border-b text-center border-junglegreen text-success md:px-4 md:py-3"
         v-if="successMessage"
       >
         <p class="font-bold">{{ successMessage }}</p>
       </div>
-      <div class="w-full md:w-1/4 m-2" v-bind:key="category.id" v-for="category in categories">
-        <div class="relative w-30 h-30">
-          <router-link
-            :to="{
+      <div class="m-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div
+          class="w-full m-0 md:m-2 lg:m-2"
+          v-bind:key="category.id"
+          v-for="category in categories"
+        >
+          <div class="relative">
+            <router-link
+              :to="{
                 name: 'category_show',
                 params: {
                     id: category.id,
                     slug: setSlug(category.name)
                 }
-              }"
-            class
-          >
-            <div class="w-full h-full absolute bg-black opacity-0 hover:opacity-0 cursor-pointer"></div>
-            <div class="text-xl text-junglegreen font-bold">{{ category.name }}</div>
-            <img :src="`/storage/${category.imagePath}`" />
-          </router-link>
-        </div>
-        <div v-show="loggedIn">
-          <router-link
-            :to="{
+            }"
+            >
+              <div class="w-full h-full absolute bg-black opacity-0 hover:opacity-0 cursor-pointer"></div>
+              <div class="lg:text-xl lg text-secondary font-bold">{{ category.name }}</div>
+              <img class="object-cover h-64 w-full" :src="`/storage/${category.imagePath}`" />
+            </router-link>
+          </div>
+          <div v-show="loggedIn && admin">
+            <router-link
+              :to="{
                             name: 'editCategory',
                             params: { id: category.id }
                         }"
-            class="btn-edit w-full inline-block text-center"
-          >Upravit</router-link>
-          <a
-            @click="deleteCategory(category.id)"
-            class="btn-delete w-full inline-block text-center"
-          >Odstranit</a>
+              class="btn-edit w-full inline-block text-center"
+            >Upravit</router-link>
+            <a
+              @click="deleteCategory(category.id)"
+              class="btn-delete w-full inline-block text-center"
+            >Odstranit</a>
+          </div>
         </div>
       </div>
     </div>
@@ -54,10 +59,10 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
-import { urlSlug } from "../../utils/urlSlug";
+const { urlSlug } = require("../../utils/urlSlug");
 @Component({
   name: "AllCategories",
-  computed: mapGetters(["categories", "loggedIn"]),
+  computed: mapGetters(["categories", "loggedIn", "admin"]),
   methods: mapMutations(["fetchCategories"]),
 })
 export default class AllCategories extends Vue {
@@ -68,12 +73,12 @@ export default class AllCategories extends Vue {
     this.$store.dispatch("fetchCategories");
   }
 
-  setParam = (category) => {
+  setParam = ({ id, name }) => {
     return {
       name: "category_show",
       params: {
-        id: category.id,
-        slug: this.setSlug(category.name),
+        id,
+        slug: this.setSlug(name),
       },
     };
   };

@@ -1,7 +1,7 @@
 <template>
   <div class="lg:min-w-130">
     <div class="header">
-      <h3>{{title}}</h3>
+      <h3 v-html="title"></h3>
     </div>
     <div class="flex flex-wrap">
       <div class="w-full">

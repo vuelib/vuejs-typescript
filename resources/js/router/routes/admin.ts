@@ -3,7 +3,7 @@ export default [
     {
         name: "admin",
         path: "/upravy",
-        component: page("/admin/index.vue"),
+        component: page("admin/index.vue"),
         children: [
             {
                 name: "createCategory",

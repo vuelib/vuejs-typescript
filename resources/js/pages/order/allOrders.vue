@@ -15,9 +15,7 @@
         <pagination :items="orders" />
       </template>
     </Sidebar>
-    <transition mode="out-in" name="component-fade">
-      <router-view />
-    </transition>
+    <router-view :key="$route.fullPath"></router-view>
   </Container>
 </template>
 <script lang="ts">
@@ -25,18 +23,12 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 @Component({
   name: "allOrders",
+  middleware: ["auth", "customer"],
   computed: mapGetters(["orders"]),
   methods: mapMutations(["fetchOrders"]),
 })
 export default class allOrders extends Vue {
-  @Prop() successMessage?: String;
-  errors!: [];
   loadComponent?: Boolean = false;
-
-  get orders() {
-    const order = this.$store.getters.orders;
-    return order;
-  }
 
   renderHTML = (order) => {
     const className = order.status == "rozpracovaná" ? "fa-pen" : "fa-check";
@@ -56,10 +48,7 @@ export default class allOrders extends Vue {
     this.loadComponent = true;
     this.$store
       .dispatch("fetchOrders", 1)
-      .then((res) => (this.loadComponent = false))
-      .catch((error) => {
-        console.log(error);
-      });
+      .then((res) => (this.loadComponent = false));
   }
 }
 </script>

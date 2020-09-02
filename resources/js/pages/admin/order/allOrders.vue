@@ -37,6 +37,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 @Component({
   name: "allOrders",
+  middleware: ["auth", "admin"],
 })
 export default class allOrders extends Vue {
   get allOrders() {
@@ -54,7 +55,7 @@ export default class allOrders extends Vue {
         content: (order) => {
           const className =
             order.status == "rozpracovaná" ? "fa-pen" : "fa-check";
-          const html = ` 
+          const html = `
              <i class="fas ${className}"></i>`;
           return html;
         },
@@ -79,7 +80,6 @@ export default class allOrders extends Vue {
   ];
   sortColumn?: any = { path: "id", order: "asc" };
   handleSort = (sortColumn) => {
-    console.log(sortColumn);
     this.sortColumn = sortColumn;
   };
   created() {

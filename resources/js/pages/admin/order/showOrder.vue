@@ -1,8 +1,10 @@
 <template>
-  <Content :title="`Objednávka č. ${order.id}`">
+  <Content
+    :title="`Objednávka č. <span class='text-junglegreen'> ${order.id} </span> ${order.status === 'potvrzena' ? 'je potvrzena' : ''}`"
+  >
     <tableOrderList :loading="loadComponenct" />
     <div class="table w-full mt-5">
-      <customTextarea
+      <FormTextarea
         v-if="order.status === 'rozpracovaná'"
         v-model="order.description"
         :error="errors.description"
@@ -12,24 +14,24 @@
       />
       <div v-else v-show="order.description" class="p-3">
         <span class="font-bold">Poznámka:</span>
-        {{order.description}}
+        {{ order.description }}
       </div>
       <div class="flex">
-        <customFormButton
+        <FormButton
           name="Potvrdit"
           :loading="loading"
           :onClick="confirmOrder"
           v-if="order.status === 'rozpracovaná'"
         />
-        <customFormButton name="Vytvořit znovu" :loading="loading" :onClick="createSame" v-else />
-        <customFormButton
+        <FormButton name="Vytvořit znovu" :loading="loading" :onClick="createSame" v-else />
+        <FormButton
           classType="btn-edit"
           name="Upravit"
           class="ml-2"
           :loading="loading"
           :onClick="editOrder"
         />
-        <customFormButton
+        <FormButton
           classType="btn-delete pl-1 pr-1 "
           name="Odstranit"
           class="ml-2"
@@ -44,9 +46,15 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
+import tableOrderList from "../../order/tableOrderList.vue";
+import { ADD_ORDER } from "../../../state/mutations-types";
 @Component({
   name: "shoOrder",
+  middleware: ["auth", "admin"],
   methods: mapMutations(["fetchOrder"]),
+  components: {
+    tableOrderList,
+  },
 })
 export default class shoOrder extends Vue {
   @Prop() idc?: String;
@@ -71,23 +79,25 @@ export default class shoOrder extends Vue {
 
   deleteOrder() {
     this.$store.dispatch("deleteOrder", this.order);
-    this.$router.push({ name: "user", params: { id: this.$route.params.id } });
+    this.$router.push({
+      name: "user",
+      params: { id: this.$route.params.id },
+    });
   }
 
-  createSame() {
+  async createSame() {
     let amounts = this.order.amounts.map((a) => {
       return { value: a.value, id: a.product.id };
     });
     this.loading = true;
-    this.$store
-      .dispatch("addOrder", { amounts, user_id: this.$route.params.id })
-      .then((order) => {
-        this.loading = false;
-        this.$router.push({
-          name: "showOrder",
-          params: { idc: order.id },
-        });
-      });
+    const order = { amounts, user_id: this.$route.params.id };
+    const { data: res } = await this.axios.post("order", order);
+    this.$store.commit(ADD_ORDER, res);
+    this.loading = false;
+    this.$router.push({
+      name: "showOrder",
+      params: { idc: res.id },
+    });
   }
 
   @Watch("$route", { immediate: true, deep: true })

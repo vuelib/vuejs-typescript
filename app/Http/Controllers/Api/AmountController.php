@@ -15,6 +15,7 @@ class AmountController extends Controller
         ]);
         $amount->value = $data['value'];
         $amount->push();
+        return $amount;
     }
 
     public function destroy(Amount $amount)

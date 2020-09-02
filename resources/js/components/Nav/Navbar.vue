@@ -7,30 +7,33 @@
                 <Logo />
                 <MenuItems
                     :links="navbarlinks"
-                    :logged-in="loggedIn"
+                    :loggedIn="loggedIn"
                     :loggedInlinks="loggedInlinks"
                     :user="user"
                 />
             </div>
         </nav>
+        <ShortCutLinks />
     </div>
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 import MenuItems from "./MenuItems.vue";
+import ShortCutLinks from "./ShortCutLinks.vue";
 import Logo from "./Logo.vue";
 @Component({
     components: {
+        Logo,
         MenuItems,
-        Logo
+        ShortCutLinks
     },
     computed: mapGetters(["navbarlinks", "loggedInlinks", "loggedIn", "user"]),
     methods: mapMutations(["setTheme"])
 })
 export default class Nav extends Vue {
     navbarlinks!: Array<String>;
-    loggedInlinks!: Array<String>;
+    loggedIn!: Boolean;
     user!: Array<String>;
 }
 </script>

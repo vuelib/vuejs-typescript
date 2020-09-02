@@ -1,74 +1,51 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+import * as types from "../mutations-types";
 export default {
     state: () => ({
-        token: localStorage.getItem("access_token") || null,
         user: {},
-        invoice: localStorage.getItem("invoice") || null
+        token: Cookies.get("token") || null
     }),
     getters: {
         loggedIn(state) {
             return state.token !== null;
         },
+        admin(state) {
+            if (state.user.role) return state.user.role.name === "admin";
+            return false;
+        },
         invoice(state) {
             return state.invoice !== null;
+        },
+        token(state) {
+            return state.token;
         },
         user(state) {
             return state.user;
         }
     },
     mutations: {
-        retrieveToken(state, token) {
+        [types.SAVE_TOKEN](state, token) {
             state.token = token;
         },
-        destroyToken(state) {
+        [types.LOGOUT](state) {
             state.token = null;
+            state.user = null;
+
+            Cookies.remove("token");
         },
 
-        getUser(state, user) {
+        [types.FETCH_USER_SUCCESS](state, { user }) {
             state.user = user;
-            if (user.invoice) {
-                localStorage.setItem("invoice", "true");
-                state.invoice = user.invoice;
-            }
         },
-        addInvoice(state, invoice) {
-            state.user.invoice = invoice;
-            state.invoice = invoice;
+        [types.FETCH_USER_FAILURE](state, { user }) {
+            state.user = null;
+            state.token = null;
+
+            Cookies.remove("token");
         }
     },
     actions: {
-        retrieveName(context) {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + context.state.token;
-
-            return new Promise((resolve, reject) => {
-                axios
-                    .get("/user")
-                    .then(response => {
-                        resolve(response);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
-        },
-        register(context, data) {
-            return new Promise((resolve, reject) => {
-                axios
-                    .post("register", {
-                        phone: data.phone,
-                        email: data.email,
-                        password: data.password,
-                        confirm_password: data.confirm_password
-                    })
-                    .then(response => {
-                        resolve(response);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
-        },
         forgotPassword(context, user) {
             return new Promise((resolve, reject) => {
                 axios
@@ -93,37 +70,21 @@ export default {
                     });
             });
         },
-        destroyToken({ state, getters, commit }) {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + state.token;
+        async logout({ commit }) {
+            try {
+                const { data } = await axios.post("logout");
+            } catch (e) {}
 
-            if (getters.loggedIn) {
-                return new Promise((resolve, reject) => {
-                    axios
-                        .post("/logout")
-                        .then(response => {
-                            localStorage.removeItem("access_token");
-                            commit("destroyToken");
-                            resolve(response);
-                        })
-                        .catch(error => {
-                            localStorage.removeItem("access_token");
-                            commit("destroyToken");
-                            reject(error);
-                        });
-                });
-            }
+            commit(types.LOGOUT);
         },
-        retrieveToken({ commit, dispatch }, credentials) {
+        async retrieveToken({ commit }, credentials) {
             return new Promise((resolve, reject) => {
                 axios
                     .post("login", credentials)
                     .then(response => {
                         const token = response.data.access_token;
-
-                        localStorage.setItem("access_token", token);
-                        commit("retrieveToken", token);
-                        // dispatch("getUser");
+                        Cookies.set("token", token);
+                        commit(types.SAVE_TOKEN, token);
                         resolve(response);
                     })
                     .catch(error => {
@@ -132,18 +93,13 @@ export default {
             });
         },
 
-        getUser({ state, commit }) {
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + state.token;
-
-            axios
-                .post("user")
-                .then(response => {
-                    commit("getUser", response.data);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+        async fetchUser({ commit }) {
+            try {
+                const { data } = await axios.post("user");
+                commit(types.FETCH_USER_SUCCESS, { user: data });
+            } catch (e) {
+                commit(types.FETCH_USER_FAILURE);
+            }
         }
     }
 };

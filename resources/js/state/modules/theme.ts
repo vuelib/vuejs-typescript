@@ -1,3 +1,4 @@
+import * as types from "../mutations-types";
 interface theme {
     theme: String;
 }
@@ -12,7 +13,7 @@ export default {
         }
     },
     mutations: {
-        setTheme(state, theme) {
+        [types.SAVE_THEME](state, theme) {
             state.theme = theme;
         }
     }

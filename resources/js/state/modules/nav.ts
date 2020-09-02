@@ -26,8 +26,8 @@ export default {
         navbarlinks(state: nav): Array<String> {
             return state.navbarlinks;
         },
-        loggedInlinks(state: nav): Array<String> {
-            return state.loogedInlinks;
+        loggedInlinks(state) {
+            return state.loggedInlinks;
         },
         sidebarlinks(state: nav): Array<String> {
             return state.sidebarlinks;

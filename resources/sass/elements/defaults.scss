@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;1,500&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;1,500&display=swap");
 
 * {
     margin: 0;
@@ -10,7 +10,10 @@ body {
 }
 
 main {
-    min-height: 70vh;
     text-size-adjust: auto;
     -webkit-text-size-adjust: auto;
+}
+
+h4 {
+    @apply .text-xl .font-semibold .cursor-pointer .text-junglegreen;
 }

@@ -1,7 +1,7 @@
 <template>
   <Container>
-    <Box title="Zapomenuté heslo" class="w-128">
-      <Form :succesMessage="dataSuccessMessage">
+    <Box title="Zapomenuté heslo" class="w-full lg:w-1/4">
+      <Form class="text-left mx-auto" :succesMessage="dataSuccessMessage">
         <FormInput
           v-model="user.email"
           :error="errors.email"
@@ -21,6 +21,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   name: "ForgotPassowrd",
+  middleware: "guest",
 })
 export default class ForgotPassowrd extends Vue {
   @Prop() dataSuccessMessage!: any;

@@ -8,18 +8,18 @@ export default [
             {
                 name: "ChangePassword",
                 path: "zmenit-heslo",
-                component: page("settings/ChangePassword.vue")
+                component: page("settings/changePassword.vue")
             },
             {
                 name: "ChangeContact",
                 path: "zmena-kontaktni-udaju",
-                component: page("settings/ChangeContact.vue")
+                component: page("settings/changeContact.vue")
             }
         ]
     },
     {
         name: "invoice",
         path: "/fakturacni-udaje",
-        component: page("invoice/AddInvoice.vue")
+        component: page("invoice/addInvoice.vue")
     }
 ];

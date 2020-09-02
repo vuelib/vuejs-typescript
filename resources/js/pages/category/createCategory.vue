@@ -2,7 +2,7 @@
   <Content title="Vytvořit kategorii">
     <div class="table">
       <Form :succesMessage="successMessage" enctype="multipart/form-data">
-        <customInput
+        <FormInput
           v-model="category.name"
           :error="errors.name"
           label="Název kategorie"
@@ -13,10 +13,10 @@
           <div class="w-full px-3">
             <label class="ares-label" for="name">Obrázek kategorie</label>
             <input @change="processFile($event)" type="file" />
-            <p class="text-red-500 text-xs italname" v-if="errors.image">{{errors.image[0]}}</p>
+            <p class="text-red-500 text-xs italname" v-if="errors.image">{{ errors.image[0] }}</p>
           </div>
         </div>
-        <customFormButton :onClick="createCategory" name="Vytvořit kategorii" :loading="loading" />
+        <FormButton :onClick="createCategory" name="Vytvořit kategorii" :loading="loading" />
       </Form>
     </div>
   </Content>
@@ -26,6 +26,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   name: "createCategory",
+  middleware: ["auth", "admin"],
 })
 export default class createCategory extends Vue {
   @Prop() successMessage!: any;
@@ -49,7 +50,6 @@ export default class createCategory extends Vue {
       .post("/category", fd, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
       .then((response) => {
@@ -67,5 +67,3 @@ export default class createCategory extends Vue {
   }
 }
 </script>
-
-
